@@ -66,7 +66,7 @@
         
             </div> 
 
-            <div class="w3-container w3-middle w3-third">
+            <div class="w3-container w3-middle w3-third w3-padding-medium">
                 <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Size</button></p>
                 <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Pattern</button></p>
                 <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Color</button></p>
