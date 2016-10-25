@@ -50,6 +50,10 @@ function editorPage_open()
   window.open("editorPage.jsp","_self" );
 }
 
+function game_open()
+{
+  window.open("gamePage.jsp","_self" );
+}
 
 
 

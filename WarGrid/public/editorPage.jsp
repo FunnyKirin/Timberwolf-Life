@@ -43,11 +43,17 @@
         <div class="w3-hide-large" style="margin-top:83px"></div>
 
 
-        <div class="w3-row-padding">
 
+        <div class="w3-container w3-group w3-row">
+          <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Size</button>
+          <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Pattern</button>
+          <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Color</button>
+          <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Save</button>
+        
+       
 
-
-            <div class="w3-container w3-card-8 w3-left w3-panel w3-twothird w3-round-xlarge">
+        
+            <div class="w3-card-8 w3-left w3-panel w3-round-xlarge w3-col m12">
                 <h1>Grid Map</h1>
                 <p>1</p>
                 <p>2</p>
@@ -57,23 +63,14 @@
                 <p>6</p>
                 <p>7</p>
                 <p>8</p>
-                <p>9</p>
-                <p>10</p>
-                <p>11</p>
-                <p>12</p>
                 <p>Map is placed here.</p>
             
         
             </div> 
 
-            <div class="w3-container w3-middle w3-third w3-padding-medium">
-                <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Size</button></p>
-                <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Pattern</button></p>
-                <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Color</button></p>
-                <p><button class="w3-btn w3-dark-grey w3-round-large w3-animate-zoom">Save</button></p>
-            </div>
-
-
         </div>
+
+
+        
 
     </div>

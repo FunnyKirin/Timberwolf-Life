@@ -50,15 +50,18 @@
         
             <div class="w3-row-padding w3-card-8 w3-panel w3-twothird w3-round-large">
                 <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186"; style="width:80%">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186"; style="width:80%"; 
+                    onclick="game_open()">
                     <p>...</p>
                 </div>
                 <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_2.PNG?alt=media&token=914a072d-223d-4aab-99e5-72d3e6e4bb08" style="width:80%">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_2.PNG?alt=media&token=914a072d-223d-4aab-99e5-72d3e6e4bb08" style="width:80%";
+                    onclick="game_open()">
                     <p>...</p>
                 </div>
                 <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_3.PNG?alt=media&token=fecdad9e-9675-4951-b530-5709bf446c42" style="width:80%">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_3.PNG?alt=media&token=fecdad9e-9675-4951-b530-5709bf446c42" style="width:80%";
+                    onclick="game_open()">
                     <p>...</p>
                 </div>
             </div>
