@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>index</title>
+    <title>A.I.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -17,7 +17,7 @@
 
 
     <!-- Sidenav/menu -->
-    <nav class="w3-sidenav w3-white w3-animate-left w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
+    <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
       <h3 class="w3-padding-64"><b>WARGRID</b></h3>
           <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
           <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>

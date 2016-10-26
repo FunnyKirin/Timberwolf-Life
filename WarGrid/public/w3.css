@@ -360,7 +360,12 @@ input[type=checkbox].w3-check:disabled+.w3-validate,input[type=radio].w3-radio:d
 
 
 /* Css */
-body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer}
 .w3-third img:hover{opacity:1}
 .w3-btn {width:150px;}
+
+/* for slideshow*/
+.mySlides {display:none}
+.w3-left, .w3-right, .w3-badge {cursor:pointer}
+.w3-badge {height:13px;width:13px;padding:0}

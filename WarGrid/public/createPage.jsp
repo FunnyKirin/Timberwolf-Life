@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>index</title>
+    <title>Create</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -17,7 +17,7 @@
 
 
     <!-- Sidenav/menu -->
-    <nav class="w3-sidenav w3-white w3-animate-left w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
+    <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
       <h3 class="w3-padding-64"><b>WARGRID</b></h3>
           <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
           <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
@@ -55,12 +55,12 @@
                     <p>...</p>
                 </div>
                 <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_2.PNG?alt=media&token=914a072d-223d-4aab-99e5-72d3e6e4bb08" style="width:80%";
+                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_2.PNG?alt=media&token=914a072d-223d-4aab-99e5-72d3e6e4bb08"; style="width:80%";
                     onclick="game_open()">
                     <p>...</p>
                 </div>
                 <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_3.PNG?alt=media&token=fecdad9e-9675-4951-b530-5709bf446c42" style="width:80%";
+                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_3.PNG?alt=media&token=fecdad9e-9675-4951-b530-5709bf446c42"; style="width:80%";
                     onclick="game_open()">
                     <p>...</p>
                 </div>

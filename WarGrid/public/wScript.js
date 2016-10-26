@@ -56,7 +56,7 @@ function game_open()
 }
 
 
-
+/*//Automatic slideshow
 function carousel() 
 {
     var i;
@@ -67,13 +67,33 @@ function carousel()
     myIndex++;
     if (myIndex > x.length) {myIndex = 1}
     x[myIndex-1].style.display = "block";
-    setTimeout(carousel, 2000); // Change image every 2 seconds
+    setTimeout(carousel, 5000); // Change image every 2 seconds
+}
+*/
+
+
+
+//search bar from home page
+function myFunction() {
+    var input, filter, cards, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+
+    cards = document.getElementsByName("myCards");
+
+    //window.alert(cards.length);
+    for (i = 0; i < cards.length; i++) 
+    {
+        if (cards[i].getElementsByTagName("p")[0].innerHTML.toUpperCase().indexOf(filter) > -1) 
+        {
+            cards[i].style.display = "";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
 }
 
-
-
-
-
+/*
 function myFunction() 
 {
   var input, filter, table, tr, td, i;
@@ -92,7 +112,7 @@ function myFunction()
     }
   }
 }
-
+*/
 
 
 function click_map(element) {
@@ -100,4 +120,38 @@ function click_map(element) {
   document.getElementById("modal01").style.display = "block";
   var captionText = document.getElementById("caption");
   captionText.innerHTML = element.alt;
+}
+
+
+
+
+//SlideShow from aboutPage
+var slideIndex = 1;
+//showDivs(slideIndex);
+
+function plusDivs(n) 
+{
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) 
+{
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) 
+{
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+     dots[i].className = dots[i].className.replace(" w3-white", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " w3-white";
 }
