@@ -85,7 +85,7 @@ function initGameOfLife() {
     initCellLookup();
 
     // SETUP THE EVENT HANDLERS
-    initEventHandlers();
+    //initEventHandlers();
 
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
@@ -167,6 +167,14 @@ function initGameOfLifeData(){
     cellLength = 20;
 }
 
+
+function CellType(initNumNeighbors, initCellValues)
+{
+    this.numNeighbors = initNumNeighbors;
+    this.cellValues = initCellValues;
+}
+
+
 function initCellLookup()
 {
     // WE'LL PUT ALL THE VALUES IN HERE
@@ -208,3 +216,185 @@ function initCellLookup()
     var centerArray = new Array(-1, -1, -1, 0, -1, 1, 0, 1, 1, 1, 1, 0, 1, -1, 0, -1);
     cellLookup[CENTER] = new CellType(8, centerArray);
 }
+
+/*
+ * This function resets the grid containing the current state of the
+ * Game of Life such that all cells in the game are dead.
+ */
+function resetGameOfLife()
+{
+    // RESET ALL THE DATA STRUCTURES TOO
+    gridWidth = canvasWidth / cellLength;
+    gridHeight = canvasHeight / cellLength;
+    updateGrid = new Array();
+    renderGrid = new Array();
+
+    // INIT THE CELLS IN THE GRID
+    for (var i = 0; i < gridHeight; i++)
+    {
+        for (var j = 0; j < gridWidth; j++)
+        {
+            setGridCell(updateGrid, i, j, DEAD_CELL);
+            setGridCell(renderGrid, i, j, DEAD_CELL);
+        }
+    }
+    // RENDER THE CLEARED SCREEN
+    renderGame();
+}
+
+
+function renderGame()
+{
+    brightGrid = new Array();
+    // CLEAR THE CANVAS
+    canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // RENDER THE GRID LINES, IF NEEDED
+    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD)
+        renderGridLines();
+
+    // RENDER THE GAME CELLS
+    renderCells();
+
+    // AND RENDER THE TEXT
+    renderText();
+
+    //renderGhosts();
+    //renderVoidCell();
+    // THE GRID WE RENDER THIS FRAME WILL BE USED AS THE BASIS
+    // FOR THE UPDATE GRID NEXT FRAME
+    swapGrids();
+}
+
+function renderCells()
+{
+    // SET THE PROPER RENDER COLOR
+    canvas2D.fillStyle = LIVE_COLOR1;
+
+    // RENDER THE LIVE CELLS IN THE GRID
+    for (var i = 0; i <= gridHeight; i++)
+    {
+        for (var j = 0; j < gridWidth; j++)
+        {
+            var cell = getGridCell(renderGrid, i, j);
+            if (cell === LIVE_CELL)
+            {
+                var x = j * cellLength;
+                var y = i * cellLength;
+                canvas2D.fillRect(x, y, cellLength, cellLength);
+            }
+        }
+    }
+}
+
+function renderGridLines()
+{
+    // SET THE PROPER COLOR
+    canvas2D.strokeStyle = GRID_LINES_COLOR;
+
+    // VERTICAL LINES
+    for (var i = 0; i < gridWidth; i++)
+    {
+        var x1 = i * cellLength;
+        var y1 = 0;
+        var x2 = x1;
+        var y2 = canvasHeight;
+        canvas2D.beginPath();
+        canvas2D.moveTo(x1, y1);
+        canvas2D.lineTo(x2, y2);
+        canvas2D.stroke();
+    }
+
+    // HORIZONTAL LINES
+    for (var j = 0; j < gridHeight; j++)
+    {
+        var x1 = 0;
+        var y1 = j * cellLength;
+        var x2 = canvasWidth;
+        var y2 = y1;
+        canvas2D.moveTo(x1, y1);
+        canvas2D.lineTo(x2, y2);
+        canvas2D.stroke();
+    }
+}
+
+/*
+ * Renders the text on top of the grid.
+ */
+function renderText()
+{
+    // SET THE PROPER COLOR
+    canvas2D.fillStyle = TEXT_COLOR;
+
+    // RENDER THE TEXT
+    //canvas2D.fillText("FPS: " + fps, FPS_X, FPS_Y);
+    //canvas2D.fillText("Cell Length: " + cellLength, CELL_LENGTH_X, CELL_LENGTH_Y);
+    canvas2D.fillText("WarGrid Test",FPS_X, FPS_Y);
+}
+
+/*
+ * We need one grid's cells to determine the grid's values for
+ * the next frame. So, we update the render grid based on the contents
+ * of the update grid, and then, after rending, we swap them, so that
+ * the next frame we'll be progressing the game properly.
+ */
+function swapGrids()
+{
+    var temp = updateGrid;
+    updateGrid = renderGrid;
+    renderGrid = temp;
+}
+
+/*
+ * Accessor method for getting the cell value in the grid at
+ * location (row, col).
+ */
+function getGridCell(grid, row, col)
+{
+    // IGNORE IF IT'S OUTSIDE THE GRID
+    if (!isValidCell(row, col))
+    {
+        return -1;
+    }
+    var index = (row * gridWidth) + col;
+    return grid[index];
+}
+
+
+/*
+ * Mutator method for setting the cell value in the grid at
+ * location (row, col).
+ */
+function setGridCell(grid, row, col, value)
+{
+    // IGNORE IF IT'S OUTSIDE THE GRID
+    if (!isValidCell(row, col))
+    {
+        return;
+    }
+    var index = (row * gridWidth) + col;
+    grid[index] = value;
+}
+
+/*
+ * This function tests to see if (row, col) represents a
+ * valid cell in the grid. If it is a valid cell, true is
+ * returned, else false.
+ */
+function isValidCell(row, col)
+{
+    // IS IT OUTSIDE THE GRID?
+    if ((row < 0) ||
+            (col < 0) ||
+            (row >= gridHeight) ||
+            (col >= gridWidth))
+    {
+        return false;
+    }
+    // IT'S INSIDE THE GRID
+    else
+    {
+        return true;
+    }
+}
+
