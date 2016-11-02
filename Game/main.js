@@ -85,7 +85,7 @@ function initGameOfLife() {
     initCellLookup();
 
     // SETUP THE EVENT HANDLERS
-    //initEventHandlers();
+    initEventHandlers();
 
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
@@ -97,6 +97,15 @@ function initConstants() {
     LIVE_CELL = 1;
     GHOST_CELL = 2;
     VOID_CELL = 3;
+
+    /*
+    DEAD_CELL1 = 0;
+    LIVE_CELL1 = 1;
+    DEAD_CELL2 = 20;
+    LIVE_CELL2 = 21;
+    GHOST_CELL = 2;
+    VOID_CELL = 3;
+    */
     // COLORS FOR RENDERING
     LIVE_COLOR1 = "#FF0000";
     DEAD_COLOR1 = "#ff7272";
@@ -157,7 +166,7 @@ function initCanvas() {
     canvasHeight = canvas.height;
 }
 
-function initGameOfLifeData(){
+function initGameOfLifeData() {
     // INIT THE TIMING DATA
     timer = null;
     fps = MAX_FPS;
@@ -167,16 +176,42 @@ function initGameOfLifeData(){
     cellLength = 20;
 }
 
+/*
+ * This function initializes all the event handlers, registering
+ * the proper response methods.
+ */
+function initEventHandlers() {
+    canvas.onclick = respondToMouseClick;
+    $("#confirmButton").click(confirmMove)
+}
 
-function CellType(initNumNeighbors, initCellValues)
-{
+function respondToMouseClick(event) {
+
+    // CALCULATE THE ROW,COL OF THE CLICK
+    var canvasCoords = getRelativeCoords(event);
+    var clickCol = Math.floor(canvasCoords.x / cellLength);
+    var clickRow = Math.floor(canvasCoords.y / cellLength);
+    setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL);
+    setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL);
+    renderGame();
+}
+
+
+/*
+Comfirm Movement
+Send socket to server
+*/
+function confirmMove() {
+    alert("!");
+}
+
+function CellType(initNumNeighbors, initCellValues) {
     this.numNeighbors = initNumNeighbors;
     this.cellValues = initCellValues;
 }
 
 
-function initCellLookup()
-{
+function initCellLookup() {
     // WE'LL PUT ALL THE VALUES IN HERE
     cellLookup = new Array();
 
@@ -221,8 +256,7 @@ function initCellLookup()
  * This function resets the grid containing the current state of the
  * Game of Life such that all cells in the game are dead.
  */
-function resetGameOfLife()
-{
+function resetGameOfLife() {
     // RESET ALL THE DATA STRUCTURES TOO
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
@@ -230,10 +264,8 @@ function resetGameOfLife()
     renderGrid = new Array();
 
     // INIT THE CELLS IN THE GRID
-    for (var i = 0; i < gridHeight; i++)
-    {
-        for (var j = 0; j < gridWidth; j++)
-        {
+    for (var i = 0; i < gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
             setGridCell(updateGrid, i, j, DEAD_CELL);
             setGridCell(renderGrid, i, j, DEAD_CELL);
         }
@@ -243,8 +275,7 @@ function resetGameOfLife()
 }
 
 
-function renderGame()
-{
+function renderGame() {
     brightGrid = new Array();
     // CLEAR THE CANVAS
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -266,19 +297,15 @@ function renderGame()
     swapGrids();
 }
 
-function renderCells()
-{
+function renderCells() {
     // SET THE PROPER RENDER COLOR
     canvas2D.fillStyle = LIVE_COLOR1;
 
     // RENDER THE LIVE CELLS IN THE GRID
-    for (var i = 0; i <= gridHeight; i++)
-    {
-        for (var j = 0; j < gridWidth; j++)
-        {
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
-            if (cell === LIVE_CELL)
-            {
+            if (cell === LIVE_CELL) {
                 var x = j * cellLength;
                 var y = i * cellLength;
                 canvas2D.fillRect(x, y, cellLength, cellLength);
@@ -287,14 +314,12 @@ function renderCells()
     }
 }
 
-function renderGridLines()
-{
+function renderGridLines() {
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
 
     // VERTICAL LINES
-    for (var i = 0; i < gridWidth; i++)
-    {
+    for (var i = 0; i < gridWidth; i++) {
         var x1 = i * cellLength;
         var y1 = 0;
         var x2 = x1;
@@ -306,8 +331,7 @@ function renderGridLines()
     }
 
     // HORIZONTAL LINES
-    for (var j = 0; j < gridHeight; j++)
-    {
+    for (var j = 0; j < gridHeight; j++) {
         var x1 = 0;
         var y1 = j * cellLength;
         var x2 = canvasWidth;
@@ -321,15 +345,14 @@ function renderGridLines()
 /*
  * Renders the text on top of the grid.
  */
-function renderText()
-{
+function renderText() {
     // SET THE PROPER COLOR
     canvas2D.fillStyle = TEXT_COLOR;
 
     // RENDER THE TEXT
     //canvas2D.fillText("FPS: " + fps, FPS_X, FPS_Y);
     //canvas2D.fillText("Cell Length: " + cellLength, CELL_LENGTH_X, CELL_LENGTH_Y);
-    canvas2D.fillText("WarGrid Test",FPS_X, FPS_Y);
+    canvas2D.fillText("WarGrid Test", FPS_X, FPS_Y);
 }
 
 /*
@@ -338,8 +361,7 @@ function renderText()
  * of the update grid, and then, after rending, we swap them, so that
  * the next frame we'll be progressing the game properly.
  */
-function swapGrids()
-{
+function swapGrids() {
     var temp = updateGrid;
     updateGrid = renderGrid;
     renderGrid = temp;
@@ -349,11 +371,9 @@ function swapGrids()
  * Accessor method for getting the cell value in the grid at
  * location (row, col).
  */
-function getGridCell(grid, row, col)
-{
+function getGridCell(grid, row, col) {
     // IGNORE IF IT'S OUTSIDE THE GRID
-    if (!isValidCell(row, col))
-    {
+    if (!isValidCell(row, col)) {
         return -1;
     }
     var index = (row * gridWidth) + col;
@@ -365,11 +385,9 @@ function getGridCell(grid, row, col)
  * Mutator method for setting the cell value in the grid at
  * location (row, col).
  */
-function setGridCell(grid, row, col, value)
-{
+function setGridCell(grid, row, col, value) {
     // IGNORE IF IT'S OUTSIDE THE GRID
-    if (!isValidCell(row, col))
-    {
+    if (!isValidCell(row, col)) {
         return;
     }
     var index = (row * gridWidth) + col;
@@ -381,20 +399,35 @@ function setGridCell(grid, row, col, value)
  * valid cell in the grid. If it is a valid cell, true is
  * returned, else false.
  */
-function isValidCell(row, col)
-{
+function isValidCell(row, col) {
     // IS IT OUTSIDE THE GRID?
     if ((row < 0) ||
-            (col < 0) ||
-            (row >= gridHeight) ||
-            (col >= gridWidth))
-    {
+        (col < 0) ||
+        (row >= gridHeight) ||
+        (col >= gridWidth)) {
         return false;
     }
     // IT'S INSIDE THE GRID
-    else
-    {
+    else {
         return true;
     }
 }
 
+// HELPER METHODS FOR THE EVENT HANDLERS
+
+/*
+ * This function gets the mouse click coordinates relative to
+ * the canvas itself, where 0,0 is the top, left corner of
+ * the canvas.
+ */
+function getRelativeCoords(event)
+{
+    if (event.offsetX !== undefined && event.offsetY !== undefined)
+    {
+        return {x: event.offsetX, y: event.offsetY};
+    }
+    else
+    {
+        return {x: event.layerX, y: event.layerY};
+    }
+}
