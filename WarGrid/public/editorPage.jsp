@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <script src="wScript.js"></script>
+    <script src="GameOfLife.js"></script>
+      case expression:
+
+        break;
+      default:
+
+    }
 
   </head>
 
@@ -49,28 +56,32 @@
           <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Pattern</button>
           <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Color</button>
           <button class="w3-col m3 w3-center w3-dark-grey w3-round-large w3-animate-zoom">Save</button>
-        
-       
 
-        
+
+
+
             <div class="w3-card-8 w3-left w3-panel w3-round-xlarge w3-col m12">
-                <h1>Grid Map</h1>
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
-                <p>7</p>
-                <p>8</p>
-                <p>Map is placed here.</p>
-            
-        
-            </div> 
+              <input id="start_button" type="button" value="Start" />
+              <input id="pause_button" type="button" value="Pause" />
+              <input id="reset_button" type="button" value="Reset" />
+                <select id="game_of_life_patterns">
+                  <option value="Void.png">Void Cell</option>
+                  <option value="LightweightSpaceshipRight.png">Lightweight Spaceship Right</option>
+                </select>
+                <input id="dec_fps_button" type="button" value="FPS-" />
+                <input id="inc_fps_button" type="button" value="FPS+" />
+                <input id="dec_cell_length_button" type="button" value="Cell Length-" />
+                <input id="inc_cell_length_button" type="button" value="Cell Length+" />
+                <canvas id="game_of_life_canvas" width="1024" height="512">
+                </canvas>
+            </div>
+
+
 
         </div>
-
-
-        
-
     </div>
+    <script>
+      initGameOfLife();
+    </script>
+  </body>
+</html>
