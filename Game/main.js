@@ -182,7 +182,7 @@ function initGameOfLifeData() {
  */
 function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
-    $("#confirmButton").click(confirmMove)
+    $("#confirmButton").click(confirmMove);
 }
 
 function respondToMouseClick(event) {
@@ -213,7 +213,7 @@ function CellType(initNumNeighbors, initCellValues) {
 
 function initCellLookup() {
     // WE'LL PUT ALL THE VALUES IN HERE
-    cellLookup = new Array();
+    cellLookup = [];
 
     // TOP LEFT
     var topLeftArray = new Array(1, 0, 1, 1, 0, 1);
@@ -260,8 +260,8 @@ function resetGameOfLife() {
     // RESET ALL THE DATA STRUCTURES TOO
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
-    updateGrid = new Array();
-    renderGrid = new Array();
+    updateGrid = [];
+    renderGrid = [];
 
     // INIT THE CELLS IN THE GRID
     for (var i = 0; i < gridHeight; i++) {
@@ -276,7 +276,7 @@ function resetGameOfLife() {
 
 
 function renderGame() {
-    brightGrid = new Array();
+    brightGrid = [];
     // CLEAR THE CANVAS
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -332,12 +332,12 @@ function renderGridLines() {
 
     // HORIZONTAL LINES
     for (var j = 0; j < gridHeight; j++) {
-        var x1 = 0;
-        var y1 = j * cellLength;
-        var x2 = canvasWidth;
-        var y2 = y1;
-        canvas2D.moveTo(x1, y1);
-        canvas2D.lineTo(x2, y2);
+        var x_1 = 0;
+        var y_1 = j * cellLength;
+        var x_2 = canvasWidth;
+        var y_2 = y_1;
+        canvas2D.moveTo(x_1, y_1);
+        canvas2D.lineTo(x_2, y_2);
         canvas2D.stroke();
     }
 }
