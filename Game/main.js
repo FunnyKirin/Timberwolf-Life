@@ -140,7 +140,7 @@ function initConstants() {
 
 function initCanvas() {
     // GET THE CANVAS
-    canvas = document.getElementById("game_of_life_canvas");
+    canvas = document.getElementById("game_canvas");
 
     // GET THE 2D RENDERING CONTEXT
     canvas2D = canvas.getContext("2d");
