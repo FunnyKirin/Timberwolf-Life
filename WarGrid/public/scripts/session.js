@@ -1,4 +1,5 @@
-var SIGNIN_ID = "sign-in";
+var GOOGLE_SIGNIN_ID = "google-sign-in";
+var FACEBOOK_SIGNIN_ID = "facebook-sign-in";
 var SIGNOUT_ID = "sign-out";
 var PROFILE_PIC_ID = "profile-pic";
 var PLAYER_ID_ID = "player-id";
@@ -7,12 +8,14 @@ var PLAYER_PROFILE_ID = "player-profile";
 function Session() {
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
     this.playerId = document.getElementById(PLAYER_ID_ID);
-    this.buttonSignin = document.getElementById(SIGNIN_ID);
+    this.buttonSigninGoogle = document.getElementById(GOOGLE_SIGNIN_ID);
+    this.buttonSigninFacebook = document.getElementById(FACEBOOK_SIGNIN_ID);
     this.buttonSignout = document.getElementById(SIGNOUT_ID);
     this.buttonProfile = document.getElementById(PLAYER_PROFILE_ID);
 
-    this.buttonSignin.addEventListener('click', this.googleSignIn.bind(this));
-    this.buttonSignout.addEventListener('click', this.googleSignOut.bind(this));
+    this.buttonSigninGoogle.addEventListener('click', this.googleSignIn.bind(this));
+    this.buttonSigninFacebook.addEventListener('click', this.facebookSignIn.bind(this));
+    this.buttonSignout.addEventListener('click', this.signOut.bind(this));
 
     this.initFirebase();
 }
@@ -33,7 +36,8 @@ Session.prototype.sessionHandler = function(player) {
         this.buttonProfile.removeAttribute('hidden');
 
         // hide sign-in button.
-        this.buttonSignin.setAttribute('hidden', 'true');
+        this.buttonSigninGoogle.setAttribute('hidden', 'true');
+        this.buttonSigninFacebook.setAttribute('hidden', 'true');
 
         console.log("Hello, " + playerId);
         console.log("You signed in with " + email);
@@ -45,7 +49,8 @@ Session.prototype.sessionHandler = function(player) {
         this.buttonSignout.setAttribute('hidden', 'true');
 
         // show sign-in button.
-        this.buttonSignin.removeAttribute('hidden');
+        this.buttonSigninGoogle.removeAttribute('hidden');
+        this.buttonSigninFacebook.removeAttribute('hidden');
 
         console.log("Bye");
     }
@@ -63,7 +68,17 @@ Session.prototype.googleSignIn = function() {
     });
 };
 
-Session.prototype.googleSignOut = function() {
+Session.prototype.facebookSignIn = function() {
+    console.log("Facebook authentication");
+
+    var facebook = new firebase.auth.FacebookAuthProvider();
+
+    this.auth.signInWithPopup(facebook).catch(function(error) {
+        console.log("ERROR: " + error);
+    });
+};
+
+Session.prototype.signOut = function() {
     this.auth.signOut();
 };
 
