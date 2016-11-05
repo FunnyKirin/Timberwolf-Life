@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <script src="jquery-1.12.4.min.js"></script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="wScript.js"></script>
 </head>
 
@@ -21,17 +21,18 @@
         <div id="player-container">
             <div hidden id="profile-pic"></div>
             <div hidden id="player-id"></div>
-            <button hidden id="sign-out">Sign-out</button>
-            <button hidden id="sign-in">Sign-in with Google</button>
+            <button hidden id="sign-out">Sign Out</button>
+            <button hidden id="sign-in">Sign In with Google</button>
         </div>
 
-        <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
-        <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
-        <a href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
-        <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">PLAY WITH FRIEND</a>
-        <a href="#ai" onclick="ai_open()" class="w3-padding">A.I.</a>
-        <a href="#editor" onclick="editorPage_open()" class="w3-padding">EDITOR</a>
-        <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
+        <button hidden id="player-profile">Player Profile</button>
+
+        <a href="#index" onclick="index_open()" class="w3-padding">Home</a>
+        <a href="#profile" onclick="profile_open()" class="w3-padding">Profile</a>
+        <a href="#create" onclick="create_open()" class="w3-padding">Create</a>
+        <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">Invite a Friend</a>
+        <a href="#ai" onclick="ai_open()" class="w3-padding">Play Against A.I.</a>
+        <a href="#editor" onclick="editorPage_open()" class="w3-padding">Map Editor</a>
     </nav>
 
     <!-- Top menu on small screens -->
@@ -132,6 +133,20 @@
 
 
         </div>
+
+
+        <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyCg8q3JPOVremSm5Exz74by1Rsv4ljk970",
+                authDomain: "llylly-95353.firebaseapp.com",
+                databaseURL: "https://llylly-95353.firebaseio.com",
+                storageBucket: "llylly-95353.appspot.com",
+                messagingSenderId: "745498047349"
+            };
+            firebase.initializeApp(config);
+        </script>
 
 
         <script src="scripts/session.js"></script>
