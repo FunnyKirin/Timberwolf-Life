@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script src="scripts/map.js"></script>
     <script src="scripts/main.js"></script>
 </head>
 
@@ -12,9 +14,12 @@
         <input id="confirmButton" type="button" value="Confirm" />
     </div>
 
-    <script src="scripts/jquery-1.12.4.min.js"></script>
+
     <script>
         initGameOfLife();
+        loadMap('maps/test_map_1.json');
+        loadMap('maps/test_map_2.json');
+        loadMap('maps/test_map_3.json');
     </script>
 </body>
 
