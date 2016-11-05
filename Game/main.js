@@ -3,6 +3,7 @@ var numOfMove1;
 var numOfMove2;
 //index of current player, start from 1.
 var currentPlayer = 1;
+var cellNumber = 0;
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -54,8 +55,8 @@ var canvas2D;
 // GRID VARIABLES
 var gridWidth;
 var gridHeight;
-var updateGrid1;
-var updateGrid2;
+var gameGrid;
+var updateGrid;
 var renderGrid;
 var ghostGrid;
 var brightGrid;
@@ -158,12 +159,28 @@ function initEventHandlers() {
 }
 
 function respondToMouseClick(event) {
+    //Caluculate the amount of cell the current player can place
+    var territory = 0;
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(gameGrid, i, j);
+            if (cell === currentPlayer * 10) {
+                territory++;
+            }
+            if (cell - currentPlayer * 10 === LIVE_CELL) {
+                territory++;
+            }
+        }
+    }
+    cellNumber = 4 + territory / 5;
     // CALCULATE THE ROW,COL OF THE CLICK
     var canvasCoords = getRelativeCoords(event);
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
-    setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-    setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+    if (cellNumber > 0) {
+        setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+        setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+    }
     renderGame();
 }
 /*
@@ -173,6 +190,7 @@ Send socket to server
 function confirmMove() {
     updateGame();
     renderGame();
+    gameGrid = renderGrid;
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -221,6 +239,7 @@ function resetGameOfLife() {
     gridHeight = canvasHeight / cellLength;
     updateGrid = [];
     renderGrid = [];
+    gameGrid = [];
     // INIT THE CELLS IN THE GRID
     for (var i = 0; i < gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
