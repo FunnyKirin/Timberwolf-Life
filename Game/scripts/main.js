@@ -72,6 +72,7 @@ function initGameOfLife() {
     initConstants();
     // INIT THE RENDERING SURFACE
     initCanvas();
+    // Load map from server
     // INIT ALL THE GAME-RELATED VARIABLES
     initGameOfLifeData();
     // INIT THE LOOKUP TABLES FOR THE SIMULATION
@@ -82,6 +83,7 @@ function initGameOfLife() {
     nextTrun();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
+    initMap();
 }
 
 function initConstants() {
@@ -146,13 +148,22 @@ function initCanvas() {
     canvasHeight = canvas.height;
 }
 
+function initMap() {
+    $.getJSON("maps/test_map_2.json", function (json) {
+        console.log(json.data);
+        renderGrid=json.data;
+        updateGrid=json.data;
+        renderGame();
+    });
+}
+
 function initGameOfLifeData() {
     // INIT THE TIMING DATA
     timer = null;
     fps = MAX_FPS;
     frameInterval = MILLISECONDS_IN_ONE_SECOND / fps;
     // INIT THE CELL LENGTH
-    cellLength = 20;
+    cellLength = 40;
 }
 /*
  * This function initializes all the event handlers, registering
@@ -184,11 +195,14 @@ function confirmMove() {
     updateGame();
     renderGame();
     swapGrids();
+    //gameGrid=updateGrid;
     //goto next turn
     nextTrun();
 }
 //goto next turn
 function nextTrun() {
+    //renderGrid=gameGrid;
+    //renderGame();
     //switch Player
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
@@ -333,7 +347,6 @@ function renderGame() {
     //renderVoidCell();
     // THE GRID WE RENDER THIS FRAME WILL BE USED AS THE BASIS
     // FOR THE UPDATE GRID NEXT FRAME
-    //swapGrids();
 }
 
 function renderCells() {
@@ -355,6 +368,11 @@ function renderCells() {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
+            }
+            if(rightNumber==3){
+
+                    canvas2D.fillStyle = VOID_COLOR;
+                    canvas2D.fillRect(x, y, cellLength, cellLength);
             }
         }
     }
@@ -468,9 +486,9 @@ function calcLivingNeighbors(row, col) {
             numLivingNeighbors += neighborValue;
         }
     }
-    if(numLivingNeighbors>0){
-                    console.log(row + " " + col);
-            console.log(numLivingNeighbors);
+    if (numLivingNeighbors > 0) {
+        console.log(row + " " + col);
+        console.log(numLivingNeighbors);
     }
     return numLivingNeighbors;
 }
