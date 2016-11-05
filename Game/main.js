@@ -1,3 +1,10 @@
+//PlayerData
+var numOfMove1;
+var numOfMove2;
+
+//index of current player, start from 1.
+var currentPlayer = 1;
+
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -98,14 +105,6 @@ function initConstants() {
     GHOST_CELL = 2;
     VOID_CELL = 3;
 
-    /*
-    DEAD_CELL1 = 0;
-    LIVE_CELL1 = 1;
-    DEAD_CELL2 = 20;
-    LIVE_CELL2 = 21;
-    GHOST_CELL = 2;
-    VOID_CELL = 3;
-    */
     // COLORS FOR RENDERING
     LIVE_COLOR1 = "#FF0000";
     DEAD_COLOR1 = "#ff7272";
@@ -191,8 +190,8 @@ function respondToMouseClick(event) {
     var canvasCoords = getRelativeCoords(event);
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
-    setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL);
-    setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL);
+    setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+    setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
     renderGame();
 }
 
@@ -202,7 +201,8 @@ Comfirm Movement
 Send socket to server
 */
 function confirmMove() {
-    alert("!");
+    updateGame();
+    renderGame();
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -274,6 +274,58 @@ function resetGameOfLife() {
     renderGame();
 }
 
+function updateGame() {
+    // GO THROUGH THE UPDATE GRID AND USE IT TO CHANGE THE RENDER GRID
+    for (var i = 0; i < gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            // HOW MANY NEIGHBORS DOES THIS CELL HAVE?
+            var numLivingNeighbors = calcLivingNeighbors(i, j);
+
+            // CALCULATE THE ARRAY INDEX OF THIS CELL
+            // AND GET ITS CURRENT STATE
+            var index = (i * gridWidth) + j;
+            var testCell = updateGrid[index];
+
+
+            if (testCell != VOID_CELL) {
+                // CASES
+                // 1) IT'S ALIVE
+                if (testCell - currentPlayer * 10 === LIVE_CELL) {
+                    // 1a FEWER THAN 2 LIVING NEIGHBORS
+                    if (numLivingNeighbors < 2) {
+                        // IT DIES FROM UNDER-POPULATION
+                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                    }
+                    // 1b MORE THAN 3 LIVING NEIGHBORS
+                    else if (numLivingNeighbors > 3) {
+                        // IT DIES FROM OVERCROWDING
+                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                    }
+                    // 1c 2 OR 3 LIVING NEIGHBORS, WE DO NOTHING
+                    else {
+                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                    }
+                }
+                // 2) IT'S DEAD
+                else if (testCell === currentPlayer * 10) {
+                    if (numLivingNeighbors === 3) {
+                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                    } else {
+                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                    }
+                } else {
+                    if (numLivingNeighbors === 3) {
+                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                    } else {
+                        renderGrid[index] = DEAD_CELL;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
 
 function renderGame() {
     brightGrid = new Array();
@@ -305,7 +357,13 @@ function renderCells() {
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
-            if (cell === LIVE_CELL) {
+            if (cell - currentPlayer * 10 === LIVE_CELL) {
+                var x = j * cellLength;
+                var y = i * cellLength;
+                canvas2D.fillRect(x, y, cellLength, cellLength);
+            }
+            if (cell === currentPlayer * 10) {
+                canvas2D.fillStyle = DEAD_COLOR1;
                 var x = j * cellLength;
                 var y = i * cellLength;
                 canvas2D.fillRect(x, y, cellLength, cellLength);
@@ -393,6 +451,56 @@ function setGridCell(grid, row, col, value) {
     var index = (row * gridWidth) + col;
     grid[index] = value;
 }
+/*
+ * A cell's type determines which adjacent cells need to be tested
+ * during each frame of the simulation. This method tests the cell
+ * at (row, col), and returns the constant representing which of
+ * the 9 different types of cells it is.
+ */
+function determineCellType(row, col) {
+    if ((row === 0) && (col === 0))
+        return TOP_LEFT;
+    else if ((row === 0) && (col === (gridWidth - 1)))
+        return TOP_RIGHT;
+    else if ((row === (gridHeight - 1)) && (col === 0))
+        return BOTTOM_LEFT;
+    else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1)))
+        return BOTTOM_RIGHT;
+    else if (row === 0)
+        return TOP;
+    else if (col === 0)
+        return LEFT;
+    else if (row === (gridHeight - 1))
+        return RIGHT;
+    else if (col === (gridWidth - 1))
+        return BOTTOM;
+    else
+        return CENTER;
+}
+
+/*
+ * This method counts the living cells adjacent to the cell at
+ * (row, col). This count is returned.
+ * playerNumber: int
+ */
+function calcLivingNeighbors(row, col) {
+    var numLivingNeighbors = 0;
+
+    // DEPENDING ON THE TYPE OF CELL IT IS WE'LL CHECK
+    // DIFFERENT ADJACENT CELLS
+    var cellType = determineCellType(row, col);
+    var cellsToCheck = cellLookup[cellType];
+    for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+        var neighborCol = col + cellsToCheck.cellValues[counter];
+        var neighborRow = row + cellsToCheck.cellValues[counter + 1];
+        var index = (neighborRow * gridWidth) + neighborCol;
+        var neighborValue = updateGrid[index] - currentPlayer * 10;
+        if (neighborValue < 10 && neighborValue != 3) {
+            numLivingNeighbors += neighborValue;
+        }
+    }
+    return numLivingNeighbors;
+}
 
 /*
  * This function tests to see if (row, col) represents a
@@ -420,14 +528,16 @@ function isValidCell(row, col) {
  * the canvas itself, where 0,0 is the top, left corner of
  * the canvas.
  */
-function getRelativeCoords(event)
-{
-    if (event.offsetX !== undefined && event.offsetY !== undefined)
-    {
-        return {x: event.offsetX, y: event.offsetY};
-    }
-    else
-    {
-        return {x: event.layerX, y: event.layerY};
+function getRelativeCoords(event) {
+    if (event.offsetX !== undefined && event.offsetY !== undefined) {
+        return {
+            x: event.offsetX,
+            y: event.offsetY
+        };
+    } else {
+        return {
+            x: event.layerX,
+            y: event.layerY
+        };
     }
 }
