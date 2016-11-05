@@ -4,6 +4,7 @@ var numOfMove2;
 //index of current player, start from 1.
 var currentPlayer = 1;
 var cellNumber = 0;
+var territory = 0;
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -11,10 +12,8 @@ var VOID_CELL;
 var GHOST_CELL;
 //Color var
 var EMPTY_COLOR;
-var LIVE_COLOR1;
-var LIVE_COLOR2;
-var DEAD_COLOR1;
-var DEAD_COLOR2;
+var LIVE_COLOR;
+var DEAD_COLOR;
 var GHOST_COLOR;
 var VOID_COLOR;
 var GRID_LINES_COLOR;
@@ -79,6 +78,8 @@ function initGameOfLife() {
     initCellLookup();
     // SETUP THE EVENT HANDLERS
     initEventHandlers();
+    //Start first Turn;
+    nextTrun();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
 }
@@ -91,10 +92,12 @@ function initConstants() {
     VOID_CELL = 3;
     // COLORS FOR RENDERING
     EMPTY_COLOR = "#ffffff";
-    LIVE_COLOR1 = "#FF0000";
-    DEAD_COLOR1 = "#ff7272";
-    LIVE_COLOR2 = "#1c23ff";
-    DEAD_COLOR2 = "#7277ff";
+    LIVE_COLOR = [];
+    DEAD_COLOR = [];
+    LIVE_COLOR[1] = "#FF0000";
+    DEAD_COLOR[1] = "#ff7272";
+    LIVE_COLOR[2] = "#1c23ff";
+    DEAD_COLOR[2] = "#7277ff";
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
     GHOST_COLOR = "rgba(255, 0, 0, 0.5)";
@@ -161,6 +164,35 @@ function initEventHandlers() {
 }
 
 function respondToMouseClick(event) {
+    // CALCULATE THE ROW,COL OF THE CLICK
+    var canvasCoords = getRelativeCoords(event);
+    var clickCol = Math.floor(canvasCoords.x / cellLength);
+    var clickRow = Math.floor(canvasCoords.y / cellLength);
+    if (cellNumber > 0) {
+        setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+        setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+        cellNumber--;
+    }
+    //alert(cellNumber);
+    renderGame();
+}
+/*
+Comfirm Movement
+Send socket to server
+*/
+function confirmMove() {
+    updateGame();
+    renderGame();
+    swapGrids();
+    gameGrid = renderGrid;
+    updateGrid= renderGrid;
+    //goto next turn
+    nextTrun();
+}
+//goto next turn
+function nextTrun() {
+    //switch Player
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     var territory = 0;
     for (var i = 0; i <= gridHeight; i++) {
@@ -175,25 +207,6 @@ function respondToMouseClick(event) {
         }
     }
     cellNumber = 4 + territory / 5;
-    // CALCULATE THE ROW,COL OF THE CLICK
-    var canvasCoords = getRelativeCoords(event);
-    var clickCol = Math.floor(canvasCoords.x / cellLength);
-    var clickRow = Math.floor(canvasCoords.y / cellLength);
-    if (cellNumber > 0) {
-        setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-        setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-        cellNumber--;
-    }
-    renderGame();
-}
-/*
-Comfirm Movement
-Send socket to server
-*/
-function confirmMove() {
-    updateGame();
-    renderGame();
-    gameGrid = renderGrid;
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -319,7 +332,7 @@ function renderGame() {
     //renderVoidCell();
     // THE GRID WE RENDER THIS FRAME WILL BE USED AS THE BASIS
     // FOR THE UPDATE GRID NEXT FRAME
-    swapGrids();
+    //swapGrids();
 }
 
 function renderCells() {
@@ -328,17 +341,19 @@ function renderCells() {
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
-            if (cell === currentPlayer * 10) {
-                canvas2D.fillStyle = DEAD_COLOR1;
-                var x = j * cellLength;
-                var y = i * cellLength;
-                canvas2D.fillRect(x, y, cellLength, cellLength);
-            }
-            if (cell - currentPlayer * 10 === LIVE_CELL) {
-                canvas2D.fillStyle = LIVE_COLOR1;
-                var x = j * cellLength;
-                var y = i * cellLength;
-                canvas2D.fillRect(x, y, cellLength, cellLength);
+            var leftNumber = Math.floor(cell / 10);
+            var rightNumber = cell % 10;
+            var x = j * cellLength;
+            var y = i * cellLength;
+            if (leftNumber > 0) {
+                if (rightNumber == 0) {
+                    canvas2D.fillStyle = DEAD_COLOR[leftNumber];
+                    canvas2D.fillRect(x, y, cellLength, cellLength);
+                }
+                else {
+                    canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+                    canvas2D.fillRect(x, y, cellLength, cellLength);
+                }
             }
         }
     }
