@@ -1,65 +1,73 @@
-var BUTTON_LOGIN_ID = "#login-button";
-var BUTTON_LOGOUT_ID = "#logout-button";
-var FIELD_LOGIN_ID = "#login";
-var FIELD_LOGOUT_ID = "#login";
+var SIGNIN_ID = "sign-in";
+var SIGNOUT_ID = "sign-out";
+var PROFILE_PIC_ID = "profile-pic";
+var PLAYER_ID_ID = "player-id";
 
-var Session = function() {
-    var login;
-    var loginButton;
-    var anonymous = true;
+function Session() {
+    this.profilePic = document.getElementById(PROFILE_PIC_ID);
+    this.playerId = document.getElementById(PLAYER_ID_ID);
+    this.buttonSignin = document.getElementById(SIGNIN_ID);
+    this.buttonSignout = document.getElementById(SIGNOUT_ID);
 
-    function sessionHandler(user) {
-        if (user) { // login
-            console.log("Hello, " + user);
-            anonymous = false;
-            closeLogin();
-            document.querySelector(BUTTON_LOGIN_ID).style.display = "none";
-            document.querySelector(BUTTON_LOGOUT_ID).style.display = "block";
+    this.buttonSignin.addEventListener('click', this.googleSignIn.bind(this));
+    this.buttonSignout.addEventListener('click', this.googleSignOut.bind(this));
 
-        } else { // logout
-            if (!anonymous) {
-                anonymous = true;
-                window.location.reload();
-            }
+    function sessionHandler(player) {
+        if (player) { // logged in
+            var profilePicUrl = player.photoUrl;
+            var playerId = player.id;
+
+            this.profilePic.style.backgroundImage = 'url(' + profilePicUrl + ')';
+            this.playerId.textContext = playerId;
+
+            // show player's profile and sign-out button.
+            this.playerId.removeAttribute('hidden');
+            this.profilePic.removeAttribute('hidden');
+            this.buttonSignout.removeAttribute('hidden');
+
+            // hide sign-in button.
+            this.buttonSignin.setAttribute('hidden', 'true');
+
+            console.log("Hello, " + player);
+        } else { // logged out
+            // hide player's profile and sign-out button.
+            this.playerId.setAttribute('hidden', 'true');
+            this.profilePic.setAttribute('hidden', 'true');
+            this.buttonSignout.setAttribute('hidden', 'true');
+
+            // show sign-in button.
+            this.buttonSignin.removeAttribute('hidden');
+
+            console.log("Bye");
         }
     }
+}
 
-    function authGoogle() {
-        console.log("Google authentication");
+Session.prototype.googleSignIn = function() {
+    console.log("Google authentication");
 
-        var google = new firebase.auth.GoogleAuthProvider();
-        google.addScope("https://www.googleapis.com/auth/userinfo.email");
-        google.addScope("https://www.googleapis.com/auth/userinfo.profile");
+    var google = new firebase.auth.GoogleAuthProvider();
+    google.addScope("https://www.googleapis.com/auth/userinfo.email");
+    google.addScope("https://www.googleapis.com/auth/userinfo.profile");
 
-        firebase.auth().signInWithPopup(google).catch(function(error) {
-            console.log("ERROR: " + error);
-        });
-    }
+    this.auth().signInWithPopup(google).catch(function(error) {
+        console.log("ERROR: " + error);
+    });
+};
 
-    function closeLogin() {
-        var loginScreen = document.querySelector(BUTTON_LOGIN_ID);
-        if (loginScreen.open) {
-            loginScreen.close();
-        }
-    }
+Session.prototype.googleSignOut = function() {
+    this.auth.signOut();
+};
 
-    // return function
-    return {
-        init: function() {
-            loginScreen = document.querySelector(BUTTON_LOGIN_ID);
+Session.prototype.initFirebase = function() {
+    // Shortcuts to Firebase SDK features.
+    this.auth = firebase.auth();
+    this.database = firebase.database();
+    this.storage = firebase.storage();
+    // Initiates Firebase auth and listen to auth state changes.
+    this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
+};
 
-            // add handler to login and logout
-            firebase.auth().onAuthStateChanged(sessionHandler);
-
-            // for now we only do Google Sign-In
-            document.querySelector(FIELD_LOGIN_ID).addEventListener("click", authGoogle);
-            document.querySelector(FIELD_LOGOUT_ID).addEventListener("click", function() {
-                firebase.auth().signOut().then(function() {
-                    console.log('Bye');
-                }, function(error) {
-                    console.error('ERROR: ' + error);
-                });
-            });
-        }
-    };
+window.onload = function() {
+    window.session = new Session();
 };
