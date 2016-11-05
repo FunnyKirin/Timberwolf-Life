@@ -2,7 +2,7 @@
 var numOfMove1;
 var numOfMove2;
 //index of current player, start from 1.
-var currentPlayer = 1;
+var currentPlayer = 2;
 var cellNumber = 0;
 var territory = 0;
 //Cell code
@@ -184,8 +184,6 @@ function confirmMove() {
     updateGame();
     renderGame();
     swapGrids();
-    gameGrid = renderGrid;
-    updateGrid= renderGrid;
     //goto next turn
     nextTrun();
 }
@@ -273,11 +271,14 @@ function updateGame() {
         for (var j = 0; j < gridWidth; j++) {
             // HOW MANY NEIGHBORS DOES THIS CELL HAVE?
             var numLivingNeighbors = calcLivingNeighbors(i, j);
+            if (i == 0 && j == 2) {
+                console.log(numLivingNeighbors);
+            }
             // CALCULATE THE ARRAY INDEX OF THIS CELL
             // AND GET ITS CURRENT STATE
             var index = (i * gridWidth) + j;
             var testCell = updateGrid[index];
-            if (testCell != VOID_CELL) {
+            if (testCell != VOID_CELL && (testCell < 10 || (testCell > currentPlayer * 10 && testCell < currentPlayer * 10 + 9))) {
                 // CASES
                 // 1) IT'S ALIVE
                 if (testCell - currentPlayer * 10 === LIVE_CELL) {
@@ -466,6 +467,10 @@ function calcLivingNeighbors(row, col) {
         if (neighborValue < 10 && neighborValue != 3 && neighborValue > 0) {
             numLivingNeighbors += neighborValue;
         }
+    }
+    if(numLivingNeighbors>0){
+                    console.log(row + " " + col);
+            console.log(numLivingNeighbors);
     }
     return numLivingNeighbors;
 }
