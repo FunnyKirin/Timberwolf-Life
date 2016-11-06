@@ -5,7 +5,7 @@ var PROFILE_PIC_ID = "profile-pic";
 var PLAYER_ID_ID = "player-id";
 var PLAYER_PROFILE_ID = "player-profile";
 
-function Session() {
+var Session = function () {
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
     this.playerId = document.getElementById(PLAYER_ID_ID);
     this.buttonSigninGoogle = document.getElementById(GOOGLE_SIGNIN_ID);
@@ -18,7 +18,7 @@ function Session() {
     this.buttonSignout.addEventListener('click', this.signOut.bind(this));
 
     this.init();
-}
+};
 
 Session.prototype.sessionHandler = function(player) {
     if (player) { // logged in
@@ -87,8 +87,4 @@ Session.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
-};
-
-window.onload = function() {
-    window.session = new Session();
 };

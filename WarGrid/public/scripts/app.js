@@ -7,3 +7,8 @@ var config = {
     messagingSenderId: "745498047349"
 };
 firebase.initializeApp(config);
+
+window.onload = function() {
+    window.session = new Session();
+    window.map = new Map();
+};
