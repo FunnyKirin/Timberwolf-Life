@@ -4,9 +4,9 @@ var Session = function() {
     console.log('[INFO] Loading Session Module...');
 
     this.authorized = false;
-    this.create = document.getElementById(BUTTON_CREATE_ID);
+    this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
 
-    this.create.addEventListener('click', this.create.bind(this));
+    this.buttonCreate.addEventListener('click', this.create.bind(this));
 
     this.init();
 };
@@ -23,7 +23,7 @@ Session.prototype.init = function() {
 };
 
 Session.prototype.create = function() {
-    if (authorized) {
+    if (this.authorized) {
         var newKey = this.db.ref().child('session').push().key;
         var updates = {};
         var sessionData = {

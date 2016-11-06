@@ -22,7 +22,7 @@ var Player = function() {
     this.init();
 };
 
-Player.prototype.sessionHandler = function(player) {
+Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
         var profilePicUrl = player.photoURL;
         var playerId = player.displayName;
