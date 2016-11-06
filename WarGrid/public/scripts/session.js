@@ -17,7 +17,7 @@ function Session() {
     this.buttonSigninFacebook.addEventListener('click', this.facebookSignIn.bind(this));
     this.buttonSignout.addEventListener('click', this.signOut.bind(this));
 
-    this.initFirebase();
+    this.init();
 }
 
 Session.prototype.sessionHandler = function(player) {
@@ -82,11 +82,9 @@ Session.prototype.signOut = function() {
     this.auth.signOut();
 };
 
-Session.prototype.initFirebase = function() {
+Session.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
     this.auth = firebase.auth();
-    this.database = firebase.database();
-    this.storage = firebase.storage();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
 };
