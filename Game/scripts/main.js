@@ -151,13 +151,13 @@ function initCanvas() {
 
 function initMap() {
     /*
-    $.getJSON("maps/test_map_2.json", function (json) {
-        console.log(json.data);
-        renderGrid=json.data;
-        updateGrid=json.data;
-        renderGame();
-    });
-    */
+     $.getJSON("maps/test_map_2.json", function (json) {
+     console.log(json.data);
+     renderGrid=json.data;
+     updateGrid=json.data;
+     renderGame();
+     });
+     */
 }
 
 function initGameOfLifeData() {
@@ -208,14 +208,13 @@ function renderGhostCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
             }
 
-            if(rightNumber == 3) {
+            if (rightNumber == 3) {
                 canvas2D.fillStyle = VOID_COLOR;
                 canvas2D.fillRect(x, y, cellLength, cellLength);
             }
@@ -223,9 +222,9 @@ function renderGhostCells() {
     }
 }
 /*
-Comfirm Movement
-Send socket to server
-*/
+ Comfirm Movement
+ Send socket to server
+ */
 function confirmMove() {
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
@@ -242,7 +241,7 @@ function confirmMove() {
     ghostGrid = [];
     updateGame();
     renderGame();
-
+    nextTurn();
 }
 //goto next turn
 function nextTurn() {
@@ -331,10 +330,10 @@ function updateGame() {
             var testCell = updateGrid[index];
             var leftNumber = Math.floor(testCell / 10);
             var rightNumber = testCell % 10;
-            if (testCell > 10 * currentPlayer && testCell < 10 * currentPlayer + 9) {
+            if (leftNumber == currentPlayer) {
                 // CASES
                 // 1) IT'S ALIVE
-                if (testCell - currentPlayer * 10 === LIVE_CELL) {
+                if (rightNumber === LIVE_CELL) {
                     // 1a FEWER THAN 2 LIVING NEIGHBORS
                     if (numLivingNeighbors < 2) {
                         // IT DIES FROM UNDER-POPULATION
@@ -354,17 +353,16 @@ function updateGame() {
                 else if (rightNumber === 0) {
                     if (numLivingNeighbors === 3) {
                         renderGrid[index] = LIVE_CELL + 10 * leftNumber;
-                    }
-                    else {
+                    } else {
                         renderGrid[index] = DEAD_CELL + 10 * leftNumber;
                     }
                 }
-            }
+            } else
+            if (numLivingNeighbors === 3) {
+                renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+            } else
             if (testCell == DEAD_CELL) {
-                if (numLivingNeighbors === 3) {
-                    renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                }
-                else {
+                {
                     renderGrid[index] = DEAD_CELL;
                 }
             }
@@ -377,7 +375,8 @@ function renderGame() {
     // CLEAR THE CANVAS
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     // RENDER THE GRID LINES, IF NEEDED
-    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD) renderGridLines();
+    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD)
+        renderGridLines();
     // RENDER THE GAME CELLS
     renderCells();
     // AND RENDER THE TEXT
@@ -403,8 +402,7 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -463,6 +461,20 @@ function swapGrids() {
     var temp = updateGrid;
     updateGrid = renderGrid;
     renderGrid = temp;
+
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(updateGrid, i, j);
+            var leftNumber = Math.floor(cell / 10);
+            var rightNumber = cell % 10;
+
+            if (leftNumber === currentPlayer) {
+                setGridCell(renderGrid, i, j, cell);
+            }
+        }
+    }
+
+
 }
 /*
  * Accessor method for getting the cell value in the grid at
@@ -495,15 +507,24 @@ function setGridCell(grid, row, col, value) {
  * the 9 different types of cells it is.
  */
 function determineCellType(row, col) {
-    if ((row === 0) && (col === 0)) return TOP_LEFT;
-    else if ((row === 0) && (col === (gridWidth - 1))) return TOP_RIGHT;
-    else if ((row === (gridHeight - 1)) && (col === 0)) return BOTTOM_LEFT;
-    else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1))) return BOTTOM_RIGHT;
-    else if (row === 0) return TOP;
-    else if (col === 0) return LEFT;
-    else if (row === (gridHeight - 1)) return RIGHT;
-    else if (col === (gridWidth - 1)) return BOTTOM;
-    else return CENTER;
+    if ((row === 0) && (col === 0))
+        return TOP_LEFT;
+    else if ((row === 0) && (col === (gridWidth - 1)))
+        return TOP_RIGHT;
+    else if ((row === (gridHeight - 1)) && (col === 0))
+        return BOTTOM_LEFT;
+    else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1)))
+        return BOTTOM_RIGHT;
+    else if (row === 0)
+        return TOP;
+    else if (col === 0)
+        return LEFT;
+    else if (row === (gridHeight - 1))
+        return RIGHT;
+    else if (col === (gridWidth - 1))
+        return BOTTOM;
+    else
+        return CENTER;
 }
 /*
  * This method counts the living cells adjacent to the cell at
@@ -522,7 +543,8 @@ function calcLivingNeighbors(row, col) {
         var index = (neighborRow * gridWidth) + neighborCol;
         var neighborValue = updateGrid[index];
         var rightNumber = neighborValue % 10;
-        if (rightNumber == 1) {
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (rightNumber == 1 && leftNumber == currentPlayer) {
             numLivingNeighbors++;
         }
     }
@@ -555,8 +577,7 @@ function getRelativeCoords(event) {
             x: event.offsetX,
             y: event.offsetY
         };
-    }
-    else {
+    } else {
         return {
             x: event.layerX,
             y: event.layerY
