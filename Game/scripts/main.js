@@ -149,12 +149,14 @@ function initCanvas() {
 }
 
 function initMap() {
+    /*
     $.getJSON("maps/test_map_2.json", function (json) {
         console.log(json.data);
         renderGrid=json.data;
         updateGrid=json.data;
         renderGame();
     });
+    */
 }
 
 function initGameOfLifeData() {
@@ -163,7 +165,7 @@ function initGameOfLifeData() {
     fps = MAX_FPS;
     frameInterval = MILLISECONDS_IN_ONE_SECOND / fps;
     // INIT THE CELL LENGTH
-    cellLength = 40;
+    cellLength = 200;
 }
 /*
  * This function initializes all the event handlers, registering
@@ -180,30 +182,79 @@ function respondToMouseClick(event) {
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
     if (cellNumber > 0) {
-        setGridCell(renderGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-        setGridCell(updateGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+        setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
         cellNumber--;
     }
+    renderGhost();
     //alert(cellNumber);
-    renderGame();
+}
+
+function renderGhost() {
+    renderGhostCells();
+}
+
+function renderGhostCells() {
+    // SET THE PROPER RENDER COLOR
+    // RENDER THE LIVE CELLS IN THE GRID
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(ghostGrid, i, j);
+            var leftNumber = Math.floor(cell / 10);
+            var rightNumber = cell % 10;
+            var x = j * cellLength;
+            var y = i * cellLength;
+            if (leftNumber > 0) {
+                if (rightNumber == 0) {
+                    canvas2D.fillStyle = DEAD_COLOR[leftNumber];
+                    canvas2D.fillRect(x, y, cellLength, cellLength);
+                }
+                else {
+                    canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+                    canvas2D.fillRect(x, y, cellLength, cellLength);
+                }
+            }
+
+            if(rightNumber == 3) {
+                canvas2D.fillStyle = VOID_COLOR;
+                canvas2D.fillRect(x, y, cellLength, cellLength);
+            }
+        }
+    }
 }
 /*
 Comfirm Movement
 Send socket to server
 */
 function confirmMove() {
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(ghostGrid, i, j);
+            if (cell - currentPlayer * 10 === LIVE_CELL) {
+                if (cell - currentPlayer * 10 === LIVE_CELL) {
+                    setGridCell(updateGrid, i, j, LIVE_CELL + currentPlayer * 10);
+                    setGridCell(renderGrid, i, j, LIVE_CELL + currentPlayer * 10);
+                }
+            }
+        }
+    }
     updateGame();
     renderGame();
-    swapGrids();
+
+    canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
+    // RENDER THE GRID LINES, IF NEEDED
+    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD) renderGridLines();
+    // RENDER THE GAME CELLS
+    renderCells();
+    // AND RENDER THE TEXT
+    renderText();
     //gameGrid=updateGrid;
     //goto next turn
-    nextTrun();
+    //nextTrun();
 }
 //goto next turn
 function nextTrun() {
-    //renderGrid=gameGrid;
-    //renderGame();
-    //switch Player
+    //switch Player2
+    ghostGrid = [];
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     var territory = 0;
@@ -211,9 +262,6 @@ function nextTrun() {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(gameGrid, i, j);
             if (cell === currentPlayer * 10) {
-                territory++;
-            }
-            if (cell - currentPlayer * 10 === LIVE_CELL) {
                 territory++;
             }
         }
@@ -285,14 +333,13 @@ function updateGame() {
         for (var j = 0; j < gridWidth; j++) {
             // HOW MANY NEIGHBORS DOES THIS CELL HAVE?
             var numLivingNeighbors = calcLivingNeighbors(i, j);
-            if (i == 0 && j == 2) {
-                console.log(numLivingNeighbors);
-            }
             // CALCULATE THE ARRAY INDEX OF THIS CELL
             // AND GET ITS CURRENT STATE
             var index = (i * gridWidth) + j;
             var testCell = updateGrid[index];
-            if (testCell != VOID_CELL && (testCell < 10 || (testCell > currentPlayer * 10 && testCell < currentPlayer * 10 + 9))) {
+            var leftNumber = Math.floor(testCell / 10);
+            var rightNumber = testCell % 10;
+            if (testCell > 10 * currentPlayer && testCell < 10 * currentPlayer + 9) {
                 // CASES
                 // 1) IT'S ALIVE
                 if (testCell - currentPlayer * 10 === LIVE_CELL) {
@@ -312,21 +359,21 @@ function updateGame() {
                     }
                 }
                 // 2) IT'S DEAD
-                else if (testCell === currentPlayer * 10) {
+                else if (rightNumber === 0) {
                     if (numLivingNeighbors === 3) {
-                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                        renderGrid[index] = LIVE_CELL + 10 * leftNumber;
                     }
                     else {
-                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                        renderGrid[index] = DEAD_CELL + 10 * leftNumber;
                     }
                 }
+            }
+            if (testCell == DEAD_CELL) {
+                if (numLivingNeighbors === 3) {
+                    renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                }
                 else {
-                    if (numLivingNeighbors === 3) {
-                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                    }
-                    else {
-                        renderGrid[index] = DEAD_CELL;
-                    }
+                    renderGrid[index] = DEAD_CELL;
                 }
             }
         }
@@ -345,6 +392,7 @@ function renderGame() {
     renderText();
     //renderGhosts();
     //renderVoidCell();
+    swapGrids();
     // THE GRID WE RENDER THIS FRAME WILL BE USED AS THE BASIS
     // FOR THE UPDATE GRID NEXT FRAME
 }
@@ -369,10 +417,9 @@ function renderCells() {
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
             }
-            if(rightNumber==3){
-
-                    canvas2D.fillStyle = VOID_COLOR;
-                    canvas2D.fillRect(x, y, cellLength, cellLength);
+            if (rightNumber == 3) {
+                canvas2D.fillStyle = VOID_COLOR;
+                canvas2D.fillRect(x, y, cellLength, cellLength);
             }
         }
     }
@@ -481,14 +528,11 @@ function calcLivingNeighbors(row, col) {
         var neighborCol = col + cellsToCheck.cellValues[counter];
         var neighborRow = row + cellsToCheck.cellValues[counter + 1];
         var index = (neighborRow * gridWidth) + neighborCol;
-        var neighborValue = updateGrid[index] - currentPlayer * 10;
-        if (neighborValue < 10 && neighborValue != 3 && neighborValue > 0) {
-            numLivingNeighbors += neighborValue;
+        var neighborValue = updateGrid[index];
+        var rightNumber = neighborValue % 10;
+        if (rightNumber == 1) {
+            numLivingNeighbors++;
         }
-    }
-    if (numLivingNeighbors > 0) {
-        console.log(row + " " + col);
-        console.log(numLivingNeighbors);
     }
     return numLivingNeighbors;
 }
