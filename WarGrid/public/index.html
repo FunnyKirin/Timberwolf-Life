@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
 
@@ -16,32 +17,40 @@
 
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
+    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. -->
+    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
+        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+    </header>
 
     <!-- Sidenav/menu -->
     <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
-        <h3 class="w3-padding-64"><b>WarGrid</b></h3>
+        <h3 class="w3-padding-64"><b>WARGRID</b></h3>
+
+        <!--
         <div id="player-container">
-            <div hidden id="profile-pic"></div>
-            <div hidden id="player-id"></div>
-            <button hidden id="sign-out">Sign Out</button>
-            <button hidden id="google-sign-in">Sign In with Google</button>
-            <button hidden id="facebook-sign-in">Sign In with Facebook</button>
+            <div  id="profile-pic"></div>
+            <div  id="player-id"></div>
+            <button  id="sign-out">Sign Out</button>
+            <button  id="google-sign-in">Sign In with Google</button>
+            <button  id="facebook-sign-in">Sign In with Facebook</button>
         </div>
 
-        <button hidden id="player-profile">Player Profile</button>
+        <button  id="player-profile">Player Profile</button>
 
-        <a href="#index" onclick="index_open()" class="w3-padding">Home</a>
-        <a href="#profile" onclick="profile_open()" class="w3-padding">Profile</a>
-        <a id="create" href="#create" onclick="create_open()" class="w3-padding">Create a Game</a>
-        <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">Invite a Friend</a>
-        <a href="#ai" onclick="ai_open()" class="w3-padding">Play Against A.I.</a>
-        <a href="#editor" onclick="editorPage_open()" class="w3-padding">Map Editor</a>
+        -->
+        <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
+        <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
+        <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE A GAME</a>
+        <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
+        <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
+        <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
         <span class="w3-left w3-padding">WarGrid</span>
-        <a class="w3-right w3-btn w3-white" onclick="w3_open()">&#9776</a>
+        <a class="w3-right w3-btn w3-white w3-round-jumbo" onclick="w3_open()">&#9776</a>
+        <a class="w3-right w3-btn w3-white w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->
@@ -54,7 +63,7 @@
 
         <!-- Lobby map grid -->
 
-        <div class="w3-container">
+        <div class="w3-container" style="margin-top:83px">
             <h2>Game Lobby</h2>
             <p>Search for a room name in the input field.</p>
 

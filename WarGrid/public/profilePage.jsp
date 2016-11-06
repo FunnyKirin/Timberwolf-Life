@@ -6,21 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <script src="wScript.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="scripts/wScript.js"></script>
 
   </head>
 
   <body class="w3-light-grey w3-content" style="max-width:1600px">
+
+    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. -->
+    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
+        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+    </header>
+
     <!-- Sidenav/menu -->
     <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
       <h3 class="w3-padding-64"><b>WARGRID</b></h3>
           <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
           <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
-          <a href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
-          <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">PLAY WITH FRIEND</a>
-          <a href="#ai" onclick="ai_open()" class="w3-padding">A.I.</a>
-          <a href="#editor" onclick="editorPage_open()" class="w3-padding">EDITOR</a>
-          <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
+          <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE A GAME</a>
+          <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
+          <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
+          <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
     </nav>
 
     <!-- Top menu on small screens -->
@@ -38,7 +44,7 @@
       	<div class="w3-hide-large" style="margin-top:83px"></div>
       <!-- Profile content -->
       
-        <div class="w3-container">
+        <div class="w3-container" style="margin-top:83px">
         	<h1>Profile</h1>
         	<p>Match history result:</p>
         	<div class="w3-panel w3-card-8 w3-round-xlarge">
