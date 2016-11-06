@@ -130,6 +130,7 @@ function initConstants() {
     FPS_Y = 450;
     CELL_LENGTH_X = 20;
     CELL_LENGTH_Y = 480;
+    ghostGrid = []
 }
 
 function initCanvas() {
@@ -165,7 +166,7 @@ function initGameOfLifeData() {
     fps = MAX_FPS;
     frameInterval = MILLISECONDS_IN_ONE_SECOND / fps;
     // INIT THE CELL LENGTH
-    cellLength = 200;
+    cellLength = 32;
 }
 /*
  * This function initializes all the event handlers, registering
@@ -237,24 +238,15 @@ function confirmMove() {
             }
         }
     }
+
+    ghostGrid = [];
     updateGame();
     renderGame();
 
-    canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
-    // RENDER THE GRID LINES, IF NEEDED
-    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD) renderGridLines();
-    // RENDER THE GAME CELLS
-    renderCells();
-    // AND RENDER THE TEXT
-    renderText();
-    //gameGrid=updateGrid;
-    //goto next turn
-    //nextTurn();
 }
 //goto next turn
 function nextTurn() {
     //switch Player2
-    ghostGrid = [];
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     var territory = 0;
