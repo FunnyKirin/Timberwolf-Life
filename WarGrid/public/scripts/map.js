@@ -1,17 +1,19 @@
 // Database
 var Map = function() {
-    console.log("Map");
+    console.log("[INFO] Loading Map Module");
     this.init();
 };
 
 Map.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
-    this.dbMap = firebase.database().ref().child('map');
+    this.ref = firebase.database().ref();
 
-    this.dbMap.on("value", function(snapshot) {
-        console.log(snapshot.val());
-    }, function(error) {
-        console.log(error);
-    });
+};
 
+Map.prototype.loadMap = function(name) {
+    return this.ref.child('map').child(name);
+};
+
+Map.prototype.updateMap = function() {
+    //TODO: do this
 };
