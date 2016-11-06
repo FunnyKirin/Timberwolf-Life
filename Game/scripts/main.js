@@ -80,7 +80,7 @@ function initGameOfLife() {
     // SETUP THE EVENT HANDLERS
     initEventHandlers();
     //Start first Turn;
-    nextTrun();
+    nextTurn();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
     initMap();
@@ -204,7 +204,7 @@ function renderGhostCells() {
             var x = j * cellLength;
             var y = i * cellLength;
             if (leftNumber > 0) {
-                if (rightNumber == 0) {
+                if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -249,10 +249,10 @@ function confirmMove() {
     renderText();
     //gameGrid=updateGrid;
     //goto next turn
-    //nextTrun();
+    //nextTurn();
 }
 //goto next turn
-function nextTrun() {
+function nextTurn() {
     //switch Player2
     ghostGrid = [];
     currentPlayer = currentPlayer === 1 ? 2 : 1;
@@ -408,7 +408,7 @@ function renderCells() {
             var x = j * cellLength;
             var y = i * cellLength;
             if (leftNumber > 0) {
-                if (rightNumber == 0) {
+                if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -560,14 +560,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX
-            , y: event.offsetY
+            x: event.offsetX,
+            y: event.offsetY
         };
     }
     else {
         return {
-            x: event.layerX
-            , y: event.layerY
+            x: event.layerX,
+            y: event.layerY
         };
     }
 }
