@@ -23,7 +23,7 @@ Session.prototype.init = function() {
 };
 
 Session.prototype.create = function() {
-    if (this.authorized) {
+    //if (this.authorized) {
         var newKey = this.db.ref().child('session').push().key;
         var session = {};
         var sessionData = {
@@ -32,15 +32,15 @@ Session.prototype.create = function() {
             'owner': this.auth.currentUser
         };
 
-        session['/sessions/' + newKey] = sessionData;
+        session['/session/' + newKey] = sessionData;
 
         console.log('new session: ', newKey);
 
         return this.db.ref().update(session);
-
+/*
     } else {
         alert('unable to create a room');
-    }
+    }*/
 };
 
 Session.prototype.leave = function() {

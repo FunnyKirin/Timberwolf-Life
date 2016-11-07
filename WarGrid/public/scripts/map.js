@@ -1,5 +1,6 @@
 // Map Module
 var Map = function() {
+    console.log('[INFO] Loading Map Module...');
     this.init();
 };
 
@@ -12,8 +13,9 @@ Map.prototype.loadMap = function(name) {
 };
 
 //
-Map.prototype.updateMap = function(name, json) {
+Map.prototype.updateMap = function(json) {
     var map = {};
+    var name = json.name;
     var data = json.data;
     var creator = json.creator;
     var x = json.x;
