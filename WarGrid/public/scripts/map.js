@@ -12,7 +12,9 @@ Map.prototype.loadMap = function(name) {
 };
 
 Map.prototype.updateMap = function(name, json) {
+    var updates = {};
 
+    updates[name] = json;
 };
 
 Map.prototype.init = function() {

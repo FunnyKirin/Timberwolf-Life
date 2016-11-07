@@ -3,7 +3,8 @@ var FACEBOOK_SIGNIN_ID = "facebook-sign-in";
 var SIGNOUT_ID = "sign-out";
 var PROFILE_PIC_ID = "profile-pic";
 var PLAYER_ID_ID = "player-id";
-var PLAYER_PROFILE_ID = "player-profile";
+var PLAYER_PROFILE_ID = "player-profile-desktop";
+var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 
 var Player = function() {
     console.log('[INFO] Loading Player Module...');
@@ -31,7 +32,7 @@ Player.prototype.playerHandler = function(player) {
         $("." + GOOGLE_SIGNIN_ID).hide();
         $("." + FACEBOOK_SIGNIN_ID).hide();
         $("." + SIGNOUT_ID).show();
-
+        $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
 
         console.log("Hello, ", playerId);
         console.log("You signed in with ", email);
@@ -41,6 +42,7 @@ Player.prototype.playerHandler = function(player) {
         $("." + GOOGLE_SIGNIN_ID).show();
         $("." + FACEBOOK_SIGNIN_ID).show();
         $("." + SIGNOUT_ID).hide();
+        $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> Login");
 
         console.log("Bye");
     }
