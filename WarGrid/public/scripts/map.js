@@ -11,8 +11,22 @@ Map.prototype.loadMap = function(name) {
     return this.dbRef.child('map').child(name);
 };
 
+//
 Map.prototype.updateMap = function(name, json) {
+    var map = {};
+    var data = json.data;
+    var creator = json.creator;
+    var x = json.x;
+    var y = json.y;
 
+    map['/map/' + name] = {
+        "data": data,
+        "creator": creator,
+        "x": x,
+        "y": y
+    };
+
+    return this.dbRef.update(map);
 };
 
 Map.prototype.init = function() {
