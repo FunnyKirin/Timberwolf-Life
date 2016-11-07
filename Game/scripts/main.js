@@ -294,9 +294,10 @@ function nextTurn() {
             }
         }
     }
-    alert(territory);
     //amount of cell current player can place.
     cellNumber = Math.floor(4 + territory / 5);
+
+    initUI();
 }
 
 function CellType(initNumNeighbors, initCellValues) {
