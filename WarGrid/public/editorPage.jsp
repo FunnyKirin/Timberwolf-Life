@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="scripts/wScript.js"></script>
-    <script src="GameOfLife.js"></script>
+    <script src="scripts/editor.js"></script>
       case expression:
 
         break;
@@ -64,22 +64,25 @@
         </div>
         -->
         <div class="w3-container" style="margin-top:83px">
-            <div class="w3-container w3-card-8 w3-left w3-panel w3-round-xlarge w3-col m12">
+
               <input id="reset_button" type="button" value="Reset" />
                 <select id="game_of_life_patterns">
                   <option value="Void.png">Void Cell</option>
-                  <option value="LightweightSpaceshipRight.png">Lightweight Spaceship Right</option>
+                  <option value="">player1 live cell</option>
+                  <option value="">player1 ghost cell</option>
+                  <option value="">player2 live cell</option>
+                  <option value="">player2 ghost cell</option>
                 </select>
-                <canvas id="game_of_life_canvas" width="1024" height="512">
+                <canvas id="editor_canvas" width="1024" height="512">
                 </canvas>
-            </div>
+
 
         </div>
 
 
     </div>
     <script>
-      initGameOfLife();
+      initEditor();
     </script>
   </body>
 </html>
