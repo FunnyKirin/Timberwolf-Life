@@ -153,12 +153,7 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-<<<<<<< HEAD
-    return $.getJSON("maps/test_map_2.json", function(json) {
-        console.log(json.data);
-=======
     $.getJSON("maps/test_map_2.json", function (json) {
->>>>>>> 24876abc8af79bb5255d921e26ac2ff5fefb11dd
         renderGrid = json.data;
         //updateGrid=json.data;
         renderGame();
