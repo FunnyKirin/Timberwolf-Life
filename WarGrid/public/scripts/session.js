@@ -25,18 +25,18 @@ Session.prototype.init = function() {
 Session.prototype.create = function() {
     if (this.authorized) {
         var newKey = this.db.ref().child('session').push().key;
-        var updates = {};
+        var session = {};
         var sessionData = {
             'map': null,
             'challenger': null,
             'owner': this.auth.currentUser
         };
 
-        updates['/sessions/' + newKey] = sessionData;
+        session['/sessions/' + newKey] = sessionData;
 
         console.log('new session: ', newKey);
 
-        return this.db.ref().update(updates);
+        return this.db.ref().update(session);
 
     } else {
         alert('unable to create a room');
