@@ -1,12 +1,12 @@
 //open and close side nav;
 
-function w3_open() 
+function w3_open()
 {
     document.getElementById("mySidenav").style.display = "block";
     document.getElementById("myOverlay").style.display = "block";
 }
-     
-function w3_close() 
+
+function w3_close()
 {
     document.getElementById("mySidenav").style.display = "none";
     document.getElementById("myOverlay").style.display = "none";
@@ -26,13 +26,13 @@ function index_open()
 function about_open()
 {
 	window.open("aboutPage.jsp","_self" );
-	
+
 }
 
 function create_open()
 {
 	window.open("createPage.jsp","_self" );
-	
+
 }
 
 function playwfriend_open()
@@ -57,7 +57,7 @@ function game_open()
 
 
 /*//Automatic slideshow
-function carousel() 
+function carousel()
 {
     var i;
     var x = document.getElementsByClassName("mySlides");
@@ -82,9 +82,9 @@ function myFunction() {
     cards = document.getElementsByName("myCards");
 
     //window.alert(cards.length);
-    for (i = 0; i < cards.length; i++) 
+    for (i = 0; i < cards.length; i++)
     {
-        if (cards[i].getElementsByTagName("p")[0].innerHTML.toUpperCase().indexOf(filter) > -1) 
+        if (cards[i].getElementsByTagName("p")[0].innerHTML.toUpperCase().indexOf(filter) > -1)
         {
             cards[i].style.display = "";
         } else {
@@ -94,7 +94,7 @@ function myFunction() {
 }
 
 /*
-function myFunction() 
+function myFunction()
 {
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");
@@ -129,23 +129,23 @@ function click_map(element) {
 var slideIndex = 1;
 //showDivs(slideIndex);
 
-function plusDivs(n) 
+function plusDivs(n)
 {
   showDivs(slideIndex += n);
 }
 
-function currentDiv(n) 
+function currentDiv(n)
 {
   showDivs(slideIndex = n);
 }
 
-function showDivs(n) 
+function showDivs(n)
 {
   var i;
   var x = document.getElementsByClassName("mySlides");
   var dots = document.getElementsByClassName("demo");
-  if (n > x.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = x.length}
+  if (n > x.length) {slideIndex = 1; }
+  if (n < 1) {slideIndex = x.length; }
   for (i = 0; i < x.length; i++) {
      x[i].style.display = "none";
   }

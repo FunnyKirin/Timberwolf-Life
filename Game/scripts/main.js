@@ -149,7 +149,6 @@ function initCanvas() {
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
 }
-
 /* This function initializes game map, for now it only loads test map 2.
  * Todo: connect this function to our web UI, so player will load the map
  * they choose.
@@ -180,14 +179,11 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
 }
-
 /* This function initilizes all UI texts
  */
 function initUI() {
     $("#text").text("Cell left: " + cellNumber);
 }
-
-
 /*
  * This function handle mouse click event, cells will only be placed on ghost grid
  * until the player click confirm.
@@ -197,11 +193,9 @@ function respondToMouseClick(event) {
     var canvasCoords = getRelativeCoords(event);
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
-
     //get cells from update grid and ghost cell
     var cell = getGridCell(updateGrid, clickRow, clickCol);
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
-
     //check if there is already a cell in ghost grid,
     // if not:
     if (ghostCell != LIVE_CELL + currentPlayer * 10) {
@@ -216,13 +210,12 @@ function respondToMouseClick(event) {
         setGridCell(ghostGrid, clickRow, clickCol, 0);
         cellNumber++;
     }
-
     //reset game UI
     renderGame();
     renderGhost();
+    renderGridLines();
     initUI();
 }
-
 //These function will be used to render ghost cells
 function renderGhost() {
     renderGhostCells();
@@ -278,7 +271,6 @@ function confirmMove() {
             }
         }
     }
-
     //update and render the game
     ghostGrid = [];
     updateGame();
@@ -287,7 +279,6 @@ function confirmMove() {
     nextTurn();
     initUI();
 }
-
 //goto next turn
 function nextTurn() {
     //switch Player
@@ -297,11 +288,13 @@ function nextTurn() {
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(updateGrid, i, j);
-            if (cell === currentPlayer * 10) {
+            var leftNumber = Math.floor(cell / 10);
+            if (leftNumber === currentPlayer) {
                 territory++;
             }
         }
     }
+    alert(territory);
     //amount of cell current player can place.
     cellNumber = Math.floor(4 + territory / 5);
 }
@@ -378,7 +371,6 @@ function updateGame() {
             var leftNumber = Math.floor(testCell / 10);
             //rightNumber = cell type
             var rightNumber = testCell % 10;
-
             // check if the cell belongs to current player.
             if (leftNumber == currentPlayer) {
                 // CASES
@@ -411,17 +403,18 @@ function updateGame() {
                     }
                 }
             }
-            // if it is an empty cell
-            else
-            if (numLivingNeighbors === 3) {
-                //become a live cell
-                renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-            }
-            else
-            if (testCell == DEAD_CELL) {
-                {
-                    //still a dead cell
-                    renderGrid[index] = DEAD_CELL;
+            //make sure it is not a void cell
+            else if (testCell != VOID_CELL) {
+                // if it is an empty cell
+                if (numLivingNeighbors === 3) {
+                    //become a live cell
+                    renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                }
+                else if (testCell == DEAD_CELL) {
+                    {
+                        //still a dead cell
+                        renderGrid[index] = DEAD_CELL;
+                    }
                 }
             }
         }
@@ -439,6 +432,7 @@ function renderGame() {
     // AND RENDER THE TEXT
     renderText();
     //renderGhosts();
+    renderGridLines();
     //renderVoidCell();
     swapGrids();
     // THE GRID WE RENDER THIS FRAME WILL BE USED AS THE BASIS

@@ -3,9 +3,10 @@
 <html>
 
 <head>
-    <title>Index</title>
+    <title>WarGrid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -21,17 +22,15 @@
 
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-large w3-padding-16">
-        
+
         <div class="w3-dropdown-click w3-right">
             <a class=" w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
             <div id="dropdown_menu_on_large_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:1">
-                <a href="#" class="fa fa-google-plus-official" onlick=""> sign in</a>
-                <a href="#" class="fa fa-facebook-square" onlick=""> sign in</a>
+                <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
+                <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
+                <a onclick="player.signOut()" href="#" class="fa fa-google-plus-official sign-out"> sign out</a>
             </div>
         </div>
-        
-
-        
 
     </header>
 
@@ -69,8 +68,9 @@
             <div class="w3-container w3-middle w3-dropdown-click">
                 <a class="w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()" ><i class="material-icons">person</i></a>
                 <div id="dropdown_menu_on_medium_small_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:0">
-                    <a href="#" class="fa fa-google-plus-official" onlick=""> sign in</a>
-                    <a href="#" class="fa fa-facebook-square" onlick=""> sign in</a>
+                    <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
+                    <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
+                    <a onclick="player.signOut()" href="#" class="fa fa-google-plus-official sign-out"> sign out</a>
                 </div>
             </div>
         </div>
