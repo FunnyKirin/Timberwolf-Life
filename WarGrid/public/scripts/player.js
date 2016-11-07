@@ -14,11 +14,11 @@ var Player = function() {
     this.buttonSigninFacebook = document.getElementById(FACEBOOK_SIGNIN_ID);
     this.buttonSignout = document.getElementById(SIGNOUT_ID);
     this.buttonProfile = document.getElementById(PLAYER_PROFILE_ID);
-
+/*
     this.buttonSigninGoogle.addEventListener('click', this.googleSignIn.bind(this));
     this.buttonSigninFacebook.addEventListener('click', this.facebookSignIn.bind(this));
     this.buttonSignout.addEventListener('click', this.signOut.bind(this));
-
+*/
     this.init();
 };
 
@@ -28,32 +28,19 @@ Player.prototype.playerHandler = function(player) {
         var playerId = player.displayName;
         var email = player.email;
 
-        this.profilePic.style.backgroundImage = 'url(' + profilePicUrl + ')';
-        this.playerId.textContent = playerId;
+        $("." + GOOGLE_SIGNIN_ID).hide();
+        $("." + FACEBOOK_SIGNIN_ID).hide();
+        $("." + SIGNOUT_ID).show();
 
-        // show player's profile and sign-out button.
-        this.profilePic.removeAttribute('hidden');
-        this.playerId.removeAttribute('hidden');
-        this.buttonSignout.removeAttribute('hidden');
-        this.buttonProfile.removeAttribute('hidden');
-
-        // hide sign-in button.
-        this.buttonSigninGoogle.setAttribute('hidden', 'true');
-        this.buttonSigninFacebook.setAttribute('hidden', 'true');
 
         console.log("Hello, ", playerId);
         console.log("You signed in with ", email);
 
     } else { // logged out
-        // hide player's profile and sign-out button.
-        this.playerId.setAttribute('hidden', 'true');
-        this.profilePic.setAttribute('hidden', 'true');
-        this.buttonProfile.setAttribute('hidden', 'true');
-        this.buttonSignout.setAttribute('hidden', 'true');
 
-        // show sign-in button.
-        this.buttonSigninGoogle.removeAttribute('hidden');
-        this.buttonSigninFacebook.removeAttribute('hidden');
+        $("." + GOOGLE_SIGNIN_ID).show();
+        $("." + FACEBOOK_SIGNIN_ID).show();
+        $("." + SIGNOUT_ID).hide();
 
         console.log("Bye");
     }
