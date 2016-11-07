@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="scripts/wScript.js"></script>
-    <script src="GameOfLife.js"></script>
+    <script src="scripts/editor.js"></script>
       case expression:
 
         break;
@@ -66,28 +66,23 @@
         </div>
         -->
         <div class="w3-container" style="margin-top:83px">
-            <div class="w3-container w3-card-8 w3-left w3-panel w3-round-xlarge w3-col m12">
-              <input id="start_button" type="button" value="Start" />
-              <input id="pause_button" type="button" value="Pause" />
+
               <input id="reset_button" type="button" value="Reset" />
-                <select id="game_of_life_patterns">
-                  <option value="Void.png">Void Cell</option>
-                  <option value="LightweightSpaceshipRight.png">Lightweight Spaceship Right</option>
+                <select id="cell_type">
+                  <option value="images/Void.png">Void Cell</option>
+                  <option value="images/P1_LIVE.png">player1 live cell</option>
+                  <option value="images/P2_LIVE.png">player2 live cell</option>
                 </select>
-                <input id="dec_fps_button" type="button" value="FPS-" />
-                <input id="inc_fps_button" type="button" value="FPS+" />
-                <input id="dec_cell_length_button" type="button" value="Cell Length-" />
-                <input id="inc_cell_length_button" type="button" value="Cell Length+" />
-                <canvas id="game_of_life_canvas" width="1024" height="512">
+                <canvas id="editor_canvas" width="1024" height="512">
                 </canvas>
-            </div>
+
 
         </div>
 
-        
+
     </div>
     <script>
-      initGameOfLife();
+      initEditor();
     </script>
   </body>
 </html>
