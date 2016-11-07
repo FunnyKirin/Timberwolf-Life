@@ -131,7 +131,7 @@ function initConstants() {
     FPS_Y = 450;
     CELL_LENGTH_X = 20;
     CELL_LENGTH_Y = 480;
-    ghostGrid = [];
+    ghostGrid = []
 }
 
 function initCanvas() {
@@ -154,8 +154,12 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-    $.getJSON("maps/test_map_2.json", function(json) {
+<<<<<<< HEAD
+    return $.getJSON("maps/test_map_2.json", function(json) {
         console.log(json.data);
+=======
+    $.getJSON("maps/test_map_2.json", function (json) {
+>>>>>>> 24876abc8af79bb5255d921e26ac2ff5fefb11dd
         renderGrid = json.data;
         //updateGrid=json.data;
         renderGame();
@@ -201,8 +205,26 @@ function respondToMouseClick(event) {
     if (ghostCell != LIVE_CELL + currentPlayer * 10) {
         //check if the player can place a cell at that position.
         if (cellNumber > 0 && cell != VOID_CELL) {
-            setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-            cellNumber--;
+            //check if the position is next to the player's territory.
+            var cellType = determineCellType(clickRow, clickCol);
+            var cellsToCheck = cellLookup[cellType];
+            var boolean = 0;
+            for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+                var neighborCol = clickCol + cellsToCheck.cellValues[counter];
+                var neighborRow = clickRow + cellsToCheck.cellValues[counter + 1];
+                var index = (neighborRow * gridWidth) + neighborCol;
+                var neighborValue = updateGrid[index];
+                var rightNumber = neighborValue % 10;
+                var leftNumber = Math.floor(neighborValue / 10);
+                if (leftNumber == currentPlayer) {
+                    boolean = 1;
+                }
+            }
+            //it is!
+            if (boolean == 1) {
+                setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                cellNumber--;
+            }
         }
     }
     // if so, remove that cell. (so players can undo their moves before they confirm)
@@ -275,9 +297,28 @@ function confirmMove() {
     ghostGrid = [];
     updateGame();
     renderGame();
+    if (checkVictory()) {
+        alert("player " + currentPlayer + " win!");
+    }
     //go to next turn
     nextTurn();
     initUI();
+}
+//check if current player achieved victory.
+function checkVictory() {
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(updateGrid, i, j);
+            var leftNumber = Math.floor(cell / 10);
+            if (leftNumber != -1) {
+                if (cell != VOID_CELL && leftNumber != currentPlayer) {
+                    console.log(leftNumber + " " + currentPlayer);
+                    return 0;
+                }
+            }
+        }
+    }
+    return 1;
 }
 //goto next turn
 function nextTurn() {
@@ -294,9 +335,9 @@ function nextTurn() {
             }
         }
     }
-    alert(territory);
     //amount of cell current player can place.
     cellNumber = Math.floor(4 + territory / 5);
+    initUI();
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -409,7 +450,8 @@ function updateGame() {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -452,7 +494,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -614,13 +657,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
