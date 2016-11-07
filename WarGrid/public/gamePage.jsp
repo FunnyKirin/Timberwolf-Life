@@ -1,44 +1,31 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
+
+<head>
     <title>Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <script src="scripts/wScript.js"></script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script src="scripts/map.js"></script>
+    <script src="scripts/main.js"></script>
+</head>
 
-  </head>
-
-
-  <body class="w3-light-grey w3-content" style="max-width:1600px">
-
-
-
-
-    <div class="w3-container w3-card-8 w3-center w3-panel w3-round-xlarge w3-col m12">
-      <h1>Game Map</h1>
-      <p>------------------------------------------------------------------------------------------------------------------------------------------------</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>Game grid is placed here.</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>*</p>
-      <p>------------------------------------------------------------------------------------------------------------------------------------------------</p>
+<body>
+        <div id="gameDiv">
+            <canvas id="game_canvas" width="512" height="512">
+            </canvas>
+            <input id="confirmButton" type="button" value="Confirm" />
+            <p id="text">123</p>
+        </div>
 
 
-
-    </div>
-
-
-
-
-
-
-    </div>
+        <script>
+            initGameOfLife();
+            loadMap('maps/test_map_1.json');
+            loadMap('maps/test_map_2.json');
+            loadMap('maps/test_map_3.json');
+        </script>
+    </body>
+</html>
