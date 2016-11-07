@@ -130,7 +130,7 @@ function initConstants() {
     FPS_Y = 450;
     CELL_LENGTH_X = 20;
     CELL_LENGTH_Y = 480;
-    ghostGrid = []
+    ghostGrid = [];
 }
 
 function initCanvas() {
@@ -446,8 +446,7 @@ function updateGame() {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                }
-                else if (testCell == DEAD_CELL) {
+                } else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -490,8 +489,7 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -653,14 +651,13 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX
-            , y: event.offsetY
+            x: event.offsetX,
+            y: event.offsetY
         };
-    }
-    else {
+    } else {
         return {
-            x: event.layerX
-            , y: event.layerY
+            x: event.layerX,
+            y: event.layerY
         };
     }
 }
