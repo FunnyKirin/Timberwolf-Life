@@ -79,7 +79,6 @@ function initGameOfLife() {
     initCellLookup();
     // SETUP THE EVENT HANDLERS
     initEventHandlers();
-    
     initUI();
     //Start first Turn;
     nextTurn();
@@ -152,15 +151,13 @@ function initCanvas() {
 }
 
 function initMap() {
-    
-     $.getJSON("maps/test_map_2.json", function (json) {
-     console.log(json.data);
-     renderGrid=json.data;
-     updateGrid=json.data;
-     renderGame();
-     swapGrids();
-     });
-     
+    $.getJSON("maps/test_map_2.json", function (json) {
+        console.log(json.data);
+        renderGrid = json.data;
+        //updateGrid=json.data;
+        renderGame();
+        swapGrids();
+    });
 }
 
 function initGameOfLifeData() {
@@ -180,18 +177,17 @@ function initEventHandlers() {
     $("#confirmButton").click(confirmMove);
 }
 
-function initUI(){
-    $("#text").text("Cell left: "+ cellNumber);
+function initUI() {
+    $("#text").text("Cell left: " + cellNumber);
 }
 
 function respondToMouseClick(event) {
-    
     // CALCULATE THE ROW,COL OF THE CLICK
     var canvasCoords = getRelativeCoords(event);
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
     var cell = getGridCell(updateGrid, clickRow, clickCol);
-    if (cellNumber > 0 && cell!=VOID_CELL) {
+    if (cellNumber > 0 && cell != VOID_CELL) {
         setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
         cellNumber--;
     }
@@ -218,12 +214,12 @@ function renderGhostCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
             }
-
             if (rightNumber == 3) {
                 canvas2D.fillStyle = VOID_COLOR;
                 canvas2D.fillRect(x, y, cellLength, cellLength);
@@ -247,7 +243,6 @@ function confirmMove() {
             }
         }
     }
-
     ghostGrid = [];
     updateGame();
     renderGame();
@@ -364,14 +359,17 @@ function updateGame() {
                 else if (rightNumber === 0) {
                     if (numLivingNeighbors === 3) {
                         renderGrid[index] = LIVE_CELL + 10 * leftNumber;
-                    } else {
+                    }
+                    else {
                         renderGrid[index] = DEAD_CELL + 10 * leftNumber;
                     }
                 }
-            } else
+            }
+            else
             if (numLivingNeighbors === 3) {
                 renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-            } else
+            }
+            else
             if (testCell == DEAD_CELL) {
                 {
                     renderGrid[index] = DEAD_CELL;
@@ -386,8 +384,7 @@ function renderGame() {
     // CLEAR THE CANVAS
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     // RENDER THE GRID LINES, IF NEEDED
-    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD)
-        renderGridLines();
+    if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD) renderGridLines();
     // RENDER THE GAME CELLS
     renderCells();
     // AND RENDER THE TEXT
@@ -413,7 +410,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -461,7 +459,6 @@ function renderText() {
     //canvas2D.fillText("FPS: " + fps, FPS_X, FPS_Y);
     //canvas2D.fillText("Cell Length: " + cellLength, CELL_LENGTH_X, CELL_LENGTH_Y);
     canvas2D.fillText("WarGrid", FPS_X, FPS_Y);
-    
 }
 /*
  * We need one grid's cells to determine the grid's values for
@@ -473,20 +470,19 @@ function swapGrids() {
     var temp = updateGrid;
     updateGrid = renderGrid;
     renderGrid = temp;
-
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(updateGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             var rightNumber = cell % 10;
-
-            if (leftNumber === currentPlayer) {
+            if (leftNumber >0) {
+                setGridCell(renderGrid, i, j, cell);
+            }
+            if (rightNumber === VOID_CELL) {
                 setGridCell(renderGrid, i, j, cell);
             }
         }
     }
-
-
 }
 /*
  * Accessor method for getting the cell value in the grid at
@@ -519,24 +515,15 @@ function setGridCell(grid, row, col, value) {
  * the 9 different types of cells it is.
  */
 function determineCellType(row, col) {
-    if ((row === 0) && (col === 0))
-        return TOP_LEFT;
-    else if ((row === 0) && (col === (gridWidth - 1)))
-        return TOP_RIGHT;
-    else if ((row === (gridHeight - 1)) && (col === 0))
-        return BOTTOM_LEFT;
-    else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1)))
-        return BOTTOM_RIGHT;
-    else if (row === 0)
-        return TOP;
-    else if (col === 0)
-        return LEFT;
-    else if (row === (gridHeight - 1))
-        return RIGHT;
-    else if (col === (gridWidth - 1))
-        return BOTTOM;
-    else
-        return CENTER;
+    if ((row === 0) && (col === 0)) return TOP_LEFT;
+    else if ((row === 0) && (col === (gridWidth - 1))) return TOP_RIGHT;
+    else if ((row === (gridHeight - 1)) && (col === 0)) return BOTTOM_LEFT;
+    else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1))) return BOTTOM_RIGHT;
+    else if (row === 0) return TOP;
+    else if (col === 0) return LEFT;
+    else if (row === (gridHeight - 1)) return RIGHT;
+    else if (col === (gridWidth - 1)) return BOTTOM;
+    else return CENTER;
 }
 /*
  * This method counts the living cells adjacent to the cell at
@@ -586,13 +573,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
