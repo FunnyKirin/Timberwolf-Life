@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
 
@@ -17,9 +19,20 @@
 
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
-    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. -->
-    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
-        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+    <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
+    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-large w3-padding-16">
+        
+        <div class="w3-dropdown-click w3-right">
+            <a class=" w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
+            <div id="dropdown_menu_on_large_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:1">
+                <a href="#" class="fa fa-google-plus-official" onlick=""> sign in</a>
+                <a href="#" class="fa fa-facebook-square" onlick=""> sign in</a>
+            </div>
+        </div>
+        
+
+        
+
     </header>
 
     <!-- Sidenav/menu -->
@@ -44,13 +57,22 @@
         <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
         <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
+        <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
-    <!-- Top menu on small screens -->
+    <!-- Top menu on medium and small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-        <span class="w3-left w3-padding">WarGrid</span>
-        <a class="w3-right w3-btn w3-white w3-round-jumbo" onclick="w3_open()">&#9776</a>
-        <a class="w3-right w3-btn w3-white w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+        <span class="w3-left">WG</span>
+        <div class="w3-btn-group w3-right">
+            <a class="w3-btn-floating w3-right w3-white  w3-round-jumbo" onclick="w3_open()">&#9776</a>
+            <div class="w3-dropdown-click">
+                <a class="w3-middle w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()" ><i class="material-icons">person</i></a>
+                <div id="dropdown_menu_on_medium_small_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:0">
+                    <a href="#" class="fa fa-google-plus-official" onlick=""> sign in</a>
+                    <a href="#" class="fa fa-facebook-square" onlick=""> sign in</a>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->

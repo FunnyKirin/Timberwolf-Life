@@ -25,17 +25,17 @@
       <h3 class="w3-padding-64"><b>WARGRID</b></h3>
           <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
           <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
-          <a href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
-          <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">PLAY WITH FRIEND</a>
-          <a href="#ai" onclick="ai_open()" class="w3-padding">A.I.</a>
-          <a href="#editor" onclick="editorPage_open()" class="w3-padding">EDITOR</a>
+          <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE A GAME</a>
+          <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
+          <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
+          <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
           <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WARGRID</span>
-      <a class="w3-right w3-btn w3-white" onclick="w3_open()">&#9776</a>
+      <span class="w3-left w3-padding">WG</span>
+      <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->

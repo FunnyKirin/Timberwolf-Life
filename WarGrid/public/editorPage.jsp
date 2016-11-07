@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="scripts/wScript.js"></script>
-    <script src="GameOfLife.js"></script>
+    <script src="scripts/editor.js"></script>
       case expression:
 
         break;
@@ -21,10 +21,11 @@
 
   <body class="w3-light-grey w3-content" style="max-width:1600px">
 
-    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. -->
+    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. 
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
         <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
     </header>
+    -->
 
 
     <!-- Sidenav/menu -->
@@ -36,12 +37,13 @@
           <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
           <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
           <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
+          <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WARGRID</span>
-      <a class="w3-right w3-btn w3-white" onclick="w3_open()">&#9776</a>
+      <span class="w3-left w3-padding">WG</span>
+      <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->
@@ -64,28 +66,23 @@
         </div>
         -->
         <div class="w3-container" style="margin-top:83px">
-            <div class="w3-container w3-card-8 w3-left w3-panel w3-round-xlarge w3-col m12">
-              <input id="start_button" type="button" value="Start" />
-              <input id="pause_button" type="button" value="Pause" />
+
               <input id="reset_button" type="button" value="Reset" />
-                <select id="game_of_life_patterns">
-                  <option value="Void.png">Void Cell</option>
-                  <option value="LightweightSpaceshipRight.png">Lightweight Spaceship Right</option>
+                <select id="cell_type">
+                  <option value="images/Void.png">Void Cell</option>
+                  <option value="images/P1_LIVE.png">player1 live cell</option>
+                  <option value="images/P2_LIVE.png">player2 live cell</option>
                 </select>
-                <input id="dec_fps_button" type="button" value="FPS-" />
-                <input id="inc_fps_button" type="button" value="FPS+" />
-                <input id="dec_cell_length_button" type="button" value="Cell Length-" />
-                <input id="inc_cell_length_button" type="button" value="Cell Length+" />
-                <canvas id="game_of_life_canvas" width="1024" height="512">
+                <canvas id="editor_canvas" width="1024" height="512">
                 </canvas>
-            </div>
+
 
         </div>
 
-        
+
     </div>
     <script>
-      initGameOfLife();
+      initEditor();
     </script>
   </body>
 </html>
