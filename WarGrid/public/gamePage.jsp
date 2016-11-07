@@ -12,11 +12,13 @@
     <script src="scripts/main.js"></script>
 </head>
 
-<body>
-        <div id="gameDiv">
-            <canvas id="game_canvas" width="512" height="512">
+<body class="w3-light-grey w3-content" style="max-width:1600px">
+
+        <div id="gameDiv" class="w3-container w3-center  w3-padding-128">
+            <canvas id="game_canvas" class="w3-container w3-card-24" width="512" height="512">
             </canvas>
             <input id="confirmButton" type="button" value="Confirm" />
+
             <p id="text">123</p>
         </div>
 
