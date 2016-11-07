@@ -8,8 +8,12 @@ Map.prototype.mapHandler = function(player) {
 
 };
 
-Map.prototype.loadMap = function() {
-    return this.db.ref('map');
+Map.prototype.loadMap = function(name) {
+    this.db.ref('/map/' + name).on('value', function(snapshot) {
+        return snapshot.val();
+    }, function(error) {
+        console.log("[ERROR] Failed to load map ", name);
+    });
 };
 
 //
