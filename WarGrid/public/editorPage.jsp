@@ -66,12 +66,10 @@
         <div class="w3-container" style="margin-top:83px">
 
               <input id="reset_button" type="button" value="Reset" />
-                <select id="game_of_life_patterns">
-                  <option value="Void.png">Void Cell</option>
-                  <option value="">player1 live cell</option>
-                  <option value="">player1 ghost cell</option>
-                  <option value="">player2 live cell</option>
-                  <option value="">player2 ghost cell</option>
+                <select id="cell_type">
+                  <option value="images/Void.png">Void Cell</option>
+                  <option value="images/P1_LIVE.png">player1 live cell</option>
+                  <option value="images/P2_LIVE.png">player2 live cell</option>
                 </select>
                 <canvas id="editor_canvas" width="1024" height="512">
                 </canvas>
