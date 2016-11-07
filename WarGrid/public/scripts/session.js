@@ -16,31 +16,29 @@ Session.prototype.sessionHandler = function(player) {
 };
 
 Session.prototype.init = function() {
-    this.db = firebase.database();
+    this.dbRef = firebase.database().ref();
     this.auth = firebase.auth();
 
+    this.dbRef.on('value', function(snapshot) {
+
+    });
     this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
 };
 
 Session.prototype.create = function() {
-    //if (this.authorized) {
-        var newKey = this.db.ref().child('session').push().key;
-        var session = {};
-        var sessionData = {
-            'map': null,
-            'challenger': null,
-            'owner': this.auth.currentUser
-        };
+    var newKey = this.dbRef.push().key;
+    var session = {};
+    var sessionData = {
+        'map': null,
+        'challenger': null,
+        'owner': this.auth.currentUser
+    };
 
-        session['/session/' + newKey] = sessionData;
+    session['/session/' + newKey] = sessionData;
 
-        console.log('new session: ', newKey);
+    console.log('new session: ', newKey);
 
-        return this.db.ref().update(session);
-/*
-    } else {
-        alert('unable to create a room');
-    }*/
+    return this.dbRef.update(session);
 };
 
 Session.prototype.leave = function() {
