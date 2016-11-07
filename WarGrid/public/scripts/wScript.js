@@ -155,3 +155,40 @@ function showDivs(n)
   x[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " w3-white";
 }
+
+
+
+/*  show the drop_down menu which contains google and facebook sign in when user click the login icon */
+function show_drop_down_menu_on_large_screen()
+{
+  var x = document.getElementById("dropdown_menu_on_large_screen");
+
+
+  if( x.className.indexOf("w3-show") == -1 )
+  {
+    x.className += " w3-show";
+  }
+  else
+  {
+    x.className = x.className.replace(" w3-show", "");
+  }
+
+}
+
+
+
+function show_drop_down_menu_on_medium_small_screen()
+{
+  var x = document.getElementById("dropdown_menu_on_medium_small_screen");
+
+
+  if( x.className.indexOf("w3-show") == -1 )
+  {
+    x.className += " w3-show";
+  }
+  else
+  {
+    x.className = x.className.replace(" w3-show", "");
+  }
+
+}
