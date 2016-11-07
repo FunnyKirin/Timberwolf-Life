@@ -1,4 +1,26 @@
-// jsonfile module
+// Map Module
+var Map = function() {
+    this.init();
+};
+
+Map.prototype.mapHandler = function(player) {
+
+};
+
+Map.prototype.loadMap = function(name) {
+    return this.dbRef.child('map').child(name);
+};
+
+Map.prototype.updateMap = function(name, json) {
+
+};
+
+Map.prototype.init = function() {
+    this.dbRef = firebase.database().ref();
+    this.auth = firebase.auth();
+
+    //this.auth.onAuthStateChanged(this.mapHandler.bind(this));
+};
 
 // load json file from server
 var loadMap = function(url) {
@@ -14,8 +36,3 @@ var loadMap = function(url) {
         console.log("End of loadMap()");
     });
 };
-
-// save the updated object to url
-function updateMap(json, url) {
-
-}
