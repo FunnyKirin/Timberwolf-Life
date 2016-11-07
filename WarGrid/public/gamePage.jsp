@@ -24,7 +24,10 @@
             <div class="w3-container w3-row w3-center">
               <span id="text" >123</span>
             </div>
-            <button id="confirmButton" value="Confirm" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
+            <div class="w3-container w3-row w3-center">
+              <button id="confirmButton" value="Confirm" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
+              <button id="confirmButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Surrender</button>
+            </div>
         </div>
 
 
