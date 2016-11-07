@@ -1,7 +1,7 @@
 //PlayerData
 var numOfMove1;
 var numOfMove2;
-//index of current player, start from 1.
+//index of current player, start from 2.
 var currentPlayer = 2;
 var cellNumber = 0;
 var territory = 0;
@@ -72,19 +72,18 @@ function initGameOfLife() {
     initConstants();
     // INIT THE RENDERING SURFACE
     initCanvas();
-    // Load map from server
     // INIT ALL THE GAME-RELATED VARIABLES
     initGameOfLifeData();
     // INIT THE LOOKUP TABLES FOR THE SIMULATION
     initCellLookup();
     // SETUP THE EVENT HANDLERS
     initEventHandlers();
-    initUI();
-    //Start first Turn;
-    nextTurn();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
+    // Load map from server
     initMap();
+    initUI();
+    //Start first Turn;
 }
 
 function initConstants() {
@@ -158,6 +157,7 @@ function initMap() {
         renderGrid = json.data;
         //updateGrid=json.data;
         renderGame();
+        nextTurn();
         swapGrids();
     });
 }
@@ -291,12 +291,13 @@ function confirmMove() {
     //update and render the game
     ghostGrid = [];
     updateGame();
-    renderGame();
+    //check if current player win
     if (checkVictory()) {
         alert("player " + currentPlayer + " win!");
     }
-    //go to next turn
     nextTurn();
+    renderGame();
+    //go to next turn
     initUI();
 }
 //check if current player achieved victory.
@@ -317,13 +318,13 @@ function checkVictory() {
 }
 //goto next turn
 function nextTurn() {
-    //switch Player
+    territory = 0
+        //switch Player
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
-    var territory = 0;
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
-            var cell = getGridCell(updateGrid, i, j);
+            var cell = getGridCell(renderGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber === currentPlayer) {
                 territory++;
