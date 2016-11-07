@@ -16,8 +16,12 @@
 
         <div id="gameDiv" class="w3-container w3-center  w3-padding-64">
 
-            <canvas id="game_canvas" class="w3-container w3-card-24 w3-sand w3-round-xlarge" width="512" height="512">
-            </canvas>
+          <div class="w3-container w3-card-24 w3-dark-grey w3-round-xlarge">
+            <div class="w3-container w3-padding-32">
+              <canvas id="game_canvas"  class="w3-sand w3-round-xlarge" width="512" height="512">
+              </canvas>
+            </div>
+          </div>
             <!--
             <input id="confirmButton" type="button" value="Confirm" />
             -->
