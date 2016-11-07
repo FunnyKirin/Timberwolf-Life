@@ -154,7 +154,7 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-    $.getJSON("maps/test_map_2.json", function(json) {
+    return $.getJSON("maps/test_map_2.json", function(json) {
         console.log(json.data);
         renderGrid = json.data;
         //updateGrid=json.data;

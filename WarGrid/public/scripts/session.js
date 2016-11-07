@@ -32,7 +32,7 @@ Session.prototype.create = function() {
             'owner': this.auth.currentUser
         };
 
-        updates['/sessions/' + newKey] = session;
+        updates['/sessions/' + newKey] = sessionData;
 
         console.log('new session: ', newKey);
 

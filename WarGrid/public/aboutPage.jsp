@@ -45,10 +45,10 @@
     <div class="w3-main" style="margin-left:300px">
         <!-- Push down content on small screens  -->
         <div class="w3-hide-large" style="margin-top:83px"></div>
-    
 
-        <h2 class="w3-center">WARGRID Slideshow</h2>
-        
+
+        <h2 class="w3-center">Our Story</h2>
+
 
             <div class="w3-content w3-display-container" style="max-width:1000px">
               <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_1.PNG?alt=media&token=13033dc6-2998-4da5-9274-a0c91d1e7009" style="width:100%">
@@ -68,13 +68,13 @@
               </div>
             </div>
 
-        
+
         <script>
           showDivs(slideIndex);
         </script>
-        
+
     </div>
-    
+
     </body>
 
 
