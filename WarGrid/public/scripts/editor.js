@@ -44,6 +44,12 @@ var testGrid;
 var ghostGrid;
 var brightGrid;
 
+//button
+var loadmap;
+
+var key;
+var deleteButton;
+
 // RENDERING VARIABLES
 var cellLength;
 
@@ -107,7 +113,11 @@ function initCanvas() {
 function initSave(){
   creatorInput = document.getElementById("creator");
   mapNameInput = document.getElementById("mapname");
+
+  loadmapInput = document.getElementById("loadMapField");
+  loadButton = document.getElementById("loadMap_button");
   save = document.getElementById("save_button");
+  deleteButton = document.getElementById("delete_button");
 }
 
 function initEditorData(){
@@ -125,7 +135,7 @@ function initGrid(){
       setGridCell(renderGrid, i, j, EMPTY_CELL);
     }
   }
-  console.log("init renderGrid: " + renderGrid);
+//  console.log("init renderGrid: " + renderGrid);
 
 }
 
@@ -137,7 +147,9 @@ function initFirebase(){
 
 function initEventHandlers(){
   save.onclick = respondToSaveMaps;
+  loadButton.onclick = respondToLoadMap;
   canvas.onclick = respondToMouseClick;
+  deleteButton.onclick = respondToDeleteMap;
 
 }
 
@@ -184,22 +196,73 @@ function respondToSaveMaps(){
   respondToSaveMap();
 }
 
+function respondToLoadMap(){
+  respondToLoadAMap();
+}
+
+function respondToDeleteMap(){
+  respondToDeleteAMap();
+}
+
 function  respondToSaveMap(){
   var creator = creatorInput.value;
   var mapname = mapNameInput.value;
+
   console.log("creator:---------------" + creator);
-
-
-  dbref = this.db.ref().child('maps');
+if (key != null){
+dbref = this.db.ref().child('maps/' + key);
 //  this.dbref = this.db.ref('map');
-  dbref.push({
-    //map: mapname,
+  dbref.update({
+    map: mapname,
     creator: creator,
     data: renderGrid,
     x: gridHeight,
     y: gridWidth
   });
+}else{
+  dbref = this.db.ref().child('maps');
+  //  this.dbref = this.db.ref('map');
+    dbref.push({
+      map: mapname,
+      creator: creator,
+      data: renderGrid,
+      x: gridHeight,
+      y: gridWidth
+    });
+
 }
+}
+
+function respondToLoadAMap(){
+  var loadMapName = loadmapInput.value;
+dbref = this.db.ref().child('maps');
+//  this.dbref = this.db.ref('map');
+
+dbref.orderByValue().limitToLast(100).on("value", function(snapshot) {
+  snapshot.forEach(function(data) {
+    //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+    if (data.val().map === loadMapName){
+      key = data.key;
+      renderGrid = data.val().data;
+      renderCells();
+    }
+  });
+});
+
+}
+
+function respondToDeleteAMap(){
+if (key != null){
+dbref = this.db.ref().child('maps/' + key);
+//  this.dbref = this.db.ref('map');
+  dbref.remove();
+}else{
+  alert("no map to delete!")
+}
+
+}
+
+
 
 function renderCells(){
   //SET THE PROPER RENDER COLOR
@@ -244,6 +307,7 @@ function resetEditor() {
   console.log("resetEditor()");
   gridWidth = canvasWidth / cellLength;
   gridHeight = canvasHeight / cellLength;
+  key = null;
   renderGrid = [];
   testGrid = [];
   console.log("gridWidth: " + gridWidth);

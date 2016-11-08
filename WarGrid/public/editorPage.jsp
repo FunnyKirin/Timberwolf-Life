@@ -102,6 +102,7 @@
                   map name:
                   <input id = "mapname" type = "text" name = "map name">
                     <input id = "save_button" type = "button" value = "save"/>
+                    <input id = "delete_button" type = "button" value = "delete"/>
                 </form>
 
                 <canvas id="editor_canvas" width="512" height="512">
