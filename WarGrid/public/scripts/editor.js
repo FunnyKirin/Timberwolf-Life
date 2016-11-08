@@ -167,9 +167,6 @@ function respondToMouseClick(event) {
   setGridCell(renderGrid, clickRow, clickCol,SELECTED_CELL);
   console.log("renderGrid: " + renderGrid);
   renderCells();
-  var id = "user1";
-  var name = "tom";
-  var email = "eamil@d.com";
   //respondToSaveMap();
   console.log("renderGrid: " + renderGrid);
 }
@@ -189,7 +186,12 @@ function  respondToSaveMap(){
   dbref.push({
     map: mapname,
     creator: creator,
-    data: renderGrid
+    data: renderGrid,
+    canvas_width: canvasWidth,
+    canvas_height: canvasHeight,
+    cell_length: cellLength,
+    row: gridHeight,
+    column: gridWidth
   });
 }
 
