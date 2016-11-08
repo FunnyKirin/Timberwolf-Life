@@ -82,7 +82,10 @@
         </div>
         -->
         <div class="w3-container" style="margin-top:83px">
-
+          <form id = "load-map-form" action = "#">
+            <input id="loadMapField" type="text" name="input a map" />
+            <input id="loadMap_button" type="button" value="loadMap" />
+          </form>
               <input id="reset_button" type="button" value="Reset" />
                 <select id="cell_type">
                   <option value="images/Void.png">Void Cell</option>
@@ -98,7 +101,8 @@
                   <input id = "creator" type = "text" name = "creator">
                   map name:
                   <input id = "mapname" type = "text" name = "map name">
-                    <input id = "save_button" type = "submit" value = "save"/>
+                    <input id = "save_button" type = "button" value = "save"/>
+                    <input id = "delete_button" type = "button" value = "delete"/>
                 </form>
 
                 <canvas id="editor_canvas" width="512" height="512">
