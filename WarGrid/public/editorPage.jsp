@@ -94,7 +94,7 @@
                     <input id = "save_button" type = "submit" value = "save"/>
                 </form>
 
-                <canvas id="editor_canvas" width="1024" height="512">
+                <canvas id="editor_canvas" width="512" height="512">
                 </canvas>
 
 

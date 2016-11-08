@@ -85,7 +85,7 @@ function initConstants() {
   GRID_LINES_COLOR = "#CCCCCC";
 
   // CELL LENGTH CONSTANTS
-  MAX_CELL_LENGTH = 32;
+  MAX_CELL_LENGTH = 64;
   MIN_CELL_LENGTH = 1;
   CELL_LENGTH_INC = 2;
   GRID_LINE_LENGTH_RENDERING_THRESHOLD = 8;
@@ -108,7 +108,7 @@ function initSave(){
 
 function initEditorData(){
   console.log("initEditorData()");
-  cellLength = 32;
+  cellLength = 64;
 }
 
 function initGrid(){
