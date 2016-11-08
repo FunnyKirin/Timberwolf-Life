@@ -10,7 +10,6 @@
 
 
 
-
       <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
       <script>
         // Initialize Firebase
@@ -89,7 +88,10 @@
                   <option value="images/Void.png">Void Cell</option>
                   <option value="images/P1_LIVE.png">player1 live cell</option>
                   <option value="images/P2_LIVE.png">player2 live cell</option>
+                  <option value="images/P1_DEAD.png">player1 dead cell</option>
+                  <option value="images/P2_DEAD.png">player2 dead cell</option>
                   <option value="images/EMPTY_CELL.png">remove cell</option>
+
                 </select>
                 <form id = "map-form" action = "#">
                   Creator:

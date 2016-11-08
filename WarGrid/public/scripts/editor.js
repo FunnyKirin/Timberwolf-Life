@@ -4,6 +4,8 @@ var LIVE_CELL;
 var VOID_CELL;
 var GHOST_CELL;
 var SELECTED_CELL;
+var P1_DEAD_CELL;
+var P2_DEAD_CELL;
 
 
 // Color
@@ -68,6 +70,8 @@ function initConstants() {
 
   P1_LIVE_CELL = 11;
   P2_LIVE_CELL = 21;
+  P1_DEAD_CELL = 10;
+  P2_DEAD_CELL = 20;
 
   //COLORS FOR RENDERING
   EMPTY_COLOR = "#f1f1f1";
@@ -159,6 +163,12 @@ function respondToMouseClick(event) {
   if (selectedPattern === "images/EMPTY_CELL.png"){
     SELECTED_CELL = EMPTY_CELL;
   }
+  if (selectedPattern === "images/P1_DEAD.png"){
+    SELECTED_CELL = P1_DEAD_CELL;
+  }
+  if (selectedPattern === "images/P2_DEAD.png"){
+    SELECTED_CELL = P2_DEAD_CELL;
+  }
   // CALCULATE THE ROW, COL OF THE CLICK
   var canvasCoords = getRelativeCoords(event);
   var clickCol = Math.floor(canvasCoords.x / cellLength);
@@ -168,7 +178,6 @@ function respondToMouseClick(event) {
   console.log("renderGrid: " + renderGrid);
   renderCells();
   //respondToSaveMap();
-  console.log("renderGrid: " + renderGrid);
 }
 
 function respondToSaveMaps(){
@@ -181,17 +190,14 @@ function  respondToSaveMap(){
   console.log("creator:---------------" + creator);
 
 
-  dbref = this.db.ref().child('maps_advoid_conflict_with_Lis_db');
+  dbref = this.db.ref().child('maps');
 //  this.dbref = this.db.ref('map');
   dbref.push({
-    map: mapname,
+    //map: mapname,
     creator: creator,
     data: renderGrid,
-    canvas_width: canvasWidth,
-    canvas_height: canvasHeight,
-    cell_length: cellLength,
-    row: gridHeight,
-    column: gridWidth
+    x: gridHeight,
+    y: gridWidth
   });
 }
 
@@ -206,10 +212,17 @@ function renderCells(){
       var y = i * cellLength;
       if (leftNumber > 0){
         if (rightNumber === 0){
+          console.log("DEAD_COLOR");
+          console.log("leftNumber: " + leftNumber);
           canvas2D.fillStyle = DEAD_COLOR[leftNumber];
           canvas2D.fillRect(x, y, cellLength, cellLength);
         } else {
           canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+          canvas2D.fillRect(x, y, cellLength, cellLength);
+        }
+      }else{
+        if (rightNumber == 0) {
+          canvas2D.fillStyle = EMPTY_COLOR;
           canvas2D.fillRect(x, y, cellLength, cellLength);
         }
       }
@@ -219,10 +232,7 @@ function renderCells(){
         canvas2D.fillRect(x, y, cellLength, cellLength);
       }
 
-      if (rightNumber == 0) {
-        canvas2D.fillStyle = EMPTY_COLOR;
-        canvas2D.fillRect(x, y, cellLength, cellLength);
-      }
+
     }
   }
   renderGridLines();
