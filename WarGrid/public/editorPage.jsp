@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+      <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyAyy_1zHKwJOJPdwcmdqPnSYL1x_5qhBf0",
+          authDomain: "wargrid-test-build-mapeditor.firebaseapp.com",
+          databaseURL: "https://wargrid-test-build-mapeditor.firebaseio.com",
+          storageBucket: "wargrid-test-build-mapeditor.appspot.com",
+          messagingSenderId: "40858880735"
+        };
+        firebase.initializeApp(config);
+      </script>
+
     <script src="scripts/wScript.js"></script>
     <script src="scripts/editor.js"></script>
       case expression:
@@ -21,11 +35,10 @@
 
   <body class="w3-light-grey w3-content" style="max-width:1600px">
 
-    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. 
+    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header. -->
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
         <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
     </header>
-    -->
 
 
     <!-- Sidenav/menu -->
@@ -37,13 +50,12 @@
           <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
           <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
           <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
-          <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WG</span>
-      <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
+      <span class="w3-left w3-padding">WARGRID</span>
+      <a class="w3-right w3-btn w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->
@@ -72,7 +84,16 @@
                   <option value="images/Void.png">Void Cell</option>
                   <option value="images/P1_LIVE.png">player1 live cell</option>
                   <option value="images/P2_LIVE.png">player2 live cell</option>
+                  <option value="images/EMPTY_CELL.png">remove cell</option>
                 </select>
+                <form id = "map-form" action = "#">
+                  Creator:
+                  <input id = "creator" type = "text" name = "creator">
+                  map name:
+                  <input id = "mapname" type = "text" name = "map name">
+                    <input id = "save_button" type = "submit" value = "save"/>
+                </form>
+
                 <canvas id="editor_canvas" width="1024" height="512">
                 </canvas>
 
@@ -81,8 +102,7 @@
 
 
     </div>
-    <script>
-      initEditor();
-    </script>
+
+<script>initEditor();</script>
   </body>
 </html>

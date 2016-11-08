@@ -23,6 +23,9 @@ var CELL_LENGTH_X;
 var CELL_LENGTH_Y;
 var GRID_LINE_LENGTH_RENDERING_THRESHOLD;
 
+var database;
+var creator;
+var mapName;
 // CANVAS VARIABLES
 var canvasWidth;
 var canvasHeight;
@@ -35,6 +38,7 @@ var gridHeight;
 var gameGrid;
 var updateGrid;
 var renderGrid;
+var testGrid;
 var ghostGrid;
 var brightGrid;
 
@@ -43,17 +47,21 @@ var cellLength;
 
 function initEditor() {
   console.log("initEditor()");
+  checkSetup();
+  initFirebase();
   initConstants();
   initCanvas();
+  initSave();
   initEditorData();
   initEventHandlers();
   resetEditor();
+  initGrid();
 }
 
 function initConstants() {
   console.log("initConstants()");
   //THESE REPRESENT THE POSSIBLE STATS FOR EACH CELL
-  DEAD_CELL = 0;
+  EMPTY_CELL = 0;
   LIVE_CELL = 1;
   GHOST_CELL = 2;
   VOID_CELL = 3;
@@ -62,7 +70,7 @@ function initConstants() {
   P2_LIVE_CELL = 21;
 
   //COLORS FOR RENDERING
-  EMPTY_COLOR = "#ffffff";
+  EMPTY_COLOR = "#f1f1f1";
   LIVE_COLOR = [];
   DEAD_COLOR = [];
   LIVE_COLOR[1] = "#FF0000";
@@ -92,14 +100,44 @@ function initCanvas() {
   canvasHeight = canvas.height;
 }
 
+function initSave(){
+  creatorInput = document.getElementById("creator");
+  mapNameInput = document.getElementById("mapname");
+  save = document.getElementById("save_button");
+}
+
 function initEditorData(){
   console.log("initEditorData()");
   cellLength = 32;
 }
 
-function initEventHandlers(){
-  canvas.onclick = respondToMouseClick;
+function initGrid(){
+  gridWidth = canvasWidth / cellLength;
+  gridHeight = canvasHeight / cellLength;
+  console.log("gridWidth: "+ gridWidth);
+  console.log("gridHeight: " + gridHeight);
+  for (var i = 0; i <= gridHeight; i++) {
+    for (var j = 0; j < gridWidth; j++) {
+      setGridCell(renderGrid, i, j, EMPTY_CELL);
+    }
+  }
+  console.log("init renderGrid: " + renderGrid);
+
 }
+
+
+
+function initFirebase(){
+  this.db = firebase.database();
+}
+
+function initEventHandlers(){
+  save.onclick = respondToSaveMaps;
+  canvas.onclick = respondToMouseClick;
+
+}
+
+
 
 function respondToMouseClick(event) {
   // GET THE PATTERN SELECTED IN THE DROP DOWN LIST
@@ -118,6 +156,9 @@ function respondToMouseClick(event) {
   if (selectedPattern === "images/P2_LIVE.png"){
     SELECTED_CELL = P2_LIVE_CELL;
   }
+  if (selectedPattern === "images/EMPTY_CELL.png"){
+    SELECTED_CELL = EMPTY_CELL;
+  }
   // CALCULATE THE ROW, COL OF THE CLICK
   var canvasCoords = getRelativeCoords(event);
   var clickCol = Math.floor(canvasCoords.x / cellLength);
@@ -126,6 +167,30 @@ function respondToMouseClick(event) {
   setGridCell(renderGrid, clickRow, clickCol,SELECTED_CELL);
   console.log("renderGrid: " + renderGrid);
   renderCells();
+  var id = "user1";
+  var name = "tom";
+  var email = "eamil@d.com";
+  //respondToSaveMap();
+  console.log("renderGrid: " + renderGrid);
+}
+
+function respondToSaveMaps(){
+  respondToSaveMap();
+}
+
+function  respondToSaveMap(){
+  var creator = creatorInput.value;
+  var mapname = mapNameInput.value;
+  console.log("creator:---------------" + creator);
+
+
+  dbref = this.db.ref().child('maps_advoid_conflict_with_Lis_db');
+//  this.dbref = this.db.ref('map');
+  dbref.push({
+    map: mapname,
+    creator: creator,
+    data: renderGrid
+  });
 }
 
 function renderCells(){
@@ -151,8 +216,14 @@ function renderCells(){
         canvas2D.fillStyle = VOID_COLOR;
         canvas2D.fillRect(x, y, cellLength, cellLength);
       }
+
+      if (rightNumber == 0) {
+        canvas2D.fillStyle = EMPTY_COLOR;
+        canvas2D.fillRect(x, y, cellLength, cellLength);
+      }
     }
   }
+  renderGridLines();
 }
 
 
@@ -162,6 +233,9 @@ function resetEditor() {
   gridWidth = canvasWidth / cellLength;
   gridHeight = canvasHeight / cellLength;
   renderGrid = [];
+  testGrid = [];
+  console.log("gridWidth: " + gridWidth);
+  console.log("gridHeight: " + gridHeight);
   renderEdiotr();
 }
 
@@ -240,5 +314,19 @@ function getRelativeCoords(event) {
       x: event.layerX,
       y: event.layerY
     };
+  }
+}
+
+function checkSetup(){
+  if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
+    window.alert('You have not configured and imported the Firebase SDK. ' +
+        'Make sure you go through the codelab setup instructions.');
+  } else if (config.storageBucket === '') {
+    window.alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
+        'actually a Firebase bug that occurs rarely. ' +
+        'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' +
+        'and make sure the storageBucket attribute is not empty. ' +
+        'You may also need to visit the Storage tab and paste the name of your bucket which is ' +
+        'displayed there.');
   }
 }
