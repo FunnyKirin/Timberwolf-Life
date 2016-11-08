@@ -6,7 +6,7 @@ var currentPlayer = 2;
 var cellNumber = 0;
 var territory = 0;
 
-var ghostTrigger = 0;
+var ghostTrigger = 1;
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -184,11 +184,20 @@ function initGameOfLifeData() {
 function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
+    $("#ghostButton").click(function(){
+        ghostTrigger = ghostTrigger === 1 ? 2 : 1;
+    })
 }
 /* This function initilizes all UI texts
  */
 function initUI() {
     $("#text").text("Cell left: " + cellNumber);
+        //reset game UI
+    renderGame();
+    renderGhostRenderCells();
+    renderGhost();
+    renderGridLines();
+    initUI();
 }
 /*
  * This function handle mouse click event, cells will only be placed on ghost grid
@@ -523,8 +532,6 @@ function renderGame() {
         renderGridLines();
     // RENDER THE GAME CELLS
     renderCells();
-    // AND RENDER THE TEXT
-    renderText();
     //renderGhosts();
     renderGridLines();
     //renderVoidCell();
@@ -584,17 +591,6 @@ function renderGridLines() {
         canvas2D.lineTo(x_2, y_2);
         canvas2D.stroke();
     }
-}
-/*
- * Renders the text on top of the grid.
- */
-function renderText() {
-    // SET THE PROPER COLOR
-    canvas2D.fillStyle = TEXT_COLOR;
-    // RENDER THE TEXT
-    //canvas2D.fillText("FPS: " + fps, FPS_X, FPS_Y);
-    //canvas2D.fillText("Cell Length: " + cellLength, CELL_LENGTH_X, CELL_LENGTH_Y);
-    canvas2D.fillText("WarGrid", FPS_X, FPS_Y);
 }
 /*
  * We need one grid's cells to determine the grid's values for
