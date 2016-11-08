@@ -8,18 +8,23 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+
+
+
       <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
       <script>
         // Initialize Firebase
         var config = {
-          apiKey: "AIzaSyAyy_1zHKwJOJPdwcmdqPnSYL1x_5qhBf0",
-          authDomain: "wargrid-test-build-mapeditor.firebaseapp.com",
-          databaseURL: "https://wargrid-test-build-mapeditor.firebaseio.com",
-          storageBucket: "wargrid-test-build-mapeditor.appspot.com",
-          messagingSenderId: "40858880735"
+          apiKey: "AIzaSyCg8q3JPOVremSm5Exz74by1Rsv4ljk970",
+          authDomain: "llylly-95353.firebaseapp.com",
+          databaseURL: "https://llylly-95353.firebaseio.com",
+          storageBucket: "llylly-95353.appspot.com",
+          messagingSenderId: "745498047349"
         };
         firebase.initializeApp(config);
       </script>
+
+
 
     <script src="scripts/wScript.js"></script>
     <script src="scripts/editor.js"></script>
