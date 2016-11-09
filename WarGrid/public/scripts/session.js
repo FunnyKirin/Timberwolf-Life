@@ -19,7 +19,7 @@ Session.prototype.sessionHandler = function(player) {
 Session.prototype.init = function() {
     this.dbRef = firebase.database().ref();
     this.auth = firebase.auth();
-/*
+
     this.dbRef.on('child_added', function(snapshot) {
         snapshot.forEach(function(data) {
             var innerHTML = "\<div class=\"w3-third w3-panel\"\>";
@@ -30,16 +30,24 @@ Session.prototype.init = function() {
             $("#" + ROOM_GRID_ID).html(innerHTML);
         });
     });
-*/
+
     this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
 };
 
 Session.prototype.create = function() {
-    this.dbRef.child('session').push({
-        map: null,
-        challenger: null,
+    var newKey = this.dbRef.child('session').push().key;
+    var session = {};
+    var sessionData = {
+        map: 'null',
+        challenger: 'null',
         owner: this.auth.currentUser
-    });
+    };
+
+    session['/session/' + newKey] = sessionData;
+
+    console.log('new session: ', newKey);
+
+    return this.dbRef.update(session);
 };
 
 Session.prototype.leave = function() {
