@@ -302,17 +302,17 @@ function renderGhostCells() {
                 }
             }
             if (ghostTrigger == 1) {
-                var cell = getGridCell(ghostRenderGrid, i, j);
+                var _cell = getGridCell(ghostRenderGrid, i, j);
                 //leftNumber = player index
-                var leftNumber = Math.floor(cell / 10);
+                var _leftNumber = Math.floor(_cell / 10);
                 //rightNumber = cell type
-                var rightNumber = cell % 10;
-                var x = j * cellLength;
-                var y = i * cellLength;
-                if (leftNumber == currentPlayer) {
-                    if (rightNumber == 1) {
+                var _rightNumber = _cell % 10;
+                var _x = j * cellLength;
+                var _y = i * cellLength;
+                if (_leftNumber == currentPlayer) {
+                    if (_rightNumber == 1) {
                         canvas2D.fillStyle = GHOST_COLOR;
-                        canvas2D.fillRect(x, y, cellLength, cellLength);
+                        canvas2D.fillRect(_x, _y, cellLength, cellLength);
                     }
                 }
             }
