@@ -23,11 +23,23 @@ Map.prototype.loadMap = function (name) {
     });
     */
 
+<<<<<<< HEAD
+Map.prototype.loadMap = function(name) {
+    var map;
+    firebase.database().ref('/map/').child(name).on('value', function(snapshot) {
+        map = snapshot.val();
+=======
     this.db.ref('/map/' + name).on('value', function(snapshot) {
         return snapshot.val();
+>>>>>>> 3012787d669ca45827e1f60509fe4e094c42d6f1
     }, function(error) {
-        console.log("[ERROR] Failed to load map ", name);
+        console.log("[ERROR] Failed to load: ", name, " (" + error + ")");
     });
+<<<<<<< HEAD
+    return map;
+};
+=======
+>>>>>>> 3012787d669ca45827e1f60509fe4e094c42d6f1
 
 };
 //
@@ -49,5 +61,9 @@ Map.prototype.updateMap = function (json) {
 Map.prototype.init = function () {
     this.db = firebase.database();
     this.auth = firebase.auth();
+<<<<<<< HEAD
+    //this.auth.onAuthStateChanged(this.mapHandler.bind(this));
+=======
     this.auth.onAuthStateChanged(this.mapHandler.bind(this));
+>>>>>>> 3012787d669ca45827e1f60509fe4e094c42d6f1
 };
