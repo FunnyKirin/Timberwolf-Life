@@ -23,13 +23,15 @@
     <!-- Sidenav/menu -->
     <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
       <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
-          <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
-          <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
-          <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE A GAME</a>
-          <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
-          <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
-          <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
-          <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
+        <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a>
+
+        <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
+
+
+        <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
+
+        <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
+        <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
