@@ -22,7 +22,7 @@
 
     <!-- Sidenav/menu -->
     <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
-      <h3 class="w3-padding-64"><b>WARGRID</b></h3>
+      <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
           <a href="#index" onclick="index_open()" class="w3-padding">HOME</a>
           <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
           <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE A GAME</a>
