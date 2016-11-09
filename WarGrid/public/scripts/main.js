@@ -5,6 +5,7 @@ var numOfMove2;
 var currentPlayer = 2;
 var cellNumber = 0;
 var territory = 0;
+var ghostTrigger = 1;
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -59,6 +60,8 @@ var gameGrid;
 var updateGrid;
 var renderGrid;
 var ghostGrid;
+var ghostUpdateGrid;
+var ghostRenderGrid;
 var brightGrid;
 // RENDERING VARIABLES
 var cellLength;
@@ -102,9 +105,9 @@ function initConstants() {
     DEAD_COLOR[2] = "#7277ff";
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "rgba(255, 0, 0, 0.5)";
+    GHOST_COLOR = "rgba(231, 237, 59, 0.7)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#80bfff";
+    VOID_COLOR = "#9B7653";
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
     TOP_LEFT = 0;
     TOP_RIGHT = 1;
@@ -131,6 +134,8 @@ function initConstants() {
     CELL_LENGTH_X = 20;
     CELL_LENGTH_Y = 480;
     ghostGrid = [];
+    ghostRenderGrid = [];
+    ghostUpdateGrid = [];
 }
 
 function initCanvas() {
@@ -153,6 +158,23 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
+    var loadMapName = "Test";
+    this.db = firebase.database();
+    dbref = this.db.ref().child('maps');
+    //  this.dbref = this.db.ref('map');
+    dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
+        snapshot.forEach(function (data) {
+            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+            if (data.val().map === loadMapName) {
+                key = data.key;
+                renderGrid = data.val().data;
+                renderGame();
+                nextTurn();
+                swapGrids();
+            }
+        });
+    });
+    /*
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
         //updateGrid=json.data;
@@ -160,6 +182,7 @@ function initMap() {
         nextTurn();
         swapGrids();
     });
+    */
 }
 
 function initGameOfLifeData() {
@@ -177,11 +200,30 @@ function initGameOfLifeData() {
 function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
+    //click ghostButton will enable/disable ghostcells
+    $("#ghostButton").click(function () {
+        ghostTrigger = ghostTrigger === 1 ? 2 : 1;
+        //re-render game after clicking.
+        renderGame();
+        renderGhostRenderCells();
+        renderGhost();
+        renderGridLines();
+    })
+    $("#resetButton").click(function () {
+       cellNumber= getCellNumber(territory);
+        ghostGrid=[];
+        //re-render game after clicking.
+        renderGame();
+        renderGhostRenderCells();
+        renderGhost();
+        renderGridLines();
+    })
 }
 /* This function initilizes all UI texts
  */
 function initUI() {
     $("#text").text("Cell left: " + cellNumber);
+    //reset game UI
 }
 /*
  * This function handle mouse click event, cells will only be placed on ghost grid
@@ -197,38 +239,41 @@ function respondToMouseClick(event) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (ghostCell != LIVE_CELL + currentPlayer * 10) {
-        //check if the player can place a cell at that position.
-        if (cellNumber > 0 && cell != VOID_CELL) {
-            //check if the position is next to the player's territory.
-            var cellType = determineCellType(clickRow, clickCol);
-            var cellsToCheck = cellLookup[cellType];
-            var boolean = 0;
-            for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
-                var neighborCol = clickCol + cellsToCheck.cellValues[counter];
-                var neighborRow = clickRow + cellsToCheck.cellValues[counter + 1];
-                var index = (neighborRow * gridWidth) + neighborCol;
-                var neighborValue = updateGrid[index];
-                var rightNumber = neighborValue % 10;
-                var leftNumber = Math.floor(neighborValue / 10);
-                if (leftNumber == currentPlayer) {
-                    boolean = 1;
+    if (cell != LIVE_CELL + currentPlayer * 10) {
+        if (ghostCell != LIVE_CELL + currentPlayer * 10) {
+            //check if the player can place a cell at that position.
+            if (cellNumber > 0 && cell != VOID_CELL) {
+                //check if the position is next to the player's territory.
+                var cellType = determineCellType(clickRow, clickCol);
+                var cellsToCheck = cellLookup[cellType];
+                var boolean = 0;
+                for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+                    var neighborCol = clickCol + cellsToCheck.cellValues[counter];
+                    var neighborRow = clickRow + cellsToCheck.cellValues[counter + 1];
+                    var index = (neighborRow * gridWidth) + neighborCol;
+                    var neighborValue = updateGrid[index];
+                    var rightNumber = neighborValue % 10;
+                    var leftNumber = Math.floor(neighborValue / 10);
+                    if (leftNumber == currentPlayer) {
+                        boolean = 1;
+                    }
+                }
+                //it is!
+                if (boolean == 1) {
+                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                    cellNumber--;
                 }
             }
-            //it is!
-            if (boolean == 1) {
-                setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-                cellNumber--;
-            }
         }
-    }
-    // if so, remove that cell. (so players can undo their moves before they confirm)
-    else {
-        setGridCell(ghostGrid, clickRow, clickCol, 0);
-        cellNumber++;
+        // if so, remove that cell. (so players can undo their moves before they confirm)
+        else {
+            setGridCell(ghostGrid, clickRow, clickCol, 0);
+            cellNumber++;
+        }
     }
     //reset game UI
     renderGame();
+    renderGhostRenderCells();
     renderGhost();
     renderGridLines();
     initUI();
@@ -250,26 +295,68 @@ function renderGhostCells() {
             var rightNumber = cell % 10;
             var x = j * cellLength;
             var y = i * cellLength;
-            //if the cell is a player's living/ dead cell
-            if (leftNumber > 0) {
-                //it is a deadcell
-                if (rightNumber === 0) {
-                    canvas2D.fillStyle = DEAD_COLOR[leftNumber];
-                    canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                //it is a living cell
-                else {
-                    canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+            if (leftNumber == currentPlayer) {
+                if (rightNumber == 1) {
+                    canvas2D.fillStyle = LIVE_COLOR[currentPlayer];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
             }
-            //it is a void cell
-            if (rightNumber == 3) {
-                canvas2D.fillStyle = VOID_COLOR;
-                canvas2D.fillRect(x, y, cellLength, cellLength);
+            if (ghostTrigger == 1) {
+                var cell = getGridCell(ghostRenderGrid, i, j);
+                //leftNumber = player index
+                var leftNumber = Math.floor(cell / 10);
+                //rightNumber = cell type
+                var rightNumber = cell % 10;
+                var x = j * cellLength;
+                var y = i * cellLength;
+                if (leftNumber == currentPlayer) {
+                    if (rightNumber == 1) {
+                        canvas2D.fillStyle = GHOST_COLOR;
+                        canvas2D.fillRect(x, y, cellLength, cellLength);
+                    }
+                }
+            }
+            /*
+             //if the cell is a player's living/ dead cell
+             if (leftNumber > 0) {
+             //it is a deadcell
+             if (rightNumber === 0) {
+             canvas2D.fillStyle = DEAD_COLOR[leftNumber];
+             canvas2D.fillRect(x, y, cellLength, cellLength);
+             }
+             //it is a living cell
+             else {
+             canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+             canvas2D.fillRect(x, y, cellLength, cellLength);
+             }
+             }
+             //it is a void cell
+
+             if (rightNumber == 3) {
+             canvas2D.fillStyle = VOID_COLOR;
+             canvas2D.fillRect(x, y, cellLength, cellLength);
+             }
+             */
+        }
+    }
+}
+
+function renderGhostRenderCells() {
+    ghostUpdateGrid = [];
+    ghostRenderGrid = [];
+    // SET THE PROPER RENDER COLOR
+    // RENDER THE LIVE CELLS IN THE GRID
+    for (var i = 0; i <= gridHeight; i++) {
+        for (var j = 0; j < gridWidth; j++) {
+            var cell = getGridCell(updateGrid, i, j);
+            setGridCell(ghostUpdateGrid, i, j, cell);
+            cell = getGridCell(ghostGrid, i, j);
+            if (cell / 10 > 0) {
+                setGridCell(ghostUpdateGrid, i, j, cell);
             }
         }
     }
+    updateGame(ghostUpdateGrid, ghostRenderGrid);
 }
 /*
  Comfirm Movement
@@ -290,13 +377,13 @@ function confirmMove() {
     }
     //update and render the game
     ghostGrid = [];
-    updateGame();
+    updateGame(updateGrid, renderGrid);
+    renderGame();
     //check if current player win
     if (checkVictory()) {
         alert("player " + currentPlayer + " win!");
     }
     nextTurn();
-    renderGame();
     //go to next turn
     initUI();
 }
@@ -318,8 +405,13 @@ function checkVictory() {
 }
 //goto next turn
 function nextTurn() {
+<<<<<<< HEAD
     territory = 0;
         //switch Player
+=======
+    territory = 0
+    //switch Player
+>>>>>>> 3012787d669ca45827e1f60509fe4e094c42d6f1
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     for (var i = 0; i <= gridHeight; i++) {
@@ -332,8 +424,12 @@ function nextTurn() {
         }
     }
     //amount of cell current player can place.
-    cellNumber = Math.floor(4 + territory / 5);
+    cellNumber = getCellNumber(territory);
     initUI();
+}
+
+function getCellNumber(territory){
+    return  Math.floor(4 + territory / 5);
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -394,12 +490,12 @@ function resetGameOfLife() {
     renderGame();
 }
 
-function updateGame() {
+function updateGame(updateGrid, renderGrid) {
     // GO THROUGH THE UPDATE GRID AND USE IT TO CHANGE THE RENDER GRID
     for (var i = 0; i < gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             // HOW MANY NEIGHBORS DOES THIS CELL HAVE?
-            var numLivingNeighbors = calcLivingNeighbors(i, j);
+            var numLivingNeighbors = calcLivingNeighbors(i, j, updateGrid);
             // CALCULATE THE ARRAY INDEX OF THIS CELL
             // AND GET ITS CURRENT STATE
             var index = (i * gridWidth) + j;
@@ -446,7 +542,8 @@ function updateGame() {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -458,15 +555,12 @@ function updateGame() {
 }
 
 function renderGame() {
-    brightGrid = [];
     // CLEAR THE CANVAS
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     // RENDER THE GRID LINES, IF NEEDED
     if (cellLength >= GRID_LINE_LENGTH_RENDERING_THRESHOLD) renderGridLines();
     // RENDER THE GAME CELLS
     renderCells();
-    // AND RENDER THE TEXT
-    renderText();
     //renderGhosts();
     renderGridLines();
     //renderVoidCell();
@@ -489,7 +583,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -526,17 +621,6 @@ function renderGridLines() {
         canvas2D.lineTo(x_2, y_2);
         canvas2D.stroke();
     }
-}
-/*
- * Renders the text on top of the grid.
- */
-function renderText() {
-    // SET THE PROPER COLOR
-    canvas2D.fillStyle = TEXT_COLOR;
-    // RENDER THE TEXT
-    //canvas2D.fillText("FPS: " + fps, FPS_X, FPS_Y);
-    //canvas2D.fillText("Cell Length: " + cellLength, CELL_LENGTH_X, CELL_LENGTH_Y);
-    canvas2D.fillText("WarGrid", FPS_X, FPS_Y);
 }
 /*
  * We need one grid's cells to determine the grid's values for
@@ -608,7 +692,7 @@ function determineCellType(row, col) {
  * (row, col). This count is returned.
  * playerNumber: int
  */
-function calcLivingNeighbors(row, col) {
+function calcLivingNeighbors(row, col, updateGrid) {
     var numLivingNeighbors = 0;
     // DEPENDING ON THE TYPE OF CELL IT IS WE'LL CHECK
     // DIFFERENT ADJACENT CELLS
@@ -651,13 +735,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }

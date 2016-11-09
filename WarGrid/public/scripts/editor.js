@@ -4,6 +4,8 @@ var LIVE_CELL;
 var VOID_CELL;
 var GHOST_CELL;
 var SELECTED_CELL;
+var P1_DEAD_CELL;
+var P2_DEAD_CELL;
 
 
 // Color
@@ -23,6 +25,9 @@ var CELL_LENGTH_X;
 var CELL_LENGTH_Y;
 var GRID_LINE_LENGTH_RENDERING_THRESHOLD;
 
+var database;
+var creator;
+var mapName;
 // CANVAS VARIABLES
 var canvasWidth;
 var canvasHeight;
@@ -35,34 +40,47 @@ var gridHeight;
 var gameGrid;
 var updateGrid;
 var renderGrid;
+var testGrid;
 var ghostGrid;
 var brightGrid;
+
+//button
+var loadmap;
+
+var key;
+var deleteButton;
 
 // RENDERING VARIABLES
 var cellLength;
 
 function initEditor() {
   console.log("initEditor()");
+  checkSetup();
+  initFirebase();
   initConstants();
   initCanvas();
+  initSave();
   initEditorData();
   initEventHandlers();
   resetEditor();
+  initGrid();
 }
 
 function initConstants() {
   console.log("initConstants()");
   //THESE REPRESENT THE POSSIBLE STATS FOR EACH CELL
-  DEAD_CELL = 0;
+  EMPTY_CELL = 0;
   LIVE_CELL = 1;
   GHOST_CELL = 2;
   VOID_CELL = 3;
 
   P1_LIVE_CELL = 11;
   P2_LIVE_CELL = 21;
+  P1_DEAD_CELL = 10;
+  P2_DEAD_CELL = 20;
 
   //COLORS FOR RENDERING
-  EMPTY_COLOR = "#ffffff";
+  EMPTY_COLOR = "#f1f1f1";
   LIVE_COLOR = [];
   DEAD_COLOR = [];
   LIVE_COLOR[1] = "#FF0000";
@@ -77,7 +95,7 @@ function initConstants() {
   GRID_LINES_COLOR = "#CCCCCC";
 
   // CELL LENGTH CONSTANTS
-  MAX_CELL_LENGTH = 32;
+  MAX_CELL_LENGTH = 64;
   MIN_CELL_LENGTH = 1;
   CELL_LENGTH_INC = 2;
   GRID_LINE_LENGTH_RENDERING_THRESHOLD = 8;
@@ -92,14 +110,50 @@ function initCanvas() {
   canvasHeight = canvas.height;
 }
 
+function initSave(){
+  creatorInput = document.getElementById("creator");
+  mapNameInput = document.getElementById("mapname");
+
+  loadmapInput = document.getElementById("loadMapField");
+  loadButton = document.getElementById("loadMap_button");
+  save = document.getElementById("save_button");
+  deleteButton = document.getElementById("delete_button");
+}
+
 function initEditorData(){
   console.log("initEditorData()");
-  cellLength = 32;
+  cellLength = 64;
+}
+
+function initGrid(){
+  gridWidth = canvasWidth / cellLength;
+  gridHeight = canvasHeight / cellLength;
+  console.log("gridWidth: "+ gridWidth);
+  console.log("gridHeight: " + gridHeight);
+  for (var i = 0; i <= gridHeight; i++) {
+    for (var j = 0; j < gridWidth; j++) {
+      setGridCell(renderGrid, i, j, EMPTY_CELL);
+    }
+  }
+//  console.log("init renderGrid: " + renderGrid);
+
+}
+
+
+
+function initFirebase(){
+  this.db = firebase.database();
 }
 
 function initEventHandlers(){
+  save.onclick = respondToSaveMaps;
+  loadButton.onclick = respondToLoadMap;
   canvas.onclick = respondToMouseClick;
+  deleteButton.onclick = respondToDeleteMap;
+
 }
+
+
 
 function respondToMouseClick(event) {
   // GET THE PATTERN SELECTED IN THE DROP DOWN LIST
@@ -118,6 +172,15 @@ function respondToMouseClick(event) {
   if (selectedPattern === "images/P2_LIVE.png"){
     SELECTED_CELL = P2_LIVE_CELL;
   }
+  if (selectedPattern === "images/EMPTY_CELL.png"){
+    SELECTED_CELL = EMPTY_CELL;
+  }
+  if (selectedPattern === "images/P1_DEAD.png"){
+    SELECTED_CELL = P1_DEAD_CELL;
+  }
+  if (selectedPattern === "images/P2_DEAD.png"){
+    SELECTED_CELL = P2_DEAD_CELL;
+  }
   // CALCULATE THE ROW, COL OF THE CLICK
   var canvasCoords = getRelativeCoords(event);
   var clickCol = Math.floor(canvasCoords.x / cellLength);
@@ -126,7 +189,80 @@ function respondToMouseClick(event) {
   setGridCell(renderGrid, clickRow, clickCol,SELECTED_CELL);
   console.log("renderGrid: " + renderGrid);
   renderCells();
+  //respondToSaveMap();
 }
+
+function respondToSaveMaps(){
+  respondToSaveMap();
+}
+
+function respondToLoadMap(){
+  respondToLoadAMap();
+}
+
+function respondToDeleteMap(){
+  respondToDeleteAMap();
+}
+
+function  respondToSaveMap(){
+  var creator = creatorInput.value;
+  var mapname = mapNameInput.value;
+
+  console.log("creator:---------------" + creator);
+if (key != null){
+dbref = this.db.ref().child('maps/' + key);
+//  this.dbref = this.db.ref('map');
+  dbref.update({
+    map: mapname,
+    creator: creator,
+    data: renderGrid,
+    x: gridHeight,
+    y: gridWidth
+  });
+}else{
+  dbref = this.db.ref().child('maps');
+  //  this.dbref = this.db.ref('map');
+    dbref.push({
+      map: mapname,
+      creator: creator,
+      data: renderGrid,
+      x: gridHeight,
+      y: gridWidth
+    });
+
+}
+}
+
+function respondToLoadAMap(){
+  var loadMapName = loadmapInput.value;
+dbref = this.db.ref().child('maps');
+//  this.dbref = this.db.ref('map');
+
+dbref.orderByValue().limitToLast(100).on("value", function(snapshot) {
+  snapshot.forEach(function(data) {
+    //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+    if (data.val().map === loadMapName){
+      key = data.key;
+      renderGrid = data.val().data;
+      renderCells();
+    }
+  });
+});
+
+}
+
+function respondToDeleteAMap(){
+if (key != null){
+dbref = this.db.ref().child('maps/' + key);
+//  this.dbref = this.db.ref('map');
+  dbref.remove();
+}else{
+  alert("no map to delete!")
+}
+
+}
+
+
 
 function renderCells(){
   //SET THE PROPER RENDER COLOR
@@ -139,10 +275,17 @@ function renderCells(){
       var y = i * cellLength;
       if (leftNumber > 0){
         if (rightNumber === 0){
+          console.log("DEAD_COLOR");
+          console.log("leftNumber: " + leftNumber);
           canvas2D.fillStyle = DEAD_COLOR[leftNumber];
           canvas2D.fillRect(x, y, cellLength, cellLength);
         } else {
           canvas2D.fillStyle = LIVE_COLOR[leftNumber];
+          canvas2D.fillRect(x, y, cellLength, cellLength);
+        }
+      }else{
+        if (rightNumber == 0) {
+          canvas2D.fillStyle = EMPTY_COLOR;
           canvas2D.fillRect(x, y, cellLength, cellLength);
         }
       }
@@ -151,8 +294,11 @@ function renderCells(){
         canvas2D.fillStyle = VOID_COLOR;
         canvas2D.fillRect(x, y, cellLength, cellLength);
       }
+
+
     }
   }
+  renderGridLines();
 }
 
 
@@ -161,7 +307,11 @@ function resetEditor() {
   console.log("resetEditor()");
   gridWidth = canvasWidth / cellLength;
   gridHeight = canvasHeight / cellLength;
+  key = null;
   renderGrid = [];
+  testGrid = [];
+  console.log("gridWidth: " + gridWidth);
+  console.log("gridHeight: " + gridHeight);
   renderEdiotr();
 }
 
@@ -240,5 +390,19 @@ function getRelativeCoords(event) {
       x: event.layerX,
       y: event.layerY
     };
+  }
+}
+
+function checkSetup(){
+  if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
+    window.alert('You have not configured and imported the Firebase SDK. ' +
+        'Make sure you go through the codelab setup instructions.');
+  } else if (config.storageBucket === '') {
+    window.alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
+        'actually a Firebase bug that occurs rarely. ' +
+        'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' +
+        'and make sure the storageBucket attribute is not empty. ' +
+        'You may also need to visit the Storage tab and paste the name of your bucket which is ' +
+        'displayed there.');
   }
 }
