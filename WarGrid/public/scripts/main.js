@@ -210,6 +210,7 @@ function initEventHandlers() {
         renderGridLines();
     })
     $("#resetButton").click(function () {
+       cellNumber= getCellNumber(territory);
         ghostGrid=[];
         //re-render game after clicking.
         renderGame();
@@ -418,8 +419,12 @@ function nextTurn() {
         }
     }
     //amount of cell current player can place.
-    cellNumber = Math.floor(4 + territory / 5);
+    cellNumber = getCellNumber(territory);
     initUI();
+}
+
+function getCellNumber(territory){
+    return  Math.floor(4 + territory / 5);
 }
 
 function CellType(initNumNeighbors, initCellValues) {
