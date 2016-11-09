@@ -9,11 +9,13 @@ Map.prototype.mapHandler = function(player) {
 };
 
 Map.prototype.loadMap = function(name) {
-    this.db.ref('/map/' + name).on('value', function(snapshot) {
-        return snapshot.val();
+    var map;
+    firebase.database().ref('/map/').child(name).on('value', function(snapshot) {
+        map = snapshot.val();
     }, function(error) {
-        console.log("[ERROR] Failed to load map ", name);
+        console.log("[ERROR] Failed to load: ", name, " (" + error + ")");
     });
+    return map;
 };
 
 //
@@ -38,6 +40,5 @@ Map.prototype.updateMap = function(json) {
 Map.prototype.init = function() {
     this.db = firebase.database();
     this.auth = firebase.auth();
-
-    this.auth.onAuthStateChanged(this.mapHandler.bind(this));
+    //this.auth.onAuthStateChanged(this.mapHandler.bind(this));
 };

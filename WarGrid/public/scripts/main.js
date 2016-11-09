@@ -318,7 +318,7 @@ function checkVictory() {
 }
 //goto next turn
 function nextTurn() {
-    territory = 0
+    territory = 0;
         //switch Player
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
