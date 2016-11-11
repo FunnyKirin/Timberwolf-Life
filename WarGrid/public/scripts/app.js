@@ -19,4 +19,5 @@ var config = {
     storageBucket: "dark-liver-life-build-2.appspot.com",
     messagingSenderId: "261875659167"
   };
+firebase.initializeApp(config);
 */
