@@ -24,19 +24,15 @@
     <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
       <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
         <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a>
-
         <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
-
-
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
-
         <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
         <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WG</span>
+      <span class="w3-left w3-padding">TW</span>
       <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
@@ -49,8 +45,8 @@
         <div class="w3-hide-large" style="margin-top:83px"></div>
 
 
-        <div class="w3-container" style="margin-top:83px">
-            <h1>Create Room</h1>
+        <div class="w3-container " style="margin-top:83px">
+            <h2>Create Room</h2>
             <p>Select Maps:</p>
 
         
