@@ -73,7 +73,7 @@
 
 
         <div class="w3-container " style="margin-top:83px">
-          <h2>Draw Your Own Map.</h2>
+          <h2>Draw Map</h2>
 
             <div class="w3-threequarter w3-container w3-card-2 ">
 
