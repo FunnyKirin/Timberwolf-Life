@@ -36,7 +36,7 @@
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WG</span>
+      <span class="w3-left w3-padding">TW</span>
       <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
@@ -50,7 +50,7 @@
       <!-- Profile content -->
       
         <div class="w3-container" style="margin-top:83px">
-        	<h1>Profile</h1>
+        	<h2>Profile</h2>
         	<p>Match history result:</p>
         	<div class="w3-panel w3-card-8 w3-round-xlarge">
         		<p>Player Name: </p>

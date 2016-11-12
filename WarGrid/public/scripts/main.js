@@ -158,6 +158,7 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
+    /*
     var loadMapName = "Test";
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
@@ -174,7 +175,8 @@ function initMap() {
             }
         });
     });
-    /*
+    */
+
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
         //updateGrid=json.data;
@@ -182,7 +184,7 @@ function initMap() {
         nextTurn();
         swapGrids();
     });
-    */
+
 }
 
 function initGameOfLifeData() {

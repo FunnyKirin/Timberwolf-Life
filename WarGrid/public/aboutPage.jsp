@@ -36,7 +36,7 @@
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">WG</span>
+      <span class="w3-left w3-padding">TW</span>
       <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
