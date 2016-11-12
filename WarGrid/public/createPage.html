@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
+
+<head>
     <title>Create</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-      <script src="scripts/app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="scripts/app.js"></script>
     <script src="scripts/wScript.js"></script>
-      <script src="scripts/createRoom.js"></script>
+    <script src="scripts/createRoom.js"></script>
 
-  </head>
+</head>
 
 
-  <body class="w3-light-grey w3-content" style="max-width:1600px">
+<body class="w3-light-grey w3-content" style="max-width:1600px">
 
     <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header.
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
@@ -23,8 +25,9 @@
      -->
 
     <!-- Sidenav/menu -->
-    <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
-      <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
+    <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav">
+        <br>
+        <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
         <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a>
         <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
@@ -33,8 +36,8 @@
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">TW</span>
-      <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
+        <span class="w3-left w3-padding">TW</span>
+        <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->
@@ -66,3 +69,7 @@
         </div>
 
     </div>
+        <script>
+        loadMaps();
+    </script>
+    </body>
