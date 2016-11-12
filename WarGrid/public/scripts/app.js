@@ -1,11 +1,11 @@
 // Initialize Firebase
-var config = {
-    apiKey: "AIzaSyCg8q3JPOVremSm5Exz74by1Rsv4ljk970",
-    authDomain: "llylly-95353.firebaseapp.com",
-    databaseURL: "https://llylly-95353.firebaseio.com",
-    storageBucket: "llylly-95353.appspot.com",
-    messagingSenderId: "745498047349"
-};
+  var config = {
+    apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw",
+    authDomain: "timberwolf-build3.firebaseapp.com",
+    databaseURL: "https://timberwolf-build3.firebaseio.com",
+    storageBucket: "timberwolf-build3.appspot.com",
+    messagingSenderId: "288270916702"
+  };
 firebase.initializeApp(config);
 
 
