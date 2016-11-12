@@ -52,23 +52,6 @@
         <h2 class="w3-center">Our Story</h2>
 
 
-            <div class="w3-content w3-display-container" style="max-width:1000px">
-              <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_1.PNG?alt=media&token=13033dc6-2998-4da5-9274-a0c91d1e7009" style="width:100%">
-              <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_2.PNG?alt=media&token=bda3a28b-af38-4b4a-8364-2236712c894f" style="width:100%">
-              <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_3.PNG?alt=media&token=303d1ff4-9e2f-47c6-a0a3-637c32928000" style="width:100%">
-              <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_4.PNG?alt=media&token=fe4605f8-7783-4ea8-a980-480a8ecf2146" style="width:100%">
-              <img class="mySlides" src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fpic_5.PNG?alt=media&token=b137a528-cee9-42aa-afa6-2d666f25448d" style="width:100%">
-
-              <div class="w3-center w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
-                <div class="w3-left w3-padding-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-                <div class="w3-right w3-padding-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"></span>
-              </div>
-            </div>
 
 
         <script>
