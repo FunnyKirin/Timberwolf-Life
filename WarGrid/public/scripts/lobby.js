@@ -4,8 +4,8 @@ var KEY_LOBBY = 'lobby';
 
 var key;
 
-var Session = function() {
-    console.log('[INFO] Loading Session Module...');
+var Lobby = function() {
+    console.log('[INFO] Loading Lobby Module...');
 
     this.authorized = false;
     this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
@@ -15,11 +15,13 @@ var Session = function() {
     this.init();
 };
 
-Session.prototype.sessionHandler = function(player) {
+Lobby.prototype.lobbyHandler = function(player) {
     this.authorized = player ? true : false;
 };
 
-Session.prototype.init = function() {
+Lobby.prototype.init = function() {
+    var count = 0;
+
     this.dbRef = firebase.database().ref();
     this.auth = firebase.auth();
 
@@ -32,32 +34,36 @@ Session.prototype.init = function() {
             innerHTML += "\<p class=\"w3-left\"\>RoomName1\<\/p\>\<p class=\"w3-right\"\>OwnerName1\<\/p\>\<\/div\>\<\/div\>";
             $("#" + ROOM_GRID_ID).html(innerHTML);
         });
+
+        count += 1;
     });
 
-    this.auth.onAuthStateChanged(this.sessionHandler.bind(this));
+    console.log("Number of maps: ", count);
+
+    this.auth.onAuthStateChanged(this.lobbyHandler.bind(this));
 };
 
-Session.prototype.create = function() {
+Lobby.prototype.create = function() {
     var newKey = this.dbRef.child(KEY_LOBBY).push().key;
-    var session = {};
-    var sessionData = {
+    var lobby = {};
+    var lobbyData = {
         map: '',
         challenger: '',
         owner: ''
     };
 
-    session['/' + KEY_LOBBY + '/' + newKey] = sessionData;
-    return this.dbRef.update(session);
+    lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
+    return this.dbRef.update(lobby);
 };
 
-Session.prototype.leave = function() {
-
-};
-
-Session.prototype.join = function() {
+Lobby.prototype.leave = function() {
 
 };
 
-Session.prototype.invite = function() {
+Lobby.prototype.join = function() {
+
+};
+
+Lobby.prototype.invite = function() {
 
 };
