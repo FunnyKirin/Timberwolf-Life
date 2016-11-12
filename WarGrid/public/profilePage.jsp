@@ -31,7 +31,6 @@
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
 
         <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
-        <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
