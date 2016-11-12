@@ -29,7 +29,6 @@
           <a href="#playwithfriend" onclick="playwfriend_open()" class="w3-padding">INVITE A FRIEND</a>
           <a href="#ai" onclick="ai_open()" class="w3-padding">PLAY AGAINST A.I.</a>
           <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
-          <a href="#about" onclick="about_open()" class="w3-padding">ABOUT</a>
     </nav>
 
     <!-- Top menu on small screens -->
