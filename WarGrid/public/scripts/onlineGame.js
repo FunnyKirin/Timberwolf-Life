@@ -409,12 +409,9 @@ function checkVictory() {
     return 1;
 }
 //goto next turn
-function nextTurn() { << << << < HEAD
+function nextTurn() {
     territory = 0;
     //switch Player
-    === === = territory = 0
-        //switch Player
-        >>> >>> > 3012787 d669ca45827e1f60509fe4e094c42d6f1
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     for (var i = 0; i <= gridHeight; i++) {

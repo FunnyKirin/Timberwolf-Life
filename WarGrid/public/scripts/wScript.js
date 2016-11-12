@@ -14,7 +14,7 @@ function w3_close()
 
 function profile_open()
 {
-	window.open("profilePage.jsp","_self" );
+	window.open("profilePage.html","_self" );
 }
 
 function index_open()
@@ -25,34 +25,34 @@ function index_open()
 
 function about_open()
 {
-	window.open("aboutPage.jsp","_self" );
+	window.open("aboutPage.html","_self" );
 
 }
 
 function create_open()
 {
-	window.open("createPage.jsp","_self" );
+	window.open("createPage.html","_self" );
 
 }
 
 function playwfriend_open()
 {
-  window.open("playwfriendPage.jsp","_self" );
+  window.open("playwfriendPage.html","_self" );
 }
 
 function ai_open()
 {
-  window.open("aiPage.jsp","_self" );
+  window.open("aiPage.html","_self" );
 }
 
 function editorPage_open()
 {
-  window.open("editorPage.jsp","_self" );
+  window.open("editorPage.html","_self" );
 }
 
 function game_open()
 {
-  window.open("gamePage.jsp","_self" );
+  window.open("gamePage.html","_self" );
 }
 
 
