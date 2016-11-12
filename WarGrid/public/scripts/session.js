@@ -1,5 +1,8 @@
 var BUTTON_CREATE_ID = 'create';
 var ROOM_GRID_ID = 'room-grid';
+var KEY_LOBBY = 'lobby';
+
+var key;
 
 var Session = function() {
     console.log('[INFO] Loading Session Module...');
@@ -35,18 +38,15 @@ Session.prototype.init = function() {
 };
 
 Session.prototype.create = function() {
-    var newKey = this.dbRef.child('session').push().key;
+    var newKey = this.dbRef.child(KEY_LOBBY).push().key;
     var session = {};
     var sessionData = {
-        map: 'null',
-        challenger: 'null',
-        owner: this.auth.currentUser
+        map: '',
+        challenger: '',
+        owner: ''
     };
 
-    session['/session/' + newKey] = sessionData;
-
-    console.log('new session: ', newKey);
-
+    session['/' + KEY_LOBBY + '/' + newKey] = sessionData;
     return this.dbRef.update(session);
 };
 

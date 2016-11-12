@@ -23,46 +23,40 @@ var Player = function() {
 
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
-        var profilePicUrl = player.photoURL;
-        var displayName = player.displayName;
-        var email = player.email;
+        //var profilePicUrl = player.photoURL;
+        //var displayName = player.displayName;
+        //var email = player.email;
+        var uid = player.uid;
+
+        this.ref.child('players').child(uid).once('value', function(snapshot) {
+            if (snapshot.val()) { // already registered
+                playerId = snapshot.val()[uid];
+            } else { // user registration
+                var temp = prompt('Get yourself a username: ');
+                var registered = true;
+                var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
+
+                this.validate(temp, regulation);
+
+                this.ref.child('playerID').child(temp).once('value', function(check) {
+                    while (registered) {
+                        if (check.val()) { // lol registered
+                            temp = prompt('user registered');
+                            temp = this.validate(temp, regulation);
+                        } else {
+                            registered = false;
+                        }
+                    }
+                });
+
+            }
+        });
 
         // html element display
         $("." + GOOGLE_SIGNIN_ID).hide();
         $("." + FACEBOOK_SIGNIN_ID).hide();
         $("." + SIGNOUT_ID).show();
-        $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + displayName);
-
-        // database management of players
-        this.ref.child('player').child(email).once('value', function(pid) {
-            if (pid) { // user already registered
-                this.ref.child('player').child(pid).once('value', function(player) {
-                    var p = player.val();
-                    p[online] = true;
-                    this.ref.child('player').child(pid).update(p);
-                });
-            } else { // prompt user to register
-                var id = prompt("First time? Get yourself a unique name");
-                this.ref.child('player').child(pid).once('value', function(attempt) {
-                    if (attempt) { // lol username taken
-                        alert('lol Player ID taken');
-                    } else { // cool, update database
-                        var p = {
-                            online: true,
-                            id: id,
-                            totalWins: 0,
-                            history: {}
-                        };
-                        this.ref.child('player').push(p);
-                        playerId = id;
-                    }
-                }, function(error) {
-                    console.log("[ERROR] Error signing in player: ", error);
-                });
-            }
-        }, function(error) {
-            console.log("[ERROR] Error signing in player: ", error);
-        });
+        $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> ");
 
         //console.log("Hello, ", playerId);
         //console.log("You signed in with ", email);
@@ -73,12 +67,6 @@ Player.prototype.playerHandler = function(player) {
         $("." + SIGNOUT_ID).hide();
         $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> Login");
 
-        // player offline
-        this.ref.child('player').child(playerId).once('value', function(player) {
-            var p = player.val();
-            p[online] = false;
-            this.ref.child('player').child(playerId).update(player);
-        });
     }
 };
 
@@ -99,9 +87,6 @@ Player.prototype.facebookSignIn = function() {
 
     var facebook = new firebase.auth.FacebookAuthProvider();
 
-    this.auth.signInWithPopup(facebook).catch(function(error) {
-        console.log("ERROR: " + error);
-    });
 };
 
 Player.prototype.signOut = function() {
@@ -114,4 +99,26 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
+};
+
+// provider listed above, don't touch this
+Player.prototype.setCustomParameter = function(provider) {
+
+};
+
+Player.prototype.validate = function(string, regulation) {
+    var invalid = true;
+
+    while (invalid) {
+        invalid = false;
+        for (var i = 0; i < length; i++) {
+            if (temp.includes(regulation[i])) {
+                string = prompt('Don\'t add special characters besides _');
+                invalid = true;
+                break;
+            }
+        }
+    }
+
+    return string;
 };
