@@ -24,6 +24,26 @@
 
 
 <body class="w3-light-grey w3-content" style="max-width:1600px">
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '1239589969432849',
+                xfbml: true,
+                version: 'v2.8'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-large w3-padding-16">
@@ -33,7 +53,7 @@
             <div id="dropdown_menu_on_large_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:1">
                 <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
                 <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
-                <a onclick="player.signOut()" href="#" class="fa fa-dot-circle-o sign-out" > sign out</a>
+                <a onclick="player.signOut()" href="#" class="fa fa-dot-circle-o sign-out"> sign out</a>
             </div>
         </div>
 
@@ -72,7 +92,7 @@
         <div class="w3-container w3-right w3-row">
             <a class="w3-btn-floating w3-right w3-white  w3-round-jumbo" onclick="w3_open()">&#9776</a>
             <div class="w3-container w3-middle w3-dropdown-click">
-                <a class="w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()" ><i class="material-icons">person</i></a>
+                <a class="w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()"><i class="material-icons">person</i></a>
                 <div id="dropdown_menu_on_medium_small_screen" class="w3-dropdown-content w3-border w3-round-xlarge" style="right:0">
                     <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
                     <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
@@ -140,11 +160,13 @@
         </div>
         -->
 
+            <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+            </div>
 
 
             <!-- Room grid -->
             <div id="room-grid" class="w3-row w3-margin-top w3-bordered w3-border w3-striped w3-round-large">
-<!--
+                <!--
                 <div class="w3-third w3-panel">
                     <div name="myCards" class="w3-card-12">
                         <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186" ; style="width:100%" ; onclick="game_open()">
@@ -173,11 +195,11 @@
             </div>
 
 -->
-        </div>
+            </div>
 
 
-        <script src="scripts/app.js"></script>
-        <script src="scripts/load.js"></script>
+            <script src="scripts/app.js"></script>
+            <script src="scripts/load.js"></script>
 
 </body>
 
