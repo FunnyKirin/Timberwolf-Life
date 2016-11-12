@@ -22,10 +22,10 @@ Lobby.prototype.lobbyHandler = function(player) {
 Lobby.prototype.init = function() {
     var count = 0;
 
-    this.dbRef = firebase.database().ref();
+    this.ref = firebase.database().ref();
     this.auth = firebase.auth();
 
-    this.dbRef.on('child_added', function(snapshot) {
+    this.ref.child('maps').on('child_added', function(snapshot) {
         snapshot.forEach(function(data) {
             var innerHTML = "\<div class=\"w3-third w3-panel\"\>";
             innerHTML += "\<div name=\"myCards\" class=\"w3-card-12\"\>\<img src=\"";
@@ -44,7 +44,7 @@ Lobby.prototype.init = function() {
 };
 
 Lobby.prototype.create = function() {
-    var newKey = this.dbRef.child(KEY_LOBBY).push().key;
+    var newKey = this.ref.child(KEY_LOBBY).push().key;
     var lobby = {};
     var lobbyData = {
         map: '',
@@ -53,7 +53,7 @@ Lobby.prototype.create = function() {
     };
 
     lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
-    return this.dbRef.update(lobby);
+    return this.ref.update(lobby);
 };
 
 Lobby.prototype.leave = function() {
