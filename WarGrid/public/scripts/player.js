@@ -21,25 +21,6 @@ var Player = function() {
     this.init();
 };
 
-Player.prototype.validateUsername = function(s, regulation) {
-    var invalid = true;
-    var ret = s;
-
-    while (invalid) {
-        invalid = false;
-        for (var i = 0; i < length; i++) {
-            if (temp.includes(regulation[i])) {
-                ret = prompt('Don\'t add special characters besides _');
-                invalid = true;
-                break;
-            }
-        }
-    }
-
-    return ret;
-};
-
-
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
         //var profilePicUrl = player.photoURL;
@@ -47,25 +28,36 @@ Player.prototype.playerHandler = function(player) {
         //var email = player.email;
         var uid = player.uid;
 
-        this.ref.child('players').child(uid).once('value', function(snapshot) {
+        console.log("UID: ", uid);
+
+        this.ref.child('playerID').child(uid).once('value', function(snapshot) {
+            console.log("snapshot.val(): ", snapshot.val());
             if (snapshot.val()) { // already registered
-                playerId = snapshot.val()[uid];
+                playerId = snapshot.val();
             } else { // user registration
                 var registered = true;
                 var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
+                //var temp = validateInput(prompt('Get yourself a username: '), regulation);
+                var temp = 'no';
 
-                var temp = this.validateUsername(prompt('Get yourself a username: '), regulation);
+                while (registered) {
+                    this.ref.child('players').child(temp).once('value', function(check) {
+                        registered = check.val() ? true : false;
+                    });
+                    temp = 'lol';
+                }
 
-                this.ref.child('playerID').child(temp).once('value', function(check) {
-                    while (registered) {
-                        if (check.val()) { // lol registered
-                            temp = this.validateUsername(prompt('user registered'), regulation);
-                        } else {
-                            registered = false;
-                        }
-                    }
+                console.log('checkpoint');
+
+                playerId = temp;
+                var playerData = {
+                    totalWins: 0,
+                    online: true,
+                    bio: ''
+                };
+                this.ref.child('players').set({
+                    playerId: playerData
                 });
-
             }
         });
 
@@ -116,4 +108,22 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
+};
+
+var validateInput = function(s, regulation) {
+    var invalid = true;
+    var ret = s;
+
+    while (invalid) {
+        invalid = false;
+        for (var i = 0; i < length; i++) {
+            if (ret.includes(regulation[i])) {
+                ret = prompt('Don\'t add special characters besides _');
+                invalid = true;
+                break;
+            }
+        }
+    }
+
+    return ret;
 };
