@@ -36,5 +36,5 @@ function createRoom(map) {
     };
     lobby['/lobby/' + newKey] = lobbyData;
     this.ref.update(lobby);
-    game_open(newKey)
+    game_open(newKey);
 }
