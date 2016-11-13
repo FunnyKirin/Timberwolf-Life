@@ -219,7 +219,7 @@ function initEventHandlers() {
         renderGhostRenderCells();
         renderGhost();
         renderGridLines();
-    })
+    });
     $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
@@ -228,7 +228,7 @@ function initEventHandlers() {
         renderGhostRenderCells();
         renderGhost();
         renderGridLines();
-    })
+    });
 }
 /* This function initilizes all UI texts
  */
