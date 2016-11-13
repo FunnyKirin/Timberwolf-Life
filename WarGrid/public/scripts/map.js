@@ -3,7 +3,10 @@ var Map = function() {
     console.log('[INFO] Loading Map Module...');
     this.init();
 };
-Map.prototype.mapHandler = function(player) {};
+
+Map.prototype.mapHandler = function(player) {
+    
+};
 
 
 Map.prototype.loadMap = function(name) {

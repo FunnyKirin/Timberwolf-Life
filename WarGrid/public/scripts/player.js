@@ -21,6 +21,25 @@ var Player = function() {
     this.init();
 };
 
+Player.prototype.validateUsername = function(s, regulation) {
+    var invalid = true;
+    var ret = s;
+
+    while (invalid) {
+        invalid = false;
+        for (var i = 0; i < length; i++) {
+            if (temp.includes(regulation[i])) {
+                ret = prompt('Don\'t add special characters besides _');
+                invalid = true;
+                break;
+            }
+        }
+    }
+
+    return ret;
+};
+
+
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
         //var profilePicUrl = player.photoURL;
@@ -32,17 +51,15 @@ Player.prototype.playerHandler = function(player) {
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val()[uid];
             } else { // user registration
-                var temp = prompt('Get yourself a username: ');
                 var registered = true;
                 var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
 
-                this.validate(temp, regulation);
+                var temp = this.validateUsername(prompt('Get yourself a username: '), regulation);
 
                 this.ref.child('playerID').child(temp).once('value', function(check) {
                     while (registered) {
                         if (check.val()) { // lol registered
-                            temp = prompt('user registered');
-                            temp = this.validate(temp, regulation);
+                            temp = this.validateUsername(prompt('user registered'), regulation);
                         } else {
                             registered = false;
                         }
@@ -99,26 +116,4 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
-};
-
-// provider listed above, don't touch this
-Player.prototype.setCustomParameter = function(provider) {
-
-};
-
-Player.prototype.validate = function(string, regulation) {
-    var invalid = true;
-
-    while (invalid) {
-        invalid = false;
-        for (var i = 0; i < length; i++) {
-            if (temp.includes(regulation[i])) {
-                string = prompt('Don\'t add special characters besides _');
-                invalid = true;
-                break;
-            }
-        }
-    }
-
-    return string;
 };
