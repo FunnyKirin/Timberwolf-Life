@@ -10,8 +10,6 @@ var Lobby = function() {
     this.authorized = false;
     this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
 
-    this.buttonCreate.addEventListener('click', this.create.bind(this));
-
     this.init();
 };
 
