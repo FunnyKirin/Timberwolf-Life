@@ -50,9 +50,9 @@ function editorPage_open()
   window.open("editorPage.html","_self" );
 }
 
-function game_open()
+function game_open(key)
 {
-  window.open("gamePage.html","_self" );
+  window.open("gamePage.html?"+key,"_self" );
     
     //window.location.href  = '/player_detail?username=123' ;
 }
