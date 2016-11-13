@@ -7,6 +7,7 @@ var PLAYER_PROFILE_ID = "player-profile-desktop";
 var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 
 var playerId;
+var playerObj = {};
 
 var Player = function() {
     console.log('[INFO] Loading Player Module...');
@@ -27,39 +28,41 @@ Player.prototype.playerHandler = function(player) {
         //var displayName = player.displayName;
         //var email = player.email;
         var uid = player.uid;
+        var registered = false;
 
         console.log("UID: ", uid);
 
         this.ref.child('playerID').child(uid).once('value', function(snapshot) {
-            console.log("snapshot.val(): ", snapshot.val());
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
+                registered = true;
             } else { // user registration
-                var registered = true;
-                var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
-                //var temp = validateInput(prompt('Get yourself a username: '), regulation);
-                var temp = 'no';
-
-                while (registered) {
-                    this.ref.child('players').child(temp).once('value', function(check) {
-                        registered = check.val() ? true : false;
-                    });
-                    temp = 'lol';
-                }
-
-                console.log('checkpoint');
-
-                playerId = temp;
-                var playerData = {
-                    totalWins: 0,
-                    online: true,
-                    bio: ''
-                };
-                this.ref.child('players').set({
-                    playerId: playerData
-                });
+                registered = false;
             }
         });
+
+        if (!registered) {
+            var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
+            //var temp = validateInput(prompt('Get yourself a username: '), regulation);
+            var temp = 'no';
+            var taken = true;
+
+            this.ref.child('players').child(temp).once('value', function(check) {
+                taken = check.val() ? true : false;
+            });
+            temp = 'steve';
+
+            console.log('checkpoint');
+
+            playerId = temp;
+            var playerData = {
+                totalWins: 0,
+                online: true,
+                bio: ''
+            };
+            this.ref.child('players').child(playerId).set(playerData);
+            this.ref.child('playerID').child(uid).set(playerId);
+        }
 
         // html element display
         $("." + GOOGLE_SIGNIN_ID).hide();
@@ -69,7 +72,6 @@ Player.prototype.playerHandler = function(player) {
 
         //console.log("Hello, ", playerId);
         //console.log("You signed in with ", email);
-
     } else { // logged out
         $("." + GOOGLE_SIGNIN_ID).show();
         $("." + FACEBOOK_SIGNIN_ID).show();
