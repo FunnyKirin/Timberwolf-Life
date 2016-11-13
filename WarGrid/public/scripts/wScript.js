@@ -53,6 +53,8 @@ function editorPage_open()
 function game_open()
 {
   window.open("gamePage.html","_self" );
+    
+    //window.location.href  = '/player_detail?username=123' ;
 }
 
 
