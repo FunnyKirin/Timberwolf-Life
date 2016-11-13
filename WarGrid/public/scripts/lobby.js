@@ -24,7 +24,7 @@ Lobby.prototype.init = function() {
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
 
-    this.ref.child('maps').on('value', function(snapshot) {
+    this.ref.child('lobby').on('value', function(snapshot) {
         var count = 0;
         var innerHTML = "";
 
@@ -46,7 +46,7 @@ Lobby.prototype.init = function() {
 
 
 
-    this.auth.onAuthStateChanged(this.lobbyHandler.bind(this));
+    //this.auth.onAuthStateChanged(this.lobbyHandler.bind(this));
 };
 
 Lobby.prototype.create = function() {

@@ -34,7 +34,6 @@ function createRoom(map) {
         challenger: '',
         owner: firebase.auth().currentUser.uid
     };
-
     lobby['/lobby/' + newKey] = lobbyData;
     this.ref.update(lobby);
     game_open(newKey)

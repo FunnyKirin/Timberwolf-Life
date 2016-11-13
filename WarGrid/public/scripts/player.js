@@ -29,7 +29,7 @@ Player.prototype.playerHandler = function(player) {
         var uid = player.uid;
 
         console.log("UID: ", uid);
-
+        var thisThis = this;
         this.ref.child('playerID').child(uid).once('value', function(snapshot) {
             console.log("snapshot.val(): ", snapshot.val());
             if (snapshot.val()) { // already registered
@@ -43,6 +43,7 @@ Player.prototype.playerHandler = function(player) {
                 while (registered) {
                     this.ref.child('players').child(temp).once('value', function(check) {
                         registered = check.val() ? true : false;
+                        console.log(registered);
                     });
                     temp = 'lol';
                 }
