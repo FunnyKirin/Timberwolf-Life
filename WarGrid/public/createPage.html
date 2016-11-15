@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/wScript.js"></script>
+    <script src="scripts/smallCanvas.js"></script>
     <script src="scripts/createPage.js"></script>
 
 </head>
@@ -62,6 +64,8 @@
                     onclick="game_open()">
                     <p>...</p>
                 </div>
+                <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512">
+                </canvas>
  -->
 
             </div>
@@ -72,5 +76,6 @@
     </div>
     <script>
         loadMaps();
+        initCanvasArray();
     </script>
 </body>
