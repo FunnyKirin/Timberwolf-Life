@@ -196,6 +196,14 @@ function show_drop_down_menu_on_medium_small_screen()
 }
 
 
+/* for icon button to send image */
+function handleBrowseClick()
+{
+  var fileinput = document.getElementById("mediaCapture");
+  fileinput.click();
+}
+
+
 
 // progess bar from map editor page.
 
