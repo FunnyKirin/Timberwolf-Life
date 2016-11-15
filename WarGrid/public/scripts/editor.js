@@ -209,7 +209,8 @@ function respondToSaveMap() {
     var mapname = mapNameInput.value;
 
     console.log("creator:---------------" + creator);
-    if (key !== null) {
+    if (key !== null) 
+    {
         dbref = this.db.ref().child('maps/' + key);
         //  this.dbref = this.db.ref('map');
         dbref.update({
@@ -219,7 +220,9 @@ function respondToSaveMap() {
             x: gridHeight,
             y: gridWidth
         });
-    } else {
+    } 
+    else 
+    {
         dbref = this.db.ref().child('maps');
         //  this.dbref = this.db.ref('map');
         dbref.push({
@@ -230,6 +233,31 @@ function respondToSaveMap() {
             y: gridWidth
         });
 
+    }
+
+
+
+
+    //add progress bar feature.
+    var elem = document.getElementById("myBar");
+    var width = 0;
+    var id = setInterval(frame, 10);
+
+
+
+    
+    function frame()
+    {
+        if(width >= 100)
+        {
+        clearInterval(id);
+        }
+        else
+        {
+          width++;
+          elem.style.width = width + '%';
+          document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
+        }
     }
 }
 

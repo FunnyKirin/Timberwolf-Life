@@ -194,3 +194,31 @@ function show_drop_down_menu_on_medium_small_screen()
   }
 
 }
+
+
+
+// progess bar from map editor page.
+
+/* put it into editor.js
+function barMove()
+{
+  var elem = document.getElementById("myBar");
+  var width = 0;
+  var id = setInterval(frame, 10);
+
+  function frame()
+  {
+    if(width >= 100)
+    {
+    clearInterval(id);
+    }
+    else
+    {
+      width++;
+      elem.style.width = width + '%';
+      document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
+    }
+  }
+}
+*/
+                    
