@@ -76,7 +76,7 @@ function carousel()
 
 
 //search bar from home page
-function myFunction() {
+function searchRoom() {
     var input, filter, cards, li, a, i;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();

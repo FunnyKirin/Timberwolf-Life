@@ -16,7 +16,7 @@
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
     <script src="scripts/map.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="scripts/lobby.js"></script>
+    <script src="scripts/lobby.js"></script>   
 </head>
 
 <body class="w3-light-grey w3-content" style="max-width:1600px">
@@ -42,7 +42,7 @@
     </script>
 
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
-    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-large w3-padding-16 " style="max-width:1600px">
+    <header class="w3-container w3-top w3-hide-small w3-large w3-padding-16 " style="max-width:1600px">
 
         <div class="w3-dropdown-click w3-right">
             <a class="player-profile-desktop w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
@@ -88,7 +88,7 @@
         <div class="w3-container" style="margin-top:83px">
             <h2>Game Lobby</h2>
             <p>Search for a room name in the input field.</p>
-            <input id="myInput" class="w3-input w3-border w3-padding w3-round-xlarge" type="text" placeholder="Search for room names.." onkeyup="myFunction()">
+            <input id="myInput" class="w3-input w3-border w3-padding w3-round-xlarge" type="text" placeholder="Search for room names.." onkeyup="searchRoom()">
             
 
 
@@ -100,7 +100,9 @@
 
 
             <!-- Room grid -->
-            <div id="room-grid" class="w3-row w3-margin-top  w3-border w3-striped w3-round-large">
+            <div id="room-grid" class="w3-container w3-margin-top w3-border w3-striped w3-round-large">
+
+                
 
 
             </div>
@@ -108,6 +110,12 @@
 
             <script src="scripts/app.js"></script>
             <script src="scripts/load.js"></script>
+
+
+
+        </div>
+
+    </div>
 </body>
 
 </html>
