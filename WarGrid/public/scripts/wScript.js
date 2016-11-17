@@ -41,9 +41,6 @@ function game_open(key) {
     lobbyJoin(key);
     //window.location.href  = '/player_detail?username=123' ;
 }
-<<<<<<< HEAD
-=======
-
 
 function localGame_open()
 {
@@ -51,7 +48,6 @@ function localGame_open()
 }
 
 
->>>>>>> origin/master
 /*//Automatic slideshow
 function carousel()
 {
