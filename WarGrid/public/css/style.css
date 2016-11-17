@@ -7,17 +7,16 @@
     width: 50%;
     height: auto;
 }
-<<<<<<< HEAD
+
 
 
 .icon_small{
-	width: 8%;
-	height: 8%;
+	width: 35px;
+	height: 35px;
     
 }
 
 
 
-.icon_small {vertical-align:20%}
-=======
->>>>>>> deda32cd05eacb4d4bf9234ed784c4af5175d09b
+.icon_small {vertical-align: -50%}
+
