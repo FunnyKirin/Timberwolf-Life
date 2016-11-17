@@ -150,8 +150,11 @@ function initFirebase() {
     var url = window.location.search.substring(1);
     room = database.ref().child("lobby").child(url);
     room.on('value', function (snapshot) {
-        //get map name
-        loadMapName = snapshot.val().map;
+        renderGrid=snapshot.val().grid;
+
+        renderGame();
+        nextTurn();
+        swapGrids();
         //get player Index
         if (auth.currentUser.uid == snapshot.val().owner) {
             playerIndex = 1;
@@ -159,6 +162,8 @@ function initFirebase() {
         else if (auth.currentUser.uid == snapshot.val().challenger) {
             playerIndex = 2;
         }
+
+        alert("you are "+playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
@@ -184,6 +189,7 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
+    /*
     dbref = this.database.ref().child('maps');
     //  this.dbref = this.db.ref('map');
     dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
@@ -193,11 +199,6 @@ function initMap() {
                 room.child("grid").transaction(function (currentData) {
                     return data.val().data;
                 });
-                room.child("currentPlayer").transaction(function (currentData) {
-                    if ((currentData) == undefined) {
-                        return 1;
-                    }
-                });
                 key = data.key;
                 renderGrid = data.val().data;
                 renderGame();
@@ -206,6 +207,7 @@ function initMap() {
             }
         });
     });
+    */
     /*
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
