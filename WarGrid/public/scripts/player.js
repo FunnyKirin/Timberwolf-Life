@@ -59,17 +59,16 @@ Player.prototype.playerHandler = function(player) {
                     taken = false;
                 });
 
-                while (true) {
-                    if (!taken) {
-                        this.ref.child('playerUID').child(uid).set(playerId);
-                        this.ref.child('players').child(playerId).set({
-                            totalWins: 0,
-                            online: true,
-                            bio: ''
-                        });
-                        break;
-                    }
-                }
+
+
+                this.ref.child('playerUID').child(uid).set(playerId);
+                this.ref.child('players').child(playerId).set({
+                    totalWins: 0,
+                    online: true,
+                    bio: ''
+                });
+
+                registered = true;
                 console.log('Logged in as', playerId);
             }
         }
@@ -80,8 +79,6 @@ Player.prototype.playerHandler = function(player) {
         $("." + SIGNOUT_ID).show();
         $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> ");
 
-        //console.log("Hello, ", playerId);
-        //console.log("You signed in with ", email);
     } else { // logged out
         $("." + GOOGLE_SIGNIN_ID).show();
         $("." + FACEBOOK_SIGNIN_ID).show();
