@@ -163,7 +163,6 @@ function initFirebase() {
         if (snapshot.val().currentPlayer == playerIndex) {
             nextTurn();
         }
-        alert("you are " + playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
@@ -426,6 +425,10 @@ function confirmMove() {
 function writeMap(grid) {
     room.child("grid").transaction(function (currentData) {
         return grid;
+    });
+    room.child("currentPlayer").transaction(function (currentData) {
+        currentData = currentData === 1 ? 2 : 1;
+        return currentData;
     });
 }
 //check if current player achieved victory.
