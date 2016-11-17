@@ -2,7 +2,7 @@ var BUTTON_CREATE_ID = 'create';
 var ROOM_GRID_ID = 'room-grid';
 var KEY_LOBBY = 'lobby';
 var authorized=false;
-var Lobby = function () {
+function initLobby () {
     console.log('[INFO] Loading Lobby Module...');
     this.room_key = '';
     this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
@@ -69,7 +69,6 @@ function lobbyLeave() {
         alert('You need to login first');
     }
 };
-<<<<<<< HEAD
 function lobbyJoin(room_key) {
     if (this.authorized) {
         var challenger = this.ref.child('lobby').child(room_key).child('challenger');
@@ -83,10 +82,6 @@ function lobbyJoin(room_key) {
         alert('You need to login first');
     }
     window.open("gamePage.html?" + room_key, "_self");
-=======
 
-Lobby.prototype.join = function(room_key) {
-
->>>>>>> origin/master
 };
 Lobby.prototype.invite = function () {};
