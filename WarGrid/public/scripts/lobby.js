@@ -120,7 +120,9 @@ Lobby.prototype.create = function() {
     var lobbyData = {
         map: '',
         challenger: '',
-        owner: ''
+        owner: '',
+        grid: '',
+        currentPlayer: 1
     };
 
     lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;

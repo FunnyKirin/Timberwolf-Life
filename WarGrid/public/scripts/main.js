@@ -84,7 +84,6 @@ function initGameOfLife() {
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
     // Load map from server
-    initMap();
     initUI();
     //Start first Turn;
 }
@@ -158,8 +157,8 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-    /*
-    var loadMapName = "Test";
+
+    var loadMapName = "Test1";
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
@@ -175,8 +174,8 @@ function initMap() {
             }
         });
     });
-    */
 
+    /*
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
         //updateGrid=json.data;
@@ -184,7 +183,7 @@ function initMap() {
         nextTurn();
         swapGrids();
     });
-
+    */
 }
 
 function initGameOfLifeData() {
