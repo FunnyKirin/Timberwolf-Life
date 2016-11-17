@@ -85,20 +85,18 @@ Lobby.prototype.init = function() {
 };
 
 Lobby.prototype.create = function() {
-    if (this.authorized) {
-        var newKey = this.ref.child(KEY_LOBBY).push().key;
-        var lobby = {};
-        var lobbyData = {
-            map: '',
-            challenger: '',
-            owner: ''
-        };
+    var newKey = this.ref.child(KEY_LOBBY).push().key;
+    var lobby = {};
+    var lobbyData = {
+        map: '',
+        challenger: '',
+        owner: '',
+        grid: '',
+        currentPlayer: 1
+    };
 
-        lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
-        return this.ref.update(lobby);
-    } else {
-        alert('You need to login first');
-    }
+    lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
+    return this.ref.update(lobby);
 };
 
 Lobby.prototype.leave = function() {
