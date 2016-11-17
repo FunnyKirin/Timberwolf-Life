@@ -5,6 +5,8 @@ function loadMaps() {
     this.auth = firebase.auth();
 
     this.ref.child('maps').on('value', function (snapshot) {
+
+        
         var count = 0;
         var innerHTML = "";
         snapshot.forEach(function (data) {
