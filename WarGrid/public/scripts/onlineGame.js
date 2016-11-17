@@ -150,10 +150,8 @@ function initFirebase() {
     var url = window.location.search.substring(1);
     room = database.ref().child("lobby").child(url);
     room.on('value', function (snapshot) {
-        renderGrid=snapshot.val().grid;
-
+        renderGrid = snapshot.val().grid;
         renderGame();
-        nextTurn();
         swapGrids();
         //get player Index
         if (auth.currentUser.uid == snapshot.val().owner) {
@@ -162,8 +160,10 @@ function initFirebase() {
         else if (auth.currentUser.uid == snapshot.val().challenger) {
             playerIndex = 2;
         }
-
-        alert("you are "+playerIndex);
+        if (snapshot.val().currentPlayer == playerIndex) {
+            nextTurn();
+        }
+        alert("you are " + playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
