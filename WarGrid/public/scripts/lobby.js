@@ -112,13 +112,7 @@ Lobby.prototype.leave = function() {
 };
 
 Lobby.prototype.join = function(room_key) {
-    if (this.authorized) {
-        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
-        challenger.transaction(playerId);
-
-    } else {
-        alert('You need to login first');
-    }
+    
 };
 
 Lobby.prototype.invite = function() {
