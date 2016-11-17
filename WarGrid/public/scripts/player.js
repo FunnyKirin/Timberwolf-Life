@@ -34,7 +34,7 @@ Player.prototype.playerHandler = function(player) {
         var thisThis = this;
 
         // check if user is already registered
-        this.ref.child('playerID').once('value', function(snapshot) {
+        this.ref.child('playerUID').once('value', function(snapshot) {
             if (snapshot.hasChild(uid)) { // already registered
                 playerId = snapshot.val();
                 registered = true;
@@ -47,6 +47,7 @@ Player.prototype.playerHandler = function(player) {
         if (!registered) {
             var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
             var temp = validateInput(prompt('Get yourself a username: '), regulation);
+            var taken = true;
 
             if (temp) {
                 this.ref.child('players').once('value', function(check) {
@@ -54,18 +55,21 @@ Player.prototype.playerHandler = function(player) {
                         alert(temp + ' exists');
                         temp = validateInput(prompt('Taken. Try again'), regulation);
                     }
-
                     playerId = temp;
+                    taken = false;
                 });
 
-
-                this.ref.child('players').child(playerId).set({
-                    totalWins: 0,
-                    online: true,
-                    bio: ''
-                });
-                this.ref.child('playerUID').child(uid).set(playerId);
-
+                while (true) {
+                    if (!taken) {
+                        this.ref.child('playerUID').child(uid).set(playerId);
+                        this.ref.child('players').child(playerId).set({
+                            totalWins: 0,
+                            online: true,
+                            bio: ''
+                        });
+                        break;
+                    }
+                }
                 console.log('Logged in as', playerId);
             }
         }
