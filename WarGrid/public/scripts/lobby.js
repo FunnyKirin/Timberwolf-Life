@@ -85,7 +85,6 @@ Lobby.prototype.init = function() {
 };
 
 Lobby.prototype.create = function() {
-<<<<<<< HEAD
     var newKey = this.ref.child(KEY_LOBBY).push().key;
     var lobby = {};
     var lobbyData = {
@@ -98,22 +97,6 @@ Lobby.prototype.create = function() {
 
     lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
     return this.ref.update(lobby);
-=======
-    if (this.authorized) {
-        var newKey = this.ref.child(KEY_LOBBY).push().key;
-        var lobby = {};
-        var lobbyData = {
-            map: '',
-            challenger: '',
-            owner: ''
-        };
-
-        lobby['/' + KEY_LOBBY + '/' + newKey] = lobbyData;
-        return this.ref.update(lobby);
-    } else {
-        alert('You need to login first');
-    }
->>>>>>> origin/master
 };
 
 Lobby.prototype.leave = function() {
