@@ -46,15 +46,15 @@ Lobby.prototype.init = function()
         $("#" + ROOM_GRID_ID).html(innerHTML);
         console.log("Number of rooms: ", count);
         */
-
+    
         /* test for fix the search of lobby page */
         var count = 0;
-        /* divider the layout into three vertical section. */
+        // divider the layout into three vertical section. 
         var innerHTML = "";
         var innerHTML_1 = "\<div class=\"w3-third w3-panel\"\>";
         var innerHTML_2 = "\<div class=\"w3-third w3-panel\"\>";
         var innerHTML_3 = "\<div class=\"w3-third w3-panel\"\>";
-        /* use divider_num to determine which vertical section need to write */
+        // use divider_num to determine which vertical section need to write 
         var divider_num = 1;
         snapshot.forEach(function(data) 
         {
@@ -64,7 +64,7 @@ Lobby.prototype.init = function()
                 innerHTML_1 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_1 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_1 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
-                console.log("divider_num: ", divider_num);
+                
             }
             else if(divider_num === 2)
             {
@@ -72,7 +72,7 @@ Lobby.prototype.init = function()
                 innerHTML_2 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_2 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_2 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
-                console.log("divider_num: ", divider_num);
+                
             }
             else if(divider_num === 3)
             {
@@ -80,7 +80,7 @@ Lobby.prototype.init = function()
                 innerHTML_3 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_3 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_3 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
-                console.log("divider_num: ", divider_num);
+                
                 divider_num = 0;
             }
             else
@@ -105,8 +105,8 @@ Lobby.prototype.init = function()
 
         $("#" + ROOM_GRID_ID).html(innerHTML);
         console.log("Number of rooms: ", count);
-
-
+    
+        
     });
 
 
