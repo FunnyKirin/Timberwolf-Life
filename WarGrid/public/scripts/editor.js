@@ -209,7 +209,7 @@ function respondToSaveMap() {
     var mapname = mapNameInput.value;
 
     console.log("creator:---------------" + creator);
-    if (key !== null) 
+    if (key !== null)
     {
         dbref = this.db.ref().child('maps/' + key);
         //  this.dbref = this.db.ref('map');
@@ -220,8 +220,8 @@ function respondToSaveMap() {
             x: gridHeight,
             y: gridWidth
         });
-    } 
-    else 
+    }
+    else
     {
         dbref = this.db.ref().child('maps');
         //  this.dbref = this.db.ref('map');
@@ -245,7 +245,7 @@ function respondToSaveMap() {
 
 
 
-    
+
     function frame()
     {
         if(width >= 100)

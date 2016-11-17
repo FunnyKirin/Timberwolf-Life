@@ -32,37 +32,41 @@ Player.prototype.playerHandler = function(player) {
 
         console.log("UID: ", uid);
         var thisThis = this;
-        this.ref.child('playerID').child(uid).once('value', function(snapshot) {
-            if (snapshot.val()) { // already registered
+
+        // check if user is already registered
+        this.ref.child('playerID').once('value', function(snapshot) {
+            if (snapshot.hasChild(uid)) { // already registered
                 playerId = snapshot.val();
                 registered = true;
             } else { // user registration
-
                 registered = false;
             }
         });
 
+        // user registration process
         if (!registered) {
-            var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
+            var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
             //var temp = validateInput(prompt('Get yourself a username: '), regulation);
-            var temp = 'no';
-            var taken = true;
-
-            this.ref.child('players').child(temp).once('value', function(check) {
-                taken = check.val() ? true : false;
-            });
-            temp = 'steve';
-
-            console.log('checkpoint');
-
-            playerId = temp;
+            var temp = 'ok';
             var playerData = {
                 totalWins: 0,
                 online: true,
                 bio: ''
             };
-            this.ref.child('players').child(playerId).set(playerData);
-            this.ref.child('playerID').child(uid).set(playerId);
+
+            if (temp) {
+                this.ref.child('players').transaction(function(check) {
+                    console.log('transaction', check);
+                    return check;
+                });
+/*
+                playerId = temp;
+                this.ref.child('players').child(playerId).set(playerData);
+                this.ref.child('playerID').child(uid).set(playerId);
+
+                console.log('Logged in as', playerId);
+                */
+            }
         }
 
         // html element display
@@ -98,7 +102,9 @@ Player.prototype.facebookSignIn = function() {
     console.log("Facebook authentication");
 
     var facebook = new firebase.auth.FacebookAuthProvider();
-
+    this.auth.signInWithPopup(facebook).catch(function(error) {
+        console.log("ERROR: ", error);
+    });
 };
 
 Player.prototype.signOut = function() {
@@ -117,13 +123,15 @@ var validateInput = function(s, regulation) {
     var invalid = true;
     var ret = s;
 
-    while (invalid) {
-        invalid = false;
-        for (var i = 0; i < length; i++) {
-            if (ret.includes(regulation[i])) {
-                ret = prompt('Don\'t add special characters besides _');
-                invalid = true;
-                break;
+    if (ret) {
+        while (invalid) {
+            invalid = false;
+            for (var i = 0; i < length; i++) {
+                if (ret.includes(regulation[i])) {
+                    ret = prompt('Don\'t add special characters besides _');
+                    invalid = true;
+                    break;
+                }
             }
         }
     }
