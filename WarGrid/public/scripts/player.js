@@ -46,26 +46,27 @@ Player.prototype.playerHandler = function(player) {
         // user registration process
         if (!registered) {
             var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
-            //var temp = validateInput(prompt('Get yourself a username: '), regulation);
-            var temp = 'ok';
-            var playerData = {
-                totalWins: 0,
-                online: true,
-                bio: ''
-            };
+            var temp = validateInput(prompt('Get yourself a username: '), regulation);
 
             if (temp) {
-                this.ref.child('players').transaction(function(check) {
-                    console.log('transaction', check);
-                    return check;
+                this.ref.child('players').once('value', function(check) {
+                    while (check.hasChild(temp) || !temp) {
+                        alert(temp + ' exists');
+                        temp = validateInput(prompt('Taken. Try again'), regulation);
+                    }
+
+                    playerId = temp;
                 });
-/*
-                playerId = temp;
-                this.ref.child('players').child(playerId).set(playerData);
-                this.ref.child('playerID').child(uid).set(playerId);
+
+
+                this.ref.child('players').child(playerId).set({
+                    totalWins: 0,
+                    online: true,
+                    bio: ''
+                });
+                this.ref.child('playerUID').child(uid).set(playerId);
 
                 console.log('Logged in as', playerId);
-                */
             }
         }
 
