@@ -6,11 +6,10 @@ var PLAYER_ID_ID = "player-id";
 var PLAYER_PROFILE_ID = "player-profile-desktop";
 var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 
-var playerId;
-var playerObj = {};
-
 var Player = function() {
     console.log('[INFO] Loading Player Module...');
+
+    this.playerId = '';
 
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
     this.playerId = document.getElementById(PLAYER_ID_ID);
@@ -34,8 +33,8 @@ Player.prototype.playerHandler = function(player) {
         var thisThis = this;
 
         // check if user is already registered
-        this.ref.child('playerUID').once('value', function(snapshot) {
-            if (snapshot.hasChild(uid)) { // already registered
+        this.ref.child('playerUID').child(uid).once('value', function(snapshot) {
+            if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
                 registered = true;
             } else { // user registration
@@ -46,31 +45,35 @@ Player.prototype.playerHandler = function(player) {
         // user registration process
         if (!registered) {
             var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
-            var temp = validateInput(prompt('Get yourself a username: '), regulation);
-            var taken = true;
+            this.playerId = validateInput(prompt('Get yourself a username'), regulation);
 
-            if (temp) {
-                this.ref.child('players').once('value', function(check) {
-                    while (check.hasChild(temp) || !temp) {
-                        alert(temp + ' exists');
-                        temp = validateInput(prompt('Taken. Try again'), regulation);
-                    }
-                    playerId = temp;
-                    taken = false;
-                });
-
-
-
-                this.ref.child('playerUID').child(uid).set(playerId);
-                this.ref.child('players').child(playerId).set({
-                    totalWins: 0,
-                    online: true,
-                    bio: ''
-                });
-
-                registered = true;
-                console.log('Logged in as', playerId);
+            while (!this.playerId) {
+                this.playerId = validateInput(prompt('Get yourself a username'), regulation);
             }
+
+            var temp = this.playerId;
+            this.ref.child('players').once('value', function(check) {
+                // jian ce
+                while (check.hasChild(temp)) {
+                    alert(temp + ' exists');
+                    temp = validateInput(prompt('Taken. Try again'), regulation);
+                }
+            });
+
+            this.playerId = temp;
+            // update database key playerUID
+            this.ref.child('playerUID').child(uid).set(this.playerId);
+
+            // update database key players
+            this.ref.child('players').child(this.playerId).set({
+                totalWins: 0,
+                online: true,
+                bio: ''
+            });
+
+            registered = true;
+            console.log('Logged in as', this.playerId);
+
         }
 
         // html element display
