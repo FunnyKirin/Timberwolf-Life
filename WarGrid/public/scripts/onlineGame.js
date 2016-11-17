@@ -163,6 +163,7 @@ function initFirebase() {
         if (snapshot.val().currentPlayer == playerIndex) {
             nextTurn();
         }
+        alert("you are player "+playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
