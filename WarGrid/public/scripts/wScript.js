@@ -58,6 +58,12 @@ function game_open(key)
 }
 
 
+function localGame_open()
+{
+  window.open("localGamePage.html","_self" );
+}
+
+
 /*//Automatic slideshow
 function carousel()
 {
