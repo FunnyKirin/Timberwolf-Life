@@ -23,27 +23,41 @@ function lobbyInit () {
         var innerHTML_1 = "\<div class=\"w3-third w3-panel\"\>";
         var innerHTML_2 = "\<div class=\"w3-third w3-panel\"\>";
         var innerHTML_3 = "\<div class=\"w3-third w3-panel\"\>";
+
+        var singleCard = "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
+        singleCard += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
+        singleCard += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
+        singleCard += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 1;
         snapshot.forEach(function (data) {
             if (divider_num === 1) {
+                innerHTML_1 += singleCard;
+                /*
                 innerHTML_1 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_1 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_1 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_1 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
+                */
             }
             else if (divider_num === 2) {
+                innerHTML_2 += singleCard;
+                /*
                 innerHTML_2 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_2 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_2 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_2 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
+                */
             }
             else if (divider_num === 3) {
+                innerHTML_3 += singleCard;
+                /*
                 innerHTML_3 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_3 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
                 innerHTML_3 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
                 innerHTML_3 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
                 divider_num = 0;
+                */
             }
             else {
                 alter("Error: in lobby load map page.");
