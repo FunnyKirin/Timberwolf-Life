@@ -1,22 +1,24 @@
 var BUTTON_CREATE_ID = 'create';
 var ROOM_GRID_ID = 'room-grid';
 var KEY_LOBBY = 'lobby';
-var authorized=false;
+var authorized = false;
+var auth;
+var ref;
 
-var Lobby = function () {
+function initLobby() {
     console.log('[INFO] Loading Lobby Module...');
     this.room_key = '';
     this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
     lobbyInit();
-};
+}
 
 function lobbyHandler(player) {
     authorized = player ? true : false;
 }
 
-function lobbyInit () {
-    this.ref = firebase.database().ref();
-    this.auth = firebase.auth();
+function lobbyInit() {
+    ref = firebase.database().ref();
+    auth = firebase.auth();
     this.ref.child('lobby').on('value', function (snapshot) {
         // test for fix the search of lobby page
         var count = 0;
@@ -31,19 +33,19 @@ function lobbyInit () {
             if (divider_num === 1) {
                 innerHTML_1 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_1 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
-                innerHTML_1 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
+                innerHTML_1 += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
                 innerHTML_1 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
             }
             else if (divider_num === 2) {
                 innerHTML_2 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_2 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
-                innerHTML_2 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
+                innerHTML_2 += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
                 innerHTML_2 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
             }
             else if (divider_num === 3) {
                 innerHTML_3 += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
                 innerHTML_3 += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
-                innerHTML_3 += "; style=\"width:100%\" ; onclick=\"game_open(\'" + data.key + "\')\"\>";
+                innerHTML_3 += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
                 innerHTML_3 += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
                 divider_num = 0;
             }
@@ -76,16 +78,20 @@ function lobbyLeave() {
 function lobbyJoin(room_key) {
     if (this.authorized) {
         var challenger = this.ref.child('lobby').child(room_key).child('challenger');
-        challenger.transaction(function(currentData){
-            if(currentData===undefined){
-                return this.auth.currentUser.uid;
+        var owner = this.ref.child('lobby').child(room_key).child('owner');
+        owner.transaction(function (currentData) {
+            if (currentData == auth.currentUser.uid) {
+                window.open("gamePage.html?" + room_key, "_self");
+            }
+            else {
+                challenger.transaction(function (currentData) {
+                    return auth.currentUser.uid;
+                });
+                window.open("gamePage.html?" + room_key, "_self");
             }
         });
     }
     else {
         alert('You need to login first');
     }
-    window.open("gamePage.html?" + room_key, "_self");
-
 }
-Lobby.prototype.invite = function () {};

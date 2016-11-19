@@ -7,3 +7,16 @@
     width: 50%;
     height: auto;
 }
+
+
+
+.icon_small{
+	width: 35px;
+	height: 35px;
+
+}
+
+
+
+.icon_small {vertical-align: -50%}
+
