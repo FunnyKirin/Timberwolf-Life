@@ -47,6 +47,9 @@ var brightGrid;
 //button
 var loadmap;
 
+var imageElement;
+var mapImg;
+
 var key;
 var deleteButton;
 
@@ -136,7 +139,6 @@ function initGrid() {
         }
     }
     //  console.log("init renderGrid: " + renderGrid);
-
 }
 
 
@@ -150,7 +152,6 @@ function initEventHandlers() {
     loadButton.onclick = respondToLoadMap;
     canvas.onclick = respondToMouseClick;
     deleteButton.onclick = respondToDeleteMap;
-
 }
 
 
@@ -207,9 +208,18 @@ function respondToDeleteMap() {
 function respondToSaveMap() {
     var creator = creatorInput.value;
     var mapname = mapNameInput.value;
+    mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
+    if (mapname === '') {
+        // text was all whitespace
+        console.log("map name was all whitesapce");
+        alert("Please Fill Out the Map Name");
+        return false;
+    } else {
+        console.log("map name has real content");
+}
 
-    console.log("creator:---------------" + creator);
-    if (key !== null) 
+
+    if (key !== null)
     {
         dbref = this.db.ref().child('maps/' + key);
         //  this.dbref = this.db.ref('map');
@@ -220,9 +230,27 @@ function respondToSaveMap() {
             x: gridHeight,
             y: gridWidth
         });
-    } 
-    else 
+    }
+    else
     {
+        var storageRef = firebase.storage().ref();
+        mapImg = canvas.toDataURL("image/png");
+        console.log(mapImg);
+        storageRef.child('images/' + mapname).putString(mapImg,'data_url');
+
+        /* the code below retrieve the image from firebase storage
+        var returnimage = storageRef.child('images/' + 'map name').toString();
+        console.log("returnimage " + returnimage.key);
+        if (returnimage.startsWith('gs://')){
+            console.log("startswith gs://");
+            firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
+                console.log("metadata: " + metadata.downloadURLs[0]);
+                imageElement.src = metadata.downloadURLs[0];
+            });
+        }
+        console.log("returnimage: "  + returnimage);
+        */
+
         dbref = this.db.ref().child('maps');
         //  this.dbref = this.db.ref('map');
         dbref.push({
@@ -245,7 +273,7 @@ function respondToSaveMap() {
 
 
 
-    
+
     function frame()
     {
         if(width >= 100)

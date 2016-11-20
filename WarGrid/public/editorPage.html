@@ -100,6 +100,7 @@
                         <option value="images/EMPTY_CELL.png">remove cell</option>
                     </select>
 
+    
                     <button id="reset_button" type="button" value="Reset" class="w3-btn w3-quarter w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
 
                 </form>
@@ -116,7 +117,7 @@
 
             <div class="w3-quarter w3-container">
                 <!--
-                <form id = "map-form" action = "#">
+
                   Creator:
                   <input id = "creator" type = "text" name = "creator">
                   map name:
@@ -125,7 +126,7 @@
 
                     <input id = "save_button" type = "button" value = "save"/>
                     <input id = "delete_button" type = "button" value = "delete"/>
-                </form>
+
             -->
                 <form id="map-form" action="#" class="w3-container w3-card-4 w3-light-grey w3-text-grey ">
 
@@ -160,36 +161,16 @@
                     </div>
 
                     <p id="progressbar_num" class="w3-center">0%</p>
-
-                    
-
-
-                    
-              
-
-        
-
                 </form>
-                
-               
-                
-
-                
             </div>
-
-
-
-
         </div>
-
-
-
-
-
     </div>
 
     <script>
-        initEditor();
+     window.onload = function(){
+         initEditor();
+         }
+        //initEditor();
     </script>
 </body>
 
