@@ -2,6 +2,7 @@ var room;
 var loadMapName;
 //PlayerData
 var playerIndex;
+var currentPlayer;
 var cellNumber = 0;
 var territory = 0;
 var ghostTrigger = 1;
@@ -149,7 +150,8 @@ function initFirebase() {
     this.storage = firebase.storage();
     var url = window.location.search.substring(1);
     room = database.ref().child("lobby").child(url);
-    room.on('value', function (snapshot) {
+    room.once('value', function (snapshot) {
+        currentPlayer = snapshot.val().currentPlayer;
         renderGrid = snapshot.val().grid;
         renderGame();
         swapGrids();
@@ -163,10 +165,23 @@ function initFirebase() {
         if (snapshot.val().currentPlayer == playerIndex) {
             nextTurn();
         }
-        alert("you are player "+playerIndex);
+        //alert("you are player " + playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
+    room.on('value', function (snapshot) {
+        //alert(snapshot.val().currentPlayer + " + " + currentPlayer);
+        //switch player
+        if (snapshot.val().currentPlayer != currentPlayer) {
+            currentPlayer = snapshot.val().currentPlayer;
+            renderGrid = snapshot.val().grid;
+            renderGame();
+            swapGrids();
+            if (currentPlayer == playerIndex) {
+                nextTurn();
+            }
+        }
+    });
 }
 
 function initCanvas() {
@@ -397,35 +412,38 @@ function renderGhostRenderCells() {
  Send socket to server
  */
 function confirmMove() {
-    //place cells from ghost grid to update grid and render grid
-    for (var i = 0; i <= gridHeight; i++) {
-        for (var j = 0; j < gridWidth; j++) {
-            var cell = getGridCell(ghostGrid, i, j);
-            if (cell - playerIndex * 10 === LIVE_CELL) {
+    if (currentPlayer == playerIndex) {
+        //place cells from ghost grid to update grid and render grid
+        for (var i = 0; i <= gridHeight; i++) {
+            for (var j = 0; j < gridWidth; j++) {
+                var cell = getGridCell(ghostGrid, i, j);
                 if (cell - playerIndex * 10 === LIVE_CELL) {
-                    setGridCell(updateGrid, i, j, LIVE_CELL + playerIndex * 10);
-                    setGridCell(renderGrid, i, j, LIVE_CELL + playerIndex * 10);
+                    if (cell - playerIndex * 10 === LIVE_CELL) {
+                        setGridCell(updateGrid, i, j, LIVE_CELL + playerIndex * 10);
+                        setGridCell(renderGrid, i, j, LIVE_CELL + playerIndex * 10);
+                    }
                 }
             }
         }
+        //update and render the game
+        ghostGrid = [];
+        updateGame(updateGrid, renderGrid);
+        renderGame();
+        writeMap(updateGrid);
+        //check if current player win
+        if (checkVictory()) {
+            alert("player " + playerIndex + " win!");
+        }
+        //nextTurn();
+        //go to next turn
+        
+        cellNumber = 0;
+        initUI();
     }
-    //update and render the game
-    ghostGrid = [];
-    updateGame(updateGrid, renderGrid);
-    renderGame();
-    writeMap(updateGrid);
-    //check if current player win
-    if (checkVictory()) {
-        alert("player " + playerIndex + " win!");
-    }
-    //nextTurn();
-    //go to next turn
-    initUI();
 }
 //send map info to database after pressing confirm
 function writeMap(grid) {
     room.child("grid").transaction(function (currentData) {
-        alert(currentData);
         return grid;
     });
     room.child("currentPlayer").transaction(function (currentData) {
@@ -468,7 +486,7 @@ function nextTurn() {
     cellNumber = getCellNumber(territory);
     initUI();
 }
-
+//calculalte amount of cells player can place
 function getCellNumber(territory) {
     return Math.floor(4 + territory / 5);
 }
