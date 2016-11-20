@@ -1,10 +1,11 @@
 *[hidden] { display: none; }
+
 #text{
     font-size: 40px;
 }
 
 .icon{
-    width: 50%;
+    width: 30%;
     height: auto;
 }
 
@@ -18,5 +19,72 @@
 
 
 
-.icon_small {vertical-align: -50%}
+
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+.w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer}
+.w3-third img:hover{opacity:1}
+.w3-btn {width:150px;}
+
+/* for slideshow */
+.mySlides {display:none}
+.w3-left, .w3-right, .w3-badge {cursor:pointer}
+.w3-badge {height:13px;width:13px;padding:0}
+
+
+/* move the person icon down a little bit */
+.material-icons {vertical-align:-14%}
+
+
+/* For game page char block, the browse need to be hidden. */
+#mediaCapture {
+  display: none;
+}
+
+/* Set each page body's size */
+.body-max-width {
+	max-width:1600px;
+}
+
+.header-max-width {
+	max-width:1600px;
+}
+
+.sidenav-style {
+	z-index:3;
+	width:300px;
+	font-weight:bold; 
+}
+
+.login-dropdown {
+	right:1;
+}
+
+.login-dropdown-small {
+	right:0;
+}
+
+.sidenav-overlay {
+	cursor:pointer;
+}
+
+.web-page-content {
+	margin-left:300px;
+}
+
+.pushdown-content {
+	margin-top:83px;
+}
+
+.pushdown-content-in-use{
+	margin-top:83px;
+}
+
+
+/*
+.map-image {
+	height: 150px;
+	width: 300px;
+
+}
+*/
 

@@ -6,11 +6,12 @@ var PLAYER_ID_ID = "player-id";
 var PLAYER_PROFILE_ID = "player-profile-desktop";
 var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 
-var playerId;
-var playerObj = {};
+var playerId = '';
 
 var Player = function() {
     console.log('[INFO] Loading Player Module...');
+
+    this.playerId = '';
 
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
     this.playerId = document.getElementById(PLAYER_ID_ID);
@@ -24,54 +25,44 @@ var Player = function() {
 
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
-        //var profilePicUrl = player.photoURL;
-        //var displayName = player.displayName;
-        //var email = player.email;
         var uid = player.uid;
-        var registered = false;
-
-        console.log("UID: ", uid);
-        var thisThis = this;
 
         // check if user is already registered
-        this.ref.child('playerUID').once('value', function(snapshot) {
-            if (snapshot.hasChild(uid)) { // already registered
+        this.ref.child('playerUID').child(uid).once('value', function(snapshot) {
+            if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
-                registered = true;
+                console.log('Logged in as', playerId);
             } else { // user registration
-                registered = false;
-            }
+                var rootRef = firebase.database().ref();
+
+                playerId = validateInput(prompt('Get yourself a username'));
+                //playerId = 'no';
+
+                // check if playerId is empty
+                while (!playerId) {
+                    playerId = validateInput(prompt('Get yourself a username'));
+                    //playerId = 'steve';
+                }
+
+                rootRef.child('players').once('value', function(check) {
+                    // regulation in database
+                    while (check.hasChild(playerId)) {
+                        alert(playerId + ' exists');
+                        playerId = validateInput(prompt('Taken. Try again'));
+                    }
+
+                    rootRef.child('playerUID').child(uid).set(playerId);
+                    rootRef.child('players').child(playerId).set({
+                        totalWins: 0,
+                        online: true,
+                        bio: ''
+                    });
+                });
+
+                console.log('Logged in as', playerId);
+            } // if user's not registered
         });
 
-        // user registration process
-        if (!registered) {
-            var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
-            var temp = validateInput(prompt('Get yourself a username: '), regulation);
-            var taken = true;
-
-            if (temp) {
-                this.ref.child('players').once('value', function(check) {
-                    while (check.hasChild(temp) || !temp) {
-                        alert(temp + ' exists');
-                        temp = validateInput(prompt('Taken. Try again'), regulation);
-                    }
-                    playerId = temp;
-                    taken = false;
-                });
-
-
-
-                this.ref.child('playerUID').child(uid).set(playerId);
-                this.ref.child('players').child(playerId).set({
-                    totalWins: 0,
-                    online: true,
-                    bio: ''
-                });
-
-                registered = true;
-                console.log('Logged in as', playerId);
-            }
-        }
 
         // html element display
         $("." + GOOGLE_SIGNIN_ID).hide();
@@ -121,7 +112,8 @@ Player.prototype.init = function() {
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };
 
-var validateInput = function(s, regulation) {
+var validateInput = function(s) {
+    var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
     var invalid = true;
     var ret = s;
 
