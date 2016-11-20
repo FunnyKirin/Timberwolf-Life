@@ -425,6 +425,7 @@ function confirmMove() {
 //send map info to database after pressing confirm
 function writeMap(grid) {
     room.child("grid").transaction(function (currentData) {
+        alert(currentData);
         return grid;
     });
     room.child("currentPlayer").transaction(function (currentData) {
