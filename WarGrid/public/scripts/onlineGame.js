@@ -1,9 +1,7 @@
+var room;
 var loadMapName;
 //PlayerData
-var numOfMove1;
-var numOfMove2;
-//index of current player, start from 2.
-var currentPlayer = 2;
+var playerIndex;
 var cellNumber = 0;
 var territory = 0;
 var ghostTrigger = 1;
@@ -71,7 +69,6 @@ var setVoidCellInterval;
 var mouseIsDown;
 
 function initGameOfLife() {
-
     checkSetup();
     //init firebase
     initFirebase();
@@ -141,7 +138,6 @@ function initConstants() {
     ghostGrid = [];
     ghostRenderGrid = [];
     ghostUpdateGrid = [];
-
     //firebase names;
     //loadMapName=    window.location.search.substring(1);
 }
@@ -151,13 +147,24 @@ function initFirebase() {
     this.auth = firebase.auth();
     this.database = firebase.database();
     this.storage = firebase.storage();
-
     var url = window.location.search.substring(1);
-    database.ref().child("lobby").child(url).on('value', function (snapshot) {
-        loadMapName = snapshot.val().map;
-    
+    room = database.ref().child("lobby").child(url);
+    room.on('value', function (snapshot) {
+        renderGrid = snapshot.val().grid;
+        renderGame();
+        swapGrids();
+        //get player Index
+        if (auth.currentUser.uid == snapshot.val().owner) {
+            playerIndex = 1;
+        }
+        else if (auth.currentUser.uid == snapshot.val().challenger) {
+            playerIndex = 2;
+        }
+        if (snapshot.val().currentPlayer == playerIndex) {
+            nextTurn();
+        }
+        alert("you are player "+playerIndex);
     });
-    
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
 }
@@ -182,12 +189,16 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
+    /*
     dbref = this.database.ref().child('maps');
     //  this.dbref = this.db.ref('map');
     dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
         snapshot.forEach(function (data) {
             //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
             if (data.val().map === loadMapName) {
+                room.child("grid").transaction(function (currentData) {
+                    return data.val().data;
+                });
                 key = data.key;
                 renderGrid = data.val().data;
                 renderGame();
@@ -196,6 +207,7 @@ function initMap() {
             }
         });
     });
+    */
     /*
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
@@ -261,8 +273,8 @@ function respondToMouseClick(event) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (cell != LIVE_CELL + currentPlayer * 10) {
-        if (ghostCell != LIVE_CELL + currentPlayer * 10) {
+    if (cell != LIVE_CELL + playerIndex * 10) {
+        if (ghostCell != LIVE_CELL + playerIndex * 10) {
             //check if the player can place a cell at that position.
             if (cellNumber > 0 && cell != VOID_CELL) {
                 //check if the position is next to the player's territory.
@@ -276,13 +288,13 @@ function respondToMouseClick(event) {
                     var neighborValue = updateGrid[index];
                     var rightNumber = neighborValue % 10;
                     var leftNumber = Math.floor(neighborValue / 10);
-                    if (leftNumber == currentPlayer) {
+                    if (leftNumber == playerIndex) {
                         boolean = 1;
                     }
                 }
                 //it is!
                 if (boolean == 1) {
-                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
                     cellNumber--;
                 }
             }
@@ -317,9 +329,9 @@ function renderGhostCells() {
             var rightNumber = cell % 10;
             var x = j * cellLength;
             var y = i * cellLength;
-            if (leftNumber == currentPlayer) {
+            if (leftNumber == playerIndex) {
                 if (rightNumber == 1) {
-                    canvas2D.fillStyle = LIVE_COLOR[currentPlayer];
+                    canvas2D.fillStyle = LIVE_COLOR[playerIndex];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
             }
@@ -331,7 +343,7 @@ function renderGhostCells() {
                 var rightNumber = cell % 10;
                 var x = j * cellLength;
                 var y = i * cellLength;
-                if (leftNumber == currentPlayer) {
+                if (leftNumber == playerIndex) {
                     if (rightNumber == 1) {
                         canvas2D.fillStyle = GHOST_COLOR;
                         canvas2D.fillRect(x, y, cellLength, cellLength);
@@ -389,10 +401,10 @@ function confirmMove() {
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(ghostGrid, i, j);
-            if (cell - currentPlayer * 10 === LIVE_CELL) {
-                if (cell - currentPlayer * 10 === LIVE_CELL) {
-                    setGridCell(updateGrid, i, j, LIVE_CELL + currentPlayer * 10);
-                    setGridCell(renderGrid, i, j, LIVE_CELL + currentPlayer * 10);
+            if (cell - playerIndex * 10 === LIVE_CELL) {
+                if (cell - playerIndex * 10 === LIVE_CELL) {
+                    setGridCell(updateGrid, i, j, LIVE_CELL + playerIndex * 10);
+                    setGridCell(renderGrid, i, j, LIVE_CELL + playerIndex * 10);
                 }
             }
         }
@@ -401,13 +413,24 @@ function confirmMove() {
     ghostGrid = [];
     updateGame(updateGrid, renderGrid);
     renderGame();
+    writeMap(updateGrid);
     //check if current player win
     if (checkVictory()) {
-        alert("player " + currentPlayer + " win!");
+        alert("player " + playerIndex + " win!");
     }
-    nextTurn();
+    //nextTurn();
     //go to next turn
     initUI();
+}
+//send map info to database after pressing confirm
+function writeMap(grid) {
+    room.child("grid").transaction(function (currentData) {
+        return grid;
+    });
+    room.child("currentPlayer").transaction(function (currentData) {
+        currentData = currentData === 1 ? 2 : 1;
+        return currentData;
+    });
 }
 //check if current player achieved victory.
 function checkVictory() {
@@ -416,8 +439,8 @@ function checkVictory() {
             var cell = getGridCell(updateGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber != -1) {
-                if (cell != VOID_CELL && leftNumber != currentPlayer) {
-                    console.log(leftNumber + " " + currentPlayer);
+                if (cell != VOID_CELL && leftNumber != playerIndex) {
+                    console.log(leftNumber + " " + playerIndex);
                     return 0;
                 }
             }
@@ -429,13 +452,13 @@ function checkVictory() {
 function nextTurn() {
     territory = 0;
     //switch Player
-    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    //playerIndex = playerIndex === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
-            if (leftNumber === currentPlayer) {
+            if (leftNumber === playerIndex) {
                 territory++;
             }
         }
@@ -522,23 +545,23 @@ function updateGame(updateGrid, renderGrid) {
             //rightNumber = cell type
             var rightNumber = testCell % 10;
             // check if the cell belongs to current player.
-            if (leftNumber == currentPlayer) {
+            if (leftNumber == playerIndex) {
                 // CASES
                 // 1) IT'S ALIVE
                 if (rightNumber === LIVE_CELL) {
                     // 1a FEWER THAN 2 LIVING NEIGHBORS
                     if (numLivingNeighbors < 2) {
                         // IT DIES FROM UNDER-POPULATION
-                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                        renderGrid[index] = DEAD_CELL + 10 * playerIndex;
                     }
                     // 1b MORE THAN 3 LIVING NEIGHBORS
                     else if (numLivingNeighbors > 3) {
                         // IT DIES FROM OVERCROWDING
-                        renderGrid[index] = DEAD_CELL + 10 * currentPlayer;
+                        renderGrid[index] = DEAD_CELL + 10 * playerIndex;
                     }
                     // 1c 2 OR 3 LIVING NEIGHBORS, WE DO NOTHING
                     else {
-                        renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
+                        renderGrid[index] = LIVE_CELL + 10 * playerIndex;
                     }
                 }
                 // 2) IT'S DEAD
@@ -558,8 +581,9 @@ function updateGame(updateGrid, renderGrid) {
                 // if it is an empty cell
                 if (numLivingNeighbors === 3) {
                     //become a live cell
-                    renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                    renderGrid[index] = LIVE_CELL + 10 * playerIndex;
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -599,7 +623,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -720,7 +745,7 @@ function calcLivingNeighbors(row, col, updateGrid) {
         var neighborValue = updateGrid[index];
         var rightNumber = neighborValue % 10;
         var leftNumber = Math.floor(neighborValue / 10);
-        if (rightNumber == 1 && leftNumber == currentPlayer) {
+        if (rightNumber == 1 && leftNumber == playerIndex) {
             numLivingNeighbors++;
         }
     }
@@ -750,28 +775,23 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
-
 // Checks that the Firebase SDK has been correctly setup and configured.
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
-        alert('You have not configured and imported the Firebase SDK. ' +
-            'Make sure you go through the codelab setup instructions.');
-    } else if (config.storageBucket === '') {
-        alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
-            'actually a Firebase bug that occurs rarely. ' +
-            'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' +
-            'and make sure the storageBucket attribute is not empty. ' +
-            'You may also need to visit the Storage tab and paste the name of your bucket which is ' +
-            'displayed there.');
+        alert('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
+    }
+    else if (config.storageBucket === '') {
+        alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 };

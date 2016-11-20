@@ -6,11 +6,12 @@ var PLAYER_ID_ID = "player-id";
 var PLAYER_PROFILE_ID = "player-profile-desktop";
 var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 
-var playerId;
-var playerObj = {};
+var playerId = '';
 
 var Player = function() {
     console.log('[INFO] Loading Player Module...');
+
+    this.playerId = '';
 
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
     this.playerId = document.getElementById(PLAYER_ID_ID);
@@ -24,46 +25,44 @@ var Player = function() {
 
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
-        //var profilePicUrl = player.photoURL;
-        //var displayName = player.displayName;
-        //var email = player.email;
         var uid = player.uid;
-        var registered = false;
 
-        console.log("UID: ", uid);
-        var thisThis = this;
-        this.ref.child('playerID').child(uid).once('value', function(snapshot) {
+        // check if user is already registered
+        this.ref.child('playerUID').child(uid).once('value', function(snapshot) {
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
-                registered = true;
+                console.log('Logged in as', playerId);
             } else { // user registration
+                var rootRef = firebase.database().ref();
 
-                registered = false;
-            }
+                playerId = validateInput(prompt('Get yourself a username'));
+                //playerId = 'no';
+
+                // check if playerId is empty
+                while (!playerId) {
+                    playerId = validateInput(prompt('Get yourself a username'));
+                    //playerId = 'steve';
+                }
+
+                rootRef.child('players').once('value', function(check) {
+                    // regulation in database
+                    while (check.hasChild(playerId)) {
+                        alert(playerId + ' exists');
+                        playerId = validateInput(prompt('Taken. Try again'));
+                    }
+
+                    rootRef.child('playerUID').child(uid).set(playerId);
+                    rootRef.child('players').child(playerId).set({
+                        totalWins: 0,
+                        online: true,
+                        bio: ''
+                    });
+                });
+
+                console.log('Logged in as', playerId);
+            } // if user's not registered
         });
 
-        if (!registered) {
-            var regulation = ['+', '-', '@', '.', ',', '=', '*', '&'];
-            //var temp = validateInput(prompt('Get yourself a username: '), regulation);
-            var temp = 'no';
-            var taken = true;
-
-            this.ref.child('players').child(temp).once('value', function(check) {
-                taken = check.val() ? true : false;
-            });
-            temp = 'steve';
-
-            console.log('checkpoint');
-
-            playerId = temp;
-            var playerData = {
-                totalWins: 0,
-                online: true,
-                bio: ''
-            };
-            this.ref.child('players').child(playerId).set(playerData);
-            this.ref.child('playerID').child(uid).set(playerId);
-        }
 
         // html element display
         $("." + GOOGLE_SIGNIN_ID).hide();
@@ -71,8 +70,6 @@ Player.prototype.playerHandler = function(player) {
         $("." + SIGNOUT_ID).show();
         $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> ");
 
-        //console.log("Hello, ", playerId);
-        //console.log("You signed in with ", email);
     } else { // logged out
         $("." + GOOGLE_SIGNIN_ID).show();
         $("." + FACEBOOK_SIGNIN_ID).show();
@@ -98,7 +95,9 @@ Player.prototype.facebookSignIn = function() {
     console.log("Facebook authentication");
 
     var facebook = new firebase.auth.FacebookAuthProvider();
-
+    this.auth.signInWithPopup(facebook).catch(function(error) {
+        console.log("ERROR: ", error);
+    });
 };
 
 Player.prototype.signOut = function() {
@@ -113,17 +112,20 @@ Player.prototype.init = function() {
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };
 
-var validateInput = function(s, regulation) {
+var validateInput = function(s) {
+    var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
     var invalid = true;
     var ret = s;
 
-    while (invalid) {
-        invalid = false;
-        for (var i = 0; i < length; i++) {
-            if (ret.includes(regulation[i])) {
-                ret = prompt('Don\'t add special characters besides _');
-                invalid = true;
-                break;
+    if (ret) {
+        while (invalid) {
+            invalid = false;
+            for (var i = 0; i < length; i++) {
+                if (ret.includes(regulation[i])) {
+                    ret = prompt('Don\'t add special characters besides _');
+                    invalid = true;
+                    break;
+                }
             }
         }
     }

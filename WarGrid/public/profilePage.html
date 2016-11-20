@@ -5,7 +5,8 @@
     <title>Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="w3.css">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,50 +14,59 @@
 
   </head>
 
-  <body class="w3-light-grey w3-content" style="max-width:1600px">
+  <body class="body-max-width w3-light-grey w3-content">
 
+    <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
+    <header class="header-max-width w3-container w3-top w3-hide-small w3-large w3-padding-16 ">
 
-    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header.
-    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
-        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+        <div class="w3-dropdown-click w3-right">
+            <a class="player-profile-desktop w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
+            <div id="dropdown_menu_on_large_screen" class="login-dropdown w3-dropdown-content w3-border w3-round-xlarge">
+                <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
+                <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
+                <a onclick="player.signOut()" href="#" class="fa fa-power-off sign-out"> sign out</a>
+            </div>
+        </div>
     </header>
-    -->
 
     <!-- Sidenav/menu -->
-    <nav class="w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" style="z-index:3;width:300px;font-weight:bold" id="mySidenav"><br>
-        <h3 class="w3-padding-32 glyphicon glyphicon-king w3-xxxlarge"></h3>
-        <br>
-        <i class="fa fa-cube w3-padding-32 w3-xxxlarge"></i>
-        <br>
-        <i class="fa fa-delicious w3-padding-32 w3-xxxlarge"></i>
-        <br>
-        <i class="material-icons w3-padding-32 w3-xxxlarge">dashboard</i>
-        <br>
-
-        
+    <nav class="sidenav-style w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" id="mySidenav"><br>
+        <img src="images/icon.png" class="icon">
         <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
         <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a>
         <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
         <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
+        <a href="#" onclick="localGame_open()" class="w3-padding">LOCAL GAME</a>
     </nav>
 
-    <!-- Top menu on small screens -->
+    <!-- Top menu on medium and small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-      <span class="w3-left w3-padding">TW</span>
-      <a class="w3-right w3-btn-floating w3-white" onclick="w3_open()">&#9776</a>
+        <img src="images/icon.png" class="w3-left icon_small ">
+        <span class="w3-left"> TL</span>
+        <div class="w3-container w3-right w3-row">
+            <a class="w3-btn-floating w3-right w3-white  w3-round-jumbo" onclick="w3_open()">&#9776;</a>
+            <div class="w3-container w3-middle w3-dropdown-click">
+                <a class="w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()"><i class="material-icons">person</i></a>
+                <div id="dropdown_menu_on_medium_small_screen" class="login-dropdown-small w3-dropdown-content w3-border w3-round-xlarge">
+                    <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
+                    <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
+                    <a onclick="player.signOut()" href="#" class="fa fa-google-plus-official sign-out"> sign out</a>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Overlay effect when opening sidenav on small screens -->
-    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+    <div class="sidenav-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" title="close side menu" id="myOverlay"></div>
 
     <!-- !WEB PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:300px">
+    <div class="web-page-content w3-main" >
     	<!-- Push down content on small screens  -->
-      	<div class="w3-hide-large" style="margin-top:83px"></div>
+      	<div class="pushdown-content w3-hide-large" ></div>
       <!-- Profile content -->
 
-        <div class="w3-container" style="margin-top:83px">
+        <div class="pushdown-content-in-use w3-container" >
         	<h2>Profile</h2>
         	<p>Match history result:</p>
         	<div class="w3-panel w3-card-8 w3-round-xlarge">

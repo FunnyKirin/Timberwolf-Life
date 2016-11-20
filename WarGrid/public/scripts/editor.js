@@ -218,7 +218,11 @@ function respondToSaveMap() {
         console.log("map name has real content");
 }
 
+<<<<<<< HEAD
 
+=======
+    console.log("creator:---------------" + creator);
+>>>>>>> a3e8050b67c550a935f5577799f015bfe4ef469e
     if (key !== null)
     {
         dbref = this.db.ref().child('maps/' + key);
