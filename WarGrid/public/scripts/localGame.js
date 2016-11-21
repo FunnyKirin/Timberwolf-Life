@@ -1,6 +1,6 @@
 function loadMaps()
 {
-    var SELECT_MAP_ID = "maps";
+    var SELECT_MAP_ID = "local_maps";
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
     this.ref.child('maps').on('value', function (snapshot)

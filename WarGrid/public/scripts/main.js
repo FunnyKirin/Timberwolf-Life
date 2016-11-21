@@ -167,7 +167,9 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-    loadMapName = window.location.search.substring(1);;
+    loadMapName = window.location.search.substring(1);
+    loadMapName=loadMapName.replace("%20", " ");
+    alert(loadMapName);
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
@@ -325,27 +327,6 @@ function renderGhostCells() {
                     }
                 }
             }
-            /*
-             //if the cell is a player's living/ dead cell
-             if (leftNumber > 0) {
-             //it is a deadcell
-             if (rightNumber === 0) {
-             canvas2D.fillStyle = DEAD_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             //it is a living cell
-             else {
-             canvas2D.fillStyle = LIVE_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             }
-             //it is a void cell
-
-             if (rightNumber == 3) {
-             canvas2D.fillStyle = VOID_COLOR;
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             */
         }
     }
 }
@@ -443,7 +424,7 @@ function CellType(initNumNeighbors, initCellValues) {
 
 function initCellLookup() {
     // WE'LL PUT ALL THE VALUES IN HERE
-    cellLookup = [];
+    cellLookup = new Array();
     // TOP LEFT
     var topLeftArray = new Array(1, 0, 1, 1, 0, 1);
     cellLookup[TOP_LEFT] = new CellType(3, topLeftArray);
@@ -687,8 +668,8 @@ function determineCellType(row, col) {
     else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1))) return BOTTOM_RIGHT;
     else if (row === 0) return TOP;
     else if (col === 0) return LEFT;
-    else if (row === (gridHeight - 1)) return RIGHT;
-    else if (col === (gridWidth - 1)) return BOTTOM;
+    else if (row === (gridHeight - 1)) return BOTTOM;
+    else if (col === (gridWidth - 1)) return RIGHT;
     else return CENTER;
 }
 /*

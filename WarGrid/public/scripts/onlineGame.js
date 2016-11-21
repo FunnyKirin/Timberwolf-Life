@@ -708,8 +708,8 @@ function determineCellType(row, col) {
     else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1))) return BOTTOM_RIGHT;
     else if (row === 0) return TOP;
     else if (col === 0) return LEFT;
-    else if (row === (gridHeight - 1)) return RIGHT;
-    else if (col === (gridWidth - 1)) return BOTTOM;
+    else if (row === (gridHeight - 1)) return BOTTOM;
+    else if (col === (gridWidth - 1)) return RIGHT;
     else return CENTER;
 }
 /*
