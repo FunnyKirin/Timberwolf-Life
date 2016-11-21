@@ -114,7 +114,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#7277ff";
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "rgba(231, 237, 59, 0.7)";
+    GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#9B7653";
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -373,6 +373,9 @@ function confirmMove() {
         alert("player " + currentPlayer + " win!");
     }
     nextTurn();
+
+    renderGhostRenderCells();
+    renderGhost();
     //go to next turn
     initUI();
 }
@@ -409,6 +412,7 @@ function nextTurn() {
     }
     //amount of cell current player can place.
     cellNumber = getCellNumber(territory);
+
     initUI();
 }
 
