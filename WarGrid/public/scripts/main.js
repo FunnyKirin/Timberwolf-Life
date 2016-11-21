@@ -1,3 +1,4 @@
+var playerName;
 var loadMapName;
 //PlayerData
 var numOfMove1;
