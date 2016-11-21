@@ -42,10 +42,7 @@ function lobbyInit() {
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
             }
-<<<<<<< HEAD
-=======
 
->>>>>>> 399622dec8a5511f15277bf723b669da073fb2a7
 
             // for each map, distribute into three vertical sections by row order.
             innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-card-2 w3-round-large w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
