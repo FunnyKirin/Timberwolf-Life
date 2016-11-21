@@ -457,7 +457,7 @@ function nextTurn() {
 }
 //calculalte amount of cells player can place
 function getCellNumber(territory) {
-    return Math.floor(3 + territory / 6);
+    return Math.floor(3 + territory / 7);
 }
 
 function CellType(initNumNeighbors, initCellValues) {
