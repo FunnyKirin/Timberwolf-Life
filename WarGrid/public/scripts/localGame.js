@@ -77,5 +77,6 @@ function loadMaps()
 }
 
 function enterLocalGame(map){
+    alert("!");
     window.open("localGame.html?"+map, "_self");
 }
