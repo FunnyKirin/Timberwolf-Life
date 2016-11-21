@@ -1,3 +1,4 @@
+var loadMapName;
 //PlayerData
 var numOfMove1;
 var numOfMove2;
@@ -69,7 +70,15 @@ var ghostInterval;
 var setVoidCellInterval;
 var mouseIsDown;
 
+function initFirebase() {
+    this.auth = firebase.auth();
+    this.database = firebase.database();
+    this.storage = firebase.storage();
+}
+
 function initGameOfLife() {
+    //init firebase
+    initFirebase();
     // INIT ALL THE CONSTANTS, i.e. ALL THE
     // THINGS THAT WILL NEVER CHANGE
     initConstants();
@@ -86,6 +95,7 @@ function initGameOfLife() {
     // Load map from server
     initUI();
     //Start first Turn;
+    initMap();
 }
 
 function initConstants() {
@@ -157,13 +167,13 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-
-    var loadMapName = "Test1";
+    loadMapName = window.location.search.substring(1);
+    loadMapName=loadMapName.replace("%20", " ");
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
-    dbref.orderByValue().limitToLast(100).on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
+    dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
+        snapshot.forEach(function (data) {
             //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
             if (data.val().map === loadMapName) {
                 key = data.key;
@@ -174,7 +184,6 @@ function initMap() {
             }
         });
     });
-
     /*
     $.getJSON("maps/test_map_2.json", function (json) {
         renderGrid = json.data;
@@ -202,7 +211,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -210,7 +219,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -317,27 +326,6 @@ function renderGhostCells() {
                     }
                 }
             }
-            /*
-             //if the cell is a player's living/ dead cell
-             if (leftNumber > 0) {
-             //it is a deadcell
-             if (rightNumber === 0) {
-             canvas2D.fillStyle = DEAD_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             //it is a living cell
-             else {
-             canvas2D.fillStyle = LIVE_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             }
-             //it is a void cell
-
-             if (rightNumber == 3) {
-             canvas2D.fillStyle = VOID_COLOR;
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             */
         }
     }
 }
@@ -408,7 +396,6 @@ function checkVictory() {
 function nextTurn() {
     territory = 0;
     //switch Player
-
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     //Caluculate the amount of cell the current player can place
     for (var i = 0; i <= gridHeight; i++) {
@@ -436,7 +423,7 @@ function CellType(initNumNeighbors, initCellValues) {
 
 function initCellLookup() {
     // WE'LL PUT ALL THE VALUES IN HERE
-    cellLookup = [];
+    cellLookup = new Array();
     // TOP LEFT
     var topLeftArray = new Array(1, 0, 1, 1, 0, 1);
     cellLookup[TOP_LEFT] = new CellType(3, topLeftArray);
@@ -539,7 +526,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -579,7 +567,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -678,8 +667,8 @@ function determineCellType(row, col) {
     else if ((row === (gridHeight - 1)) && (col === (gridHeight - 1))) return BOTTOM_RIGHT;
     else if (row === 0) return TOP;
     else if (col === 0) return LEFT;
-    else if (row === (gridHeight - 1)) return RIGHT;
-    else if (col === (gridWidth - 1)) return BOTTOM;
+    else if (row === (gridHeight - 1)) return BOTTOM;
+    else if (col === (gridWidth - 1)) return RIGHT;
     else return CENTER;
 }
 /*
@@ -730,13 +719,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }

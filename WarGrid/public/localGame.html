@@ -13,22 +13,13 @@
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-camo.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="scripts/wScript.js"></script>
-    <script src="scripts/jquery-1.12.4.min.js"></script>
-    <script src="scripts/map.js"></script>
-    <script src="scripts/onlineGame.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw"
-            , authDomain: "timberwolf-build3.firebaseapp.com"
-            , databaseURL: "https://timberwolf-build3.firebaseio.com"
-            , storageBucket: "timberwolf-build3.appspot.com"
-            , messagingSenderId: "288270916702"
-        };
-        firebase.initializeApp(config);
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js">
+        < script src = "scripts/wScript.js" >
     </script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/map.js"></script>
+    <script src="scripts/main.js"></script>
 </head>
 
 <body class="body-max-width w3-grey w3-content">
@@ -54,13 +45,13 @@
                 <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512"> </canvas>
             </div>
             <div class="w3-col w3-container w3-padding-16 m3 w3-right ">
-                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge"> <span id="message-filler"></span> </div>
+                <div id="messages" class="w3-container w3-card-0 w3-sand w3-round-xlarge" style="height: 450px; width: 350px;"> <span id="message-filler"></span> </div>
                 <!--this <div> should be <form>, however, if change it to form, the map content will disappear -->
                 <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message...">
+                    <input class="w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." style="width: 150px">
                     <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
                     <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-                    <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
+                    <button id="submitImage" title="Add an image" class="w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()" style="width: 100px"> <i class="material-icons">image</i> </button>
                 </div>
             </div>
         </div>
@@ -97,18 +88,7 @@
                 <br/>
                 <br/> "Reset" button will cancel all placement of the current turn.
                 <br/>
-                <br/> Game of life algorithm:
-                <br/>
-                <br/> 1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-                <br/>
-                <br/> 2. Any live cell with two or three live neighbours lives on to the next generation.
-                <br/>
-                <br/> 3. Any live cell with more than three live neighbours dies, as if by over-population.
-                <br/>
-                <br/> 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-                <br/>
-                <br/>
-            </div>
+                <br/> </div>
         </div>
     </div>
     <div id="Surrender" class="w3-modal w3-animate-opacity">

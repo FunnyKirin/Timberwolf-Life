@@ -46,6 +46,7 @@ var brightGrid;
 
 //button
 var loadmap;
+var resizeButton;
 
 var imageElement;
 var mapImg;
@@ -119,13 +120,21 @@ function initSave() {
 
     loadmapInput = document.getElementById("loadMapField");
     loadButton = document.getElementById("loadMap_button");
+
+    rowInput = document.getElementById("resizeRow");
+    columnInput = document.getElementById("resizeColumn");
+    resizeButton = document.getElementById("resizeButton");
+
     save = document.getElementById("save_button");
     deleteButton = document.getElementById("delete_button");
+
+    resetButton = document.getElementById("reset_button");
 }
 
 function initEditorData() {
     console.log("initEditorData()");
     cellLength = 64;
+    console.log("cellLength: " + cellLength);
 }
 
 function initGrid() {
@@ -138,7 +147,7 @@ function initGrid() {
             setGridCell(renderGrid, i, j, EMPTY_CELL);
         }
     }
-    //  console.log("init renderGrid: " + renderGrid);
+      console.log("init renderGrid: " + renderGrid);
 }
 
 
@@ -152,6 +161,8 @@ function initEventHandlers() {
     loadButton.onclick = respondToLoadMap;
     canvas.onclick = respondToMouseClick;
     deleteButton.onclick = respondToDeleteMap;
+    resizeButton.onclick = respondToResizeMap;
+    resetButton.onclick = respondToResetEditor;
 }
 
 
@@ -205,6 +216,46 @@ function respondToDeleteMap() {
     respondToDeleteAMap();
 }
 
+function respondToResizeMap() {
+    console.log("respondToResizeMap");
+    var customRow = rowInput.value;
+    var customColumn = columnInput.value;
+
+    if ((customRow <= 16) && (customRow >= 8)){
+        if ((canvasWidth % customRow) != 0){
+            console.log("need to change canvas width!");
+            while ( (canvasWidth % customRow) != 0){
+                canvasWidth += 1;
+            }
+            canvas.width = canvasWidth;
+            console.log("new canvas width: " + canvasWidth);
+        }
+    }else{
+        window.alert("Please enter a number between 8 and 32");
+        return false;
+    }
+    if ((customColumn <= 16) && (customColumn >= 8)){
+        if ((canvasHeight % customRow) != 0){
+            console.log("need to change canvas width!");
+            while ( (canvasHeight % customColumn) != 0){
+                canvasHeight += 1;
+            }
+            canvas.height = canvasHeight;
+            console.log("new canvas height: " + canvasHeight);
+        }
+    }else{
+        window.alert("Please enter a number between 8 and 32");
+        return false;
+    }
+
+    cellLength = canvasWidth / customRow;
+    canvas2D.clearRect(0,0,canvasWidth, canvasHeight);
+    resetEditor();
+    console.log("canvas : width" + canvas.width);
+    console.log("canvas height: " + canvas.height);
+
+}
+
 function respondToSaveMap() {
     var creator = creatorInput.value;
     var mapname = mapNameInput.value;
@@ -218,11 +269,7 @@ function respondToSaveMap() {
         console.log("map name has real content");
 }
 
-<<<<<<< HEAD
 
-=======
-    console.log("creator:---------------" + creator);
->>>>>>> a3e8050b67c550a935f5577799f015bfe4ef469e
     if (key !== null)
     {
         dbref = this.db.ref().child('maps/' + key);
@@ -255,15 +302,21 @@ function respondToSaveMap() {
         console.log("returnimage: "  + returnimage);
         */
 
-        dbref = this.db.ref().child('maps');
-        //  this.dbref = this.db.ref('map');
-        dbref.push({
-            map: mapname,
-            creator: creator,
-            data: renderGrid,
-            x: gridHeight,
-            y: gridWidth
+
+               db.ref().child('maps/').once('value', function(snapshot){
+            if (!snapshot.hasChild(mapname)){
+                db.ref().child('maps/' + mapname).set({
+                    map: mapname,
+                    creator: creator,
+                    data: renderGrid,
+                    x: gridHeight,
+                    y: gridWidth
+                });
+            }else{
+                alert("The map name already exists");
+            }
         });
+
 
     }
 
@@ -296,19 +349,15 @@ function respondToSaveMap() {
 function respondToLoadAMap() {
     var loadMapName = loadmapInput.value;
     dbref = this.db.ref().child('maps');
-    //  this.dbref = this.db.ref('map');
+       dbref.child(loadMapName).on("value", function(snapshot){
+        console.log("loadmap: " + snapshot.val().data);
+        console.log("loadmap, key:  " + snapshot.key);
+        mapNameInput.value = snapshot.val().map;
+        mapNameInput.disabled = true;
+        renderGrid = snapshot.val().data;
+        renderCells();
 
-    dbref.orderByValue().limitToLast(100).on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
-            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-            if (data.val().map === loadMapName) {
-                key = data.key;
-                renderGrid = data.val().data;
-                renderCells();
-            }
-        });
     });
-
 }
 
 function respondToDeleteAMap() {
@@ -320,6 +369,10 @@ function respondToDeleteAMap() {
         alert("no map to delete!");
     }
 
+}
+
+function respondToResetEditor() {
+    initEditor();
 }
 
 
@@ -367,12 +420,16 @@ function resetEditor() {
     console.log("resetEditor()");
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
+    mapNameInput.value = '';
+    mapNameInput.disabled = false;
     key = null;
     renderGrid = [];
+    initGrid();
     testGrid = [];
     console.log("gridWidth: " + gridWidth);
     console.log("gridHeight: " + gridHeight);
     renderEdiotr();
+    renderCells();
 }
 
 
