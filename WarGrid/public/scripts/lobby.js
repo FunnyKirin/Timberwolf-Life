@@ -41,9 +41,11 @@ function lobbyInit() {
           var returnimage = storageRef.child('images/' + data.val().map).toString();
           var mapImageSrc;
           console.log("returnimage " + returnimage.key);
-          if (returnimage.startsWith('gs://')){
+          if (returnimage.startsWith('gs://'))
+          {
               console.log("startswith gs://");
-              firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
+              firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata)
+              {
                   console.log("metadata: " + metadata.downloadURLs[0]);
                   mapImageSrc = metadata.downloadURLs[0];
               });
