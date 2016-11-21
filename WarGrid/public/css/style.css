@@ -80,6 +80,31 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 }
 
 
+.editor_page_bar_buttons{
+	width: 120px;
+}
+
+.editor_page_map_icon {
+	width: 50px;
+}
+
+.editor_page_progressbar {
+	width:1%;
+}
+
+.game_page_message_box {
+	height: 450px;
+	width: 350px;
+}
+
+.game_page_message_input {
+	width: 150px;
+}
+
+.game_page_browse_img {
+	width: 100px;
+}
+
 /*
 .map-image {
 	height: 150px;

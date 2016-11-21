@@ -69,18 +69,18 @@
 
             <div class="w3-col w3-container w3-padding-16 m3 w3-right ">
                 
-                <div id="messages" class="w3-container w3-card-0 w3-sand w3-round-xlarge" style="height: 450px; width: 350px;">
+                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge">
                     <span id="message-filler"></span>
                 </div>
 
                 <!--this <div> should be <form>, however, if change it to form, the map content will disappear -->
                 <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." style="width: 150px"> 
+                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
 
                     <button id="submit"  type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
 
                     <input id="mediaCapture" type="file" accept="image/*,capture=camera" >
-                    <button id="submitImage" title="Add an image" class="w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()" style="width: 100px">
+                    <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()" >
                         <i class="material-icons">image</i>
                     </button>
                 </div>
