@@ -30,19 +30,20 @@ function lobbyInit() {
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
         snapshot.forEach(function(data) {
+            var randomID= Math.floor((Math.random() * 100) + 1);
             //retrieve map images
             var storageRef = firebase.storage().ref();
             var returnimage = storageRef.child('images/' + data.val().map).toString();
             var mapImageSrc;
             if (returnimage.startsWith('gs://')) {
                 firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata) {
-                    mapImageSrc = document.getElementById(data.val().map);
+                    mapImageSrc = document.getElementById(data.val().map + randomID);
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
             }
 
             // for each map, distribute into three vertical sections by row order.
-            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img id = \"" + data.val().map + "\"src=\"";
+            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
             innerHTML_array[divider_num] += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
