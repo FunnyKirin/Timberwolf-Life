@@ -17,6 +17,7 @@
     <script src="scripts/wScript.js"></script>
     <script src="scripts/smallCanvas.js"></script>
     <script src="scripts/createPage.js"></script>
+    <script src="scripts/local_maps.js"></script>
 
 </head>
 
@@ -77,7 +78,7 @@
             <p>Select Maps:</p>
 
 
-            <div id="maps" class="w3-row-padding w3-card-8 w3-panel w3-col m12 w3-round-large">
+            <div id="local_maps" class="w3-row-padding w3-card-8 w3-panel w3-col m12 w3-round-large">
                 
 
             </div>
@@ -87,7 +88,8 @@
 
     </div>
     <script>
-        loadMaps();
-        initCanvasArray();
+        local_maps_init();
     </script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/load.js"></script>
 </body>
