@@ -154,16 +154,18 @@ function initFirebase() {
         renderGame();
         swapGrids();
         //get player Index
-        if (auth.currentUser.uid == snapshot.val().owner) {
-            playerIndex = 1;
-        }
-        else if (auth.currentUser.uid == snapshot.val().challenger) {
-            playerIndex = 2;
-        }
-        if (snapshot.val().currentPlayer == playerIndex) {
-            nextTurn();
-        }
-        //alert("you are player " + playerIndex);
+        database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function (abc) {
+                if (abc.val() == snapshot.val().owner) {
+                    playerIndex = 1;
+                }
+                else if (abc.val() == snapshot.val().challenger) {
+                    playerIndex = 2;
+                }
+                if (snapshot.val().currentPlayer == playerIndex) {
+                    nextTurn();
+                }
+            })
+            //alert("you are player " + playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
@@ -455,7 +457,7 @@ function nextTurn() {
 }
 //calculalte amount of cells player can place
 function getCellNumber(territory) {
-    return Math.floor(4 + territory / 5);
+    return Math.floor(3 + territory / 6);
 }
 
 function CellType(initNumNeighbors, initCellValues) {
