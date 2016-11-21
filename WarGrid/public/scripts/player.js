@@ -46,13 +46,13 @@ Player.prototype.playerHandler = function(player) {
 
                 rootRef.child('players').once('value', function(check) {
                     // regulation in database
-                    while (check.hasChild(playerId)) {
+                    while (check.hasChild(playerId.toLowerCase())) {
                         alert(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
 
-                    rootRef.child('playerUID').child(uid).set(playerId);
-                    rootRef.child('players').child(playerId).set({
+                    rootRef.child('playerUID').child(uid).set(playerId.toLowerCase());
+                    rootRef.child('players').child(playerId.toLowerCase()).set({
                         totalWins: 0,
                         online: true,
                         bio: ''
@@ -124,6 +124,15 @@ var validateInput = function(s) {
                 if (ret.includes(regulation[i])) {
                     ret = prompt('Don\'t add special characters besides _');
                     invalid = true;
+                } else if (ret.length <= 3) {
+                    ret = prompt('Too short');
+                    invalid = true;
+                } else if (ret.length >= 32) {
+                    ret = prompt('Too long');
+                    invalid = true;
+                }
+
+                if (invalid) {
                     break;
                 }
             }
