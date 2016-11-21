@@ -169,7 +169,6 @@ function initCanvas() {
 function initMap() {
     loadMapName = window.location.search.substring(1);
     loadMapName=loadMapName.replace("%20", " ");
-    alert(loadMapName);
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
