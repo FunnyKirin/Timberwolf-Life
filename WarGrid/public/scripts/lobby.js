@@ -4,7 +4,6 @@ var KEY_LOBBY = 'lobby';
 var authorized = false;
 var auth;
 var ref;
-var name = "";
 
 function initLobby() {
     console.log('[INFO] Loading Lobby Module...');
@@ -47,6 +46,7 @@ function lobbyInit() {
             // for each map, distribute into three vertical sections by row order.
             innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-card-2 w3-round-large w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
+
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; class=\"w3-margin-top \" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
             innerHTML_array[divider_num] += "\<p class=\"w3-left w3-margin-top\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-margin-top\"\>" + data.val().owner + "\<\/p\>\<\/div\>";
             // if reach to the third column, reset it.
