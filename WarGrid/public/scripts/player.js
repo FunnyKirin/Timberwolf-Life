@@ -25,8 +25,7 @@ Player.prototype.playerHandler = function (player) {
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
                 console.log('Logged in as', playerId);
-            }
-            else { // user registration
+            } else { // user registration
                 var rootRef = firebase.database().ref();
                 playerId = validateInput(prompt('Get yourself a username'));
                 //playerId = 'no';
@@ -43,10 +42,10 @@ Player.prototype.playerHandler = function (player) {
                     }
                     rootRef.child('playerUID').child(uid).set(playerId.toLowerCase());
                     rootRef.child('players').child(playerId.toLowerCase()).set({
-                        totalWins: 0
-                        , totalLosses: 0
-                        , online: true
-                        , bio: ''
+                        totalWins: 0,
+                        totalLosses: 0,
+                        online: true,
+                        bio: ''
                     });
                 });
                 
