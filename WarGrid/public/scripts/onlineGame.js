@@ -86,8 +86,7 @@ function initGameOfLife() {
     initEventHandlers();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
-    // Load map from server
-    initMap();
+
     initUI();
     //Start first Turn;
 }
@@ -199,40 +198,7 @@ function initCanvas() {
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
 }
-/* This function initializes game map, for now it only loads test map 2.
- * Todo: connect this function to our web UI, so player will load the map
- * they choose.
- */
-function initMap() {
-    /*
-    dbref = this.database.ref().child('maps');
-    //  this.dbref = this.db.ref('map');
-    dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
-        snapshot.forEach(function (data) {
-            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-            if (data.val().map === loadMapName) {
-                room.child("grid").transaction(function (currentData) {
-                    return data.val().data;
-                });
-                key = data.key;
-                renderGrid = data.val().data;
-                renderGame();
-                nextTurn();
-                swapGrids();
-            }
-        });
-    });
-    */
-    /*
-    $.getJSON("maps/test_map_2.json", function (json) {
-        renderGrid = json.data;
-        //updateGrid=json.data;
-        renderGame();
-        nextTurn();
-        swapGrids();
-    });
-    */
-}
+
 
 function initGameOfLifeData() {
     // INIT THE TIMING DATA
