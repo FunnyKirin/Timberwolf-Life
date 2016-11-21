@@ -25,9 +25,9 @@ function loadMaps()
         var innerHTML = "";
         var innerHTML_array = [3];  // vertical section array.
         // assign the open outter div.
-        innerHTML_array[0] = "\<div class=\"w3-third w3-panel\"\>";
-        innerHTML_array[1] = "\<div class=\"w3-third w3-panel\"\>";
-        innerHTML_array[2] = "\<div class=\"w3-third w3-panel\"\>";
+        innerHTML_array[0] = "\<div class=\"w3-third w3-container  w3-border\"\>";
+        innerHTML_array[1] = "\<div class=\"w3-third w3-container  w3-border\"\>";
+        innerHTML_array[2] = "\<div class=\"w3-third w3-container  w3-border\"\>";
 
 
         // use divider_num to determine which vertical section need to write
@@ -49,7 +49,7 @@ function loadMaps()
             }
 
             // for each map, distribute into three vertical sections by row order.
-            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-card-2 w3-round-large w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
+            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-card-2 w3-round-large w3-section \"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; class=\"w3-margin-top \" ;onclick=\"enterLocalGame('" + data.val().map + "')\"\>";
             innerHTML_array[divider_num] += "\<p class=\"w3-left w3-margin-top\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-margin-top\"\>" + data.val().creator + "\<\/p\>\<\/div\>";
