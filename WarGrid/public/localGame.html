@@ -48,13 +48,13 @@
                 <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512"> </canvas>
             </div>
             <div class="w3-col w3-container w3-padding-16 m3 w3-right ">
-                <div id="messages" class="w3-container w3-card-0 w3-sand w3-round-xlarge" style="height: 450px; width: 350px;"> <span id="message-filler"></span> </div>
+                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge" > <span id="message-filler"></span> </div>
                 
                 <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." style="width: 150px">
+                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
                     <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
                     <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-                    <button id="submitImage" title="Add an image" class="w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()" style="width: 100px"> <i class="material-icons">image</i> </button>
+                    <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
                 </div>
             </div>
         </div>
@@ -106,132 +106,5 @@
 
 
 
-<!--
-<body class="body-max-width w3-light-grey w3-content">
 
-
-
-  
-    <header class="header-max-width w3-container w3-top w3-hide-small w3-large w3-padding-16 ">
-        <div class="w3-dropdown-click w3-right"> <a class="player-profile-desktop w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
-            <div id="dropdown_menu_on_large_screen" class="login-dropdown w3-dropdown-content w3-border w3-round-xlarge"> 
-                <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a> 
-                <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a> 
-                <a onclick="player.signOut()" href="#" class="fa fa-power-off sign-out"> sign out</a> 
-            </div>
-        </div>
-    </header>
-   
-    <nav class="sidenav-style w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" id="mySidenav">
-        <br> <img src="images/icon.png" class="icon">
-        <h3 class="w3-padding-64 "><b>Timberwolf Life</b>
-        </h3> <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a> 
-        <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a> 
-        <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a> 
-        <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a> 
-        <a href="#" onclick="localGame_open()" class="w3-padding">LOCAL GAME</a> 
-    </nav>
-
-    
-    <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-        <img src="images/icon.png" class="w3-left icon_small ">
-        <span class="w3-left"> TL</span>
-        <div class="w3-container w3-right w3-row">
-            <a class="w3-btn-floating w3-right w3-white  w3-round-jumbo" onclick="w3_open()">&#9776;</a>
-            <div class="w3-container w3-middle w3-dropdown-click">
-                <a class="w3-btn-floating w3-white w3-round-jumbo " onclick="show_drop_down_menu_on_medium_small_screen()"><i class="material-icons">person</i></a>
-                <div id="dropdown_menu_on_medium_small_screen" class="login-dropdown-small w3-dropdown-content w3-border w3-round-xlarge">
-                    <a onclick="player.googleSignIn()" href="#" class="fa fa-google-plus-official google-sign-in"> sign in</a>
-                    <a onclick="player.facebookSignIn()" href="#" class="fa fa-facebook-square facebook-sign-in"> sign in</a>
-                    <a onclick="player.signOut()" href="#" class="fa fa-google-plus-official sign-out"> sign out</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-   
-    <div class="sidenav-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()"  title="close side menu" id="myOverlay"></div>
-
-   
-    <div class="web-page-content w3-main" >
-       
-        <div class="pushdown-content w3-hide-large" ></div>
-
-
-        <div class="pushdown-content-in-use w3-container " >
-
-            <div id="gameDiv" class="w3-container w3-center w3-padding-64">
-                
-                <div class="w3-col w3-container w3-padding-16 m8 ">
-                    <canvas id="game_canvas" class="w3-camo-dark-grey w3-round-xlarge" width="512" height="512"> </canvas>
-                </div>
-                <div class="w3-col w3-container w3-padding-16 m4 ">
-                    <div id="messages" class="w3-container w3-card-0 w3-camo-dark-grey w3-round-xlarge w3-center" style="height: 450px; width: 350px;"> <span id="message-filler"></span> </div>
-                    
-                    <div id="message-form" action="#" class="w3-container w3-margin-top">
-                        <input class="w3-input w3-light-grey w3-animate-input" type="text" id="message" placeholder="Message..." style="width: 150px">
-                        <button id="submit" type="submit" class="w3-btn w3-dark-grey w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
-                        <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-                        <button id="submitImage" title="Add an image" class="w3-btn w3-light-grey w3-margin-top w3-right" onclick="handleBrowseClick()" style="width: 100px"> <i class="material-icons">image</i> </button>
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="w3-col w3-container w3-row m8"> <span id="text">Cell left: 0 </span> </div>
-                
-                <div class="w3-col w3-container w3-row m8">
-                    <button id="resetButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
-                    <button id="confirmButton" value="Confirm" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
-                    <button id="ghostButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
-                    <button id="surrenderButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="document.getElementById('Surrender').style.display='block'">Surrender</button>
-                </div>
-            </div>
-            <script>
-                initGameOfLife();
-            </script>
-            
-            <div id="Instruction" class="w3-modal w3-animate-opacity">
-                <div class="w3-modal-content w3-card-8 w3-round">
-                    <div class="w3-container w3-black"> <span onclick="document.getElementById('Instruction').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
-                        <h1>Instruction: </h1> </div>
-                    <div class="w3-container w3-camo-forest">
-                        <br/> This game is a turn based strategy game that requires two players play against each other. Both player need to play on one machine for now.
-                        <br/>
-                        <br/> Players' goal is to occupy the entire map with their live cells or dead cells, once a cell is occupied by a player's live cell, it become part of the player's terrtory until it get occupied by another player.
-                        <br/>
-                        <br/> Player can place certain amount of living cells each turn, after pressing "confirm", all live cells of current player will render 1 frame base on game of life algorithm, then it is the other player's turn.
-                        <br/>
-                        <br/> The amount of Live cells players can place is depend on the size of their terrtory; and players can only place cells in or next to their terrtory.
-                        <br/>
-                        <br/> Yellow cells will indicate position of your live cells in the next turn based on your current placement, you can turn it on/off by pressing "Ghost on/off button
-                        <br/>
-                        <br/> "Reset" button will cancel all placement of the current turn.
-                        <br/>
-                        <br/> 
-                    </div>
-                </div>
-            </div>
-            <div id="Surrender" class="w3-modal w3-animate-opacity">
-                <div class="w3-modal-content w3-card-8 w3-round">
-                    <div class="w3-container w3-section w3-black">
-                        <h1 class="w3-xxlarge w3-center w3-margin-top">Loser!!!</h1>
-                        <p class="w3-jumbo w3-margin-top w3-center"><i class="fa fa-thumbs-down"></i></p>
-                        <div class="w3-container w3-margin-top w3-center">
-                            <button class="w3-btn w3-border w3-margin w3-w3-round-xlarge w3-large w3-round-large" onclick="index_open()">Click</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-
-    </div>
-    
-</body>
-
--->
 </html>
