@@ -26,8 +26,9 @@ function lobbyInit() {
         innerHTML_array[2] = "\<div class=\"w3-third w3-panel\"\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
+
         snapshot.forEach(function(data) {
-            var randomID= Math.floor((Math.random() * 100) + 1);
+            var randomID= Math.floor((Math.random() * 1000) + 1);
 
             //retrieve map images
             var storageRef = firebase.storage().ref();
@@ -41,11 +42,13 @@ function lobbyInit() {
                 });
             }
 
+
             // for each map, distribute into three vertical sections by row order.
-            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
+            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-card-2 w3-round-large w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
-            innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
-            innerHTML_array[divider_num] += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + data.val().owner + "\<\/p\>\<\/div\>";
+
+            innerHTML_array[divider_num] += "; style=\"width:100%\" ; class=\"w3-margin-top \" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
+            innerHTML_array[divider_num] += "\<p class=\"w3-left w3-margin-top\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-margin-top\"\>" + getName(data.val().owner) + "\<\/p\>\<\/div\>";
             // if reach to the third column, reset it.
             if (divider_num === 2) divider_num = -1;
             // increase index and count.
