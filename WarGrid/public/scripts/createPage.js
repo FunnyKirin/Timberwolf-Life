@@ -88,7 +88,7 @@ function createRoom(map) {
     var lobbyData = {
         map: map,
         challenger: '',
-        owner: auth.currentUser.uid,
+        owner: playerId,
         grid: grid,
         currentPlayer: 1
     };
