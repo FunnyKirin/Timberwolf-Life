@@ -12,31 +12,27 @@ function initLobby() {
     lobbyInit();
 }
 
-function lobbyHandler(player) {
-    authorized = player ? true : false;
-}
-
 function lobbyInit() {
     ref = firebase.database().ref();
     auth = firebase.auth();
-    this.ref.child('lobby').on('value', function (snapshot) 
+    this.ref.child('lobby').on('value', function (snapshot)
     {
 
         var count = 0;
         // divider the layout into three vertical sections.
         var innerHTML = "";
-        var innerHTML_array = [3];  // vertical section array. 
-        // assign the open outter div. 
+        var innerHTML_array = [3];  // vertical section array.
+        // assign the open outter div.
         innerHTML_array[0] = "\<div class=\"w3-third w3-panel\"\>";
         innerHTML_array[1] = "\<div class=\"w3-third w3-panel\"\>";
         innerHTML_array[2] = "\<div class=\"w3-third w3-panel\"\>";
 
-        
+
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
-        snapshot.forEach(function (data) 
+        snapshot.forEach(function (data)
         {
-            // for each map, distribute into three vertical sections by row order. 
+            // for each map, distribute into three vertical sections by row order.
             innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
@@ -46,12 +42,12 @@ function lobbyInit() {
             if(divider_num === 2)
                 divider_num = -1;
 
-            // increase index and count. 
+            // increase index and count.
             divider_num++;
             count += 1;
-            
+
         });
-        // assign the close outter div. 
+        // assign the close outter div.
         innerHTML_array[0] += "\<\/div\>";
         innerHTML_array[1] += "\<\/div\>";
         innerHTML_array[2] += "\<\/div\>";
@@ -60,11 +56,14 @@ function lobbyInit() {
         $("#" + ROOM_GRID_ID).html(innerHTML);
         console.log("Number of rooms: ", count);
     });
-    this.auth.onAuthStateChanged(lobbyHandler.bind(this));
+    auth.onAuthStateChanged(function (player) {
+        authorized = player ? true : false;
+        console.log(authorized ? 'authorized' : 'unauthorized');
+    });
 }
 
 function lobbyLeave() {
-    if (this.authorized) {
+    if (authorized) {
         var challenger = this.ref.child('lobby').child(room_key).child('challenger');
         challenger.transaction('');
     }
@@ -74,16 +73,16 @@ function lobbyLeave() {
 }
 
 function lobbyJoin(room_key) {
-    if (this.authorized) {
+    if (authorized) {
         var challenger = this.ref.child('lobby').child(room_key).child('challenger');
         var owner = this.ref.child('lobby').child(room_key).child('owner');
         owner.transaction(function (currentData) {
-            if (currentData == auth.currentUser.uid) {
+            if (currentData == playerId) { // what is this
                 window.open("gamePage.html?" + room_key, "_self");
             }
             else {
                 challenger.transaction(function (currentData) {
-                    return auth.currentUser.uid;
+                    return playerId;
                 });
                 window.open("gamePage.html?" + room_key, "_self");
             }
