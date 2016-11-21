@@ -27,22 +27,23 @@ function lobbyInit() {
         innerHTML_array[2] = "\<div class=\"w3-third w3-panel\"\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
-        snapshot.forEach(function (data) {
+        snapshot.forEach(function(data) {
+            var randomID= Math.floor((Math.random() * 100) + 1);
+
             //retrieve map images
             var storageRef = firebase.storage().ref();
             var returnimage = storageRef.child('images/' + data.val().map).toString();
             var mapImageSrc;
-            console.log("returnimage " + returnimage.key);
             if (returnimage.startsWith('gs://')) {
-                console.log("startswith gs://");
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function (metadata) {
-                    console.log("metadata: " + metadata.downloadURLs[0]);
-                    mapImageSrc = metadata.downloadURLs[0];
+
+                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata) {
+                    mapImageSrc = document.getElementById(data.val().map + randomID);
+                    mapImageSrc.src = metadata.downloadURLs[0];
                 });
             }
-            console.log("returnimage: " + returnimage);
+
             // for each map, distribute into three vertical sections by row order.
-            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img src=\"";
+            innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"w3-card-12 w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
             innerHTML_array[divider_num] += "\<p class=\"w3-left \"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right \"\>" + getName(data.val().owner) + "\<\/p\>\<\/div\>";
