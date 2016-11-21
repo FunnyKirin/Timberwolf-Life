@@ -42,17 +42,12 @@ function lobbyInit() {
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
             }
-<<<<<<< HEAD
-=======
-
->>>>>>> 399622dec8a5511f15277bf723b669da073fb2a7
 
             // for each map, distribute into three vertical sections by row order.
             innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-card-12 w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
-            innerHTML_array[divider_num] += "\<p class=\"w3-left w3-section\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-section\"\>" + getName(data.val().owner) + "\<\/p\>\<\/div\>";
-            // if reach to the third column, reset it.
+            innerHTML_array[divider_num] += "\<p class=\"w3-left w3-section\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-section\"\>" + getName(data.val().owner) + "\<\/p\>\<\/div\>"; // if reach to the third column, reset it.
             if (divider_num === 2) divider_num = -1;
             // increase index and count.
             divider_num++;
