@@ -86,7 +86,6 @@ function initGameOfLife() {
     initEventHandlers();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
-
     initUI();
     //Start first Turn;
 }
@@ -107,7 +106,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#7277ff";
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "rgba(231, 237, 59, 0.4)";
+    GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#9B7653";
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -178,6 +177,8 @@ function initFirebase() {
             swapGrids();
             if (currentPlayer == playerIndex) {
                 nextTurn();
+                renderGhostRenderCells();
+                renderGhost();
             }
         }
     });
@@ -198,7 +199,6 @@ function initCanvas() {
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
 }
-
 
 function initGameOfLifeData() {
     // INIT THE TIMING DATA
@@ -245,53 +245,55 @@ function initUI() {
  * until the player click confirm.
  */
 function respondToMouseClick(event) {
-    // CALCULATE THE ROW,COL OF THE CLICK
-    var canvasCoords = getRelativeCoords(event);
-    var clickCol = Math.floor(canvasCoords.x / cellLength);
-    var clickRow = Math.floor(canvasCoords.y / cellLength);
-    //get cells from update grid and ghost cell
-    var cell = getGridCell(updateGrid, clickRow, clickCol);
-    var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
-    //check if there is already a cell in ghost grid,
-    // if not:
-    if (cell != LIVE_CELL + playerIndex * 10) {
-        if (ghostCell != LIVE_CELL + playerIndex * 10) {
-            //check if the player can place a cell at that position.
-            if (cellNumber > 0 && cell != VOID_CELL) {
-                //check if the position is next to the player's territory.
-                var cellType = determineCellType(clickRow, clickCol);
-                var cellsToCheck = cellLookup[cellType];
-                var boolean = 0;
-                for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
-                    var neighborCol = clickCol + cellsToCheck.cellValues[counter];
-                    var neighborRow = clickRow + cellsToCheck.cellValues[counter + 1];
-                    var index = (neighborRow * gridWidth) + neighborCol;
-                    var neighborValue = updateGrid[index];
-                    var rightNumber = neighborValue % 10;
-                    var leftNumber = Math.floor(neighborValue / 10);
-                    if (leftNumber == playerIndex) {
-                        boolean = 1;
+    if (currentPlayer == playerIndex) {
+        // CALCULATE THE ROW,COL OF THE CLICK
+        var canvasCoords = getRelativeCoords(event);
+        var clickCol = Math.floor(canvasCoords.x / cellLength);
+        var clickRow = Math.floor(canvasCoords.y / cellLength);
+        //get cells from update grid and ghost cell
+        var cell = getGridCell(updateGrid, clickRow, clickCol);
+        var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
+        //check if there is already a cell in ghost grid,
+        // if not:
+        if (cell != LIVE_CELL + playerIndex * 10) {
+            if (ghostCell != LIVE_CELL + playerIndex * 10) {
+                //check if the player can place a cell at that position.
+                if (cellNumber > 0 && cell != VOID_CELL) {
+                    //check if the position is next to the player's territory.
+                    var cellType = determineCellType(clickRow, clickCol);
+                    var cellsToCheck = cellLookup[cellType];
+                    var boolean = 0;
+                    for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+                        var neighborCol = clickCol + cellsToCheck.cellValues[counter];
+                        var neighborRow = clickRow + cellsToCheck.cellValues[counter + 1];
+                        var index = (neighborRow * gridWidth) + neighborCol;
+                        var neighborValue = updateGrid[index];
+                        var rightNumber = neighborValue % 10;
+                        var leftNumber = Math.floor(neighborValue / 10);
+                        if (leftNumber == playerIndex) {
+                            boolean = 1;
+                        }
+                    }
+                    //it is!
+                    if (boolean == 1) {
+                        setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
+                        cellNumber--;
                     }
                 }
-                //it is!
-                if (boolean == 1) {
-                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
-                    cellNumber--;
-                }
+            }
+            // if so, remove that cell. (so players can undo their moves before they confirm)
+            else {
+                setGridCell(ghostGrid, clickRow, clickCol, 0);
+                cellNumber++;
             }
         }
-        // if so, remove that cell. (so players can undo their moves before they confirm)
-        else {
-            setGridCell(ghostGrid, clickRow, clickCol, 0);
-            cellNumber++;
-        }
+        //reset game UI
+        renderGame();
+        renderGhostRenderCells();
+        renderGhost();
+        renderGridLines();
+        initUI();
     }
-    //reset game UI
-    renderGame();
-    renderGhostRenderCells();
-    renderGhost();
-    renderGridLines();
-    initUI();
 }
 //These function will be used to render ghost cells
 function renderGhost() {
@@ -402,7 +404,6 @@ function confirmMove() {
         }
         //nextTurn();
         //go to next turn
-        
         cellNumber = 0;
         initUI();
     }
