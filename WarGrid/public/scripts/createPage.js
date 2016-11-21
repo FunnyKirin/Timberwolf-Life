@@ -70,29 +70,33 @@ function loadMaps() {
 }
 
 function createRoom(map) {
-    var newKey = this.ref.child("lobby").push().key;
-    var lobby = {};
-    var grid = [];
+    if (authorized) {
+        var newKey = this.ref.child("lobby").push().key;
+        var lobby = {};
+        var grid = [];
 
-    //  load map into grid
-    this.ref.child('maps').orderByValue().limitToLast(100).on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
-            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-            if (data.val().map === map) {
-                grid = data.val().data;
-            }
+        //  load map into grid
+        this.ref.child('maps').orderByValue().limitToLast(100).on("value", function(snapshot) {
+            snapshot.forEach(function(data) {
+                //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+                if (data.val().map === map) {
+                    grid = data.val().data;
+                }
+            });
         });
-    });
 
-    //create room
-    var lobbyData = {
-        map: map,
-        challenger: '',
-        owner: playerId,
-        grid: grid,
-        currentPlayer: 1
-    };
-    lobby['/lobby/' + newKey] = lobbyData;
-    this.ref.update(lobby);
-    game_open(newKey);
+        //create room
+        var lobbyData = {
+            map: map,
+            challenger: '',
+            owner: playerId,
+            grid: grid,
+            currentPlayer: 1
+        };
+        lobby['/lobby/' + newKey] = lobbyData;
+        this.ref.update(lobby);
+        game_open(newKey);
+    } else {
+        alert('You need to log in first');
+    }
 }
