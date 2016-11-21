@@ -25,38 +25,44 @@ Player.prototype.playerHandler = function (player) {
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
                 console.log('Logged in as', playerId);
+                
+                // html element display
+                $("." + GOOGLE_SIGNIN_ID).hide();
+                $("." + FACEBOOK_SIGNIN_ID).hide();
+                $("." + SIGNOUT_ID).show();
+                $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
+                
             } else { // user registration
                 var rootRef = firebase.database().ref();
                 playerId = validateInput(prompt('Get yourself a username'));
-                //playerId = 'no';
+
                 // check if playerId is empty
                 while (!playerId) {
                     playerId = validateInput(prompt('Get yourself a username'));
-                    //playerId = 'steve';
                 }
+                
                 rootRef.child('players').once('value', function (check) {
                     // regulation in database
                     while (check.hasChild(playerId.toLowerCase())) {
                         alert(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
+                    // html element display
+                    $("." + GOOGLE_SIGNIN_ID).hide();
+                    $("." + FACEBOOK_SIGNIN_ID).hide();
+                    $("." + SIGNOUT_ID).show();
+                    $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
                     rootRef.child('playerUID').child(uid).set(playerId.toLowerCase());
                     rootRef.child('players').child(playerId.toLowerCase()).set({
-                        totalWins: 0,
-                        totalLosses: 0,
-                        online: true,
-                        bio: ''
+                        totalWins: 0
+                        , totalLosses: 0
+                        , online: true
+                        , bio: ''
                     });
                 });
                 
                 console.log('Logged in as', playerId);
             } // if user's not registered
-            
-            // html element display
-            $("." + GOOGLE_SIGNIN_ID).hide();
-            $("." + FACEBOOK_SIGNIN_ID).hide();
-            $("." + SIGNOUT_ID).show();
-            $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
         });
     }
     else { // logged out
