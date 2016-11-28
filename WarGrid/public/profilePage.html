@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
+
+<head>
     <title>Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,11 +12,14 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
+    <script src="scripts/player.js"></script>
+</head>
 
-  </head>
-
-  <body class="body-max-width w3-light-grey w3-content">
+<body class="body-max-width w3-light-grey w3-content">
 
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
     <header class="header-max-width w3-container w3-top w3-hide-small w3-large w3-padding-16 ">
@@ -62,26 +66,29 @@
     <div class="sidenav-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" title="close side menu" id="myOverlay"></div>
 
     <!-- !WEB PAGE CONTENT! -->
-    <div class="web-page-content w3-main" >
-    	<!-- Push down content on small screens  -->
-      	<div class="pushdown-content w3-hide-large" ></div>
-      <!-- Profile content -->
+    <div class="web-page-content w3-main">
+        <!-- Push down content on small screens  -->
+        <div class="pushdown-content w3-hide-large"></div>
+        <!-- Profile content -->
 
-        <div class="pushdown-content-in-use w3-container" >
-        	<h2 class="fa fa-address-card w3-xxlarge w3-text-dark-grey"> Profile</h2>
-        	<p>Match history result:</p>
-        	<div class="w3-panel w3-card-8 w3-round-xlarge">
-                <div class="profile_page_icon w3-section " ><i class="w3-xlarge fa fa-user w3-text-grey"> Player Name: <span></span>  </i></div>
-                <div class="profile_page_icon w3-section" ><i class="w3-xlarge fa fa-thumbs-o-up w3-text-grey"> Total Wins: <span></span> </i></div>
-                <div class="profile_page_icon w3-section" ><i class="w3-xlarge fa fa-thumbs-o-down w3-text-grey"> Total Loss: <span></span> </i></div>
-        	</div>
+        <div class="pushdown-content-in-use w3-container">
+            <h2 class="fa fa-address-card w3-xxlarge w3-text-dark-grey"> Profile</h2>
+            <p>Match history result:</p>
+            <div class="w3-panel w3-card-8 w3-round-xlarge">
+                <div class="profile_page_icon w3-section "><i class="pid w3-xlarge fa fa-user w3-text-grey">Player Name: <span></span>  </i></div>
+                <div class="profile_page_icon w3-section"><i class="win w3-xlarge fa fa-thumbs-o-up w3-text-grey">Total Wins: <span></span> </i></div>
+                <div class="profile_page_icon w3-section"><i class="loss w3-xlarge fa fa-thumbs-o-down w3-text-grey">Total Loss: <span></span> </i></div>
+            </div>
         </div>
 
     </div>
 
+    <script>
+        window.onload = function() {
+            window.player = new Player();
+        };
+    </script>
 
-	</body>
+</body>
+
 </html>
-
-
-

@@ -148,28 +148,27 @@ function initFirebase() {
     this.storage = firebase.storage();
     var url = window.location.search.substring(1);
     room = database.ref().child("lobby").child(url);
-    room.once('value', function (snapshot) {
+    room.once('value', function(snapshot) {
         currentPlayer = snapshot.val().currentPlayer;
         renderGrid = snapshot.val().grid;
         renderGame();
         swapGrids();
         //get player Index
-        database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function (abc) {
-                if (abc.val() == snapshot.val().owner) {
-                    playerIndex = 1;
-                }
-                else if (abc.val() == snapshot.val().challenger) {
-                    playerIndex = 2;
-                }
-                if (snapshot.val().currentPlayer == playerIndex) {
-                    nextTurn();
-                }
-            })
-            //alert("you are player " + playerIndex);
+        database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function(abc) {
+            if (abc.val() == snapshot.val().owner) {
+                playerIndex = 1;
+            } else if (abc.val() == snapshot.val().challenger) {
+                playerIndex = 2;
+            }
+            if (snapshot.val().currentPlayer == playerIndex) {
+                nextTurn();
+            }
+        });
+        //alert("you are player " + playerIndex);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-    room.on('value', function (snapshot) {
+    room.on('value', function(snapshot) {
         //alert(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -218,7 +217,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function () {
+    $("#ghostButton").click(function() {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -226,7 +225,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function () {
+    $("#resetButton").click(function() {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -321,17 +320,17 @@ function renderGhostCells() {
                 }
             }
             if (ghostTrigger == 1) {
-                var cell = getGridCell(ghostRenderGrid, i, j);
+                var _cell = getGridCell(ghostRenderGrid, i, j);
                 //leftNumber = player index
-                var leftNumber = Math.floor(cell / 10);
+                var _leftNumber = Math.floor(_cell / 10);
                 //rightNumber = cell type
-                var rightNumber = cell % 10;
-                var x = j * cellLength;
-                var y = i * cellLength;
-                if (leftNumber == playerIndex) {
-                    if (rightNumber == 1) {
+                var _rightNumber = _cell % 10;
+                var _x = j * cellLength;
+                var _y = i * cellLength;
+                if (_leftNumber == playerIndex) {
+                    if (_rightNumber == 1) {
                         canvas2D.fillStyle = GHOST_COLOR;
-                        canvas2D.fillRect(x, y, cellLength, cellLength);
+                        canvas2D.fillRect(_x, _y, cellLength, cellLength);
                     }
                 }
             }
@@ -412,10 +411,10 @@ function confirmMove() {
 }
 //send map info to database after pressing confirm
 function writeMap(grid) {
-    room.child("grid").transaction(function (currentData) {
+    room.child("grid").transaction(function(currentData) {
         return grid;
     });
-    room.child("currentPlayer").transaction(function (currentData) {
+    room.child("currentPlayer").transaction(function(currentData) {
         currentData = currentData === 1 ? 2 : 1;
         return currentData;
     });
@@ -436,6 +435,7 @@ function checkVictory() {
     }
     return 1;
 }
+
 //goto next turn
 function nextTurn() {
     territory = 0;
@@ -570,8 +570,7 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * playerIndex;
-                }
-                else if (testCell == DEAD_CELL) {
+                } else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -611,8 +610,7 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -763,14 +761,13 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX
-            , y: event.offsetY
+            x: event.offsetX,
+            y: event.offsetY
         };
-    }
-    else {
+    } else {
         return {
-            x: event.layerX
-            , y: event.layerY
+            x: event.layerX,
+            y: event.layerY
         };
     }
 }
@@ -778,8 +775,7 @@ function getRelativeCoords(event) {
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
         alert('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
-    }
-    else if (config.storageBucket === '') {
+    } else if (config.storageBucket === '') {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
-};
+}

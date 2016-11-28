@@ -5,7 +5,7 @@ var authorized = false;
 var auth;
 var ref;
 
-function initLobby() {
+function lobby() {
     console.log('[INFO] Loading Lobby Module...');
     this.room_key = '';
     this.buttonCreate = document.getElementById(BUTTON_CREATE_ID);
