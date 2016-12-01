@@ -1,9 +1,11 @@
 var BUTTON_CREATE_ID = 'create';
 var ROOM_GRID_ID = 'room-grid';
 var KEY_LOBBY = 'lobby';
+
+//TODO: localize these
 var authorized = false;
 var auth;
-var ref;
+var dbref;
 
 function lobby() {
     console.log('[INFO] Loading Lobby Module...');
@@ -13,9 +15,11 @@ function lobby() {
 }
 
 function lobbyInit() {
-    ref = firebase.database().ref();
+    // initialize variables for easier access
+    dbref = firebase.database().ref();
     auth = firebase.auth();
-    this.ref.child('lobby').on('value', function (snapshot) {
+
+    dbref.child('lobby').on('value', function (snapshot) {
         var count = 0;
         // divider the layout into three vertical sections.
         var innerHTML = "";
@@ -28,7 +32,7 @@ function lobbyInit() {
         var divider_num = 0;
 
         snapshot.forEach(function(data) {
-            var randomID= Math.floor((Math.random() * 1000) + 1);
+            var randomID = Math.floor((Math.random() * 1000) + 1);
 
             //retrieve map images
             var storageRef = firebase.storage().ref();
@@ -71,23 +75,25 @@ function lobbyInit() {
 
 function lobbyLeave() {
     if (authorized) {
-        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
+        dbref.child('lobby').child(room_key).child('challenger').once('value', function(snapshot) {
+            if (playerId == snapshot.val()) {
+
+            }
+        });
         challenger.transaction('');
-    }
-    else {
+    } else {
         alert('You need to login first');
     }
 }
 
 function lobbyJoin(room_key) {
     if (authorized) {
-        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
-        var owner = this.ref.child('lobby').child(room_key).child('owner');
+        var challenger = dbref.child('lobby').child(room_key).child('challenger');
+        var owner = dbref.child('lobby').child(room_key).child('owner');
         owner.transaction(function (currentData) {
             if (currentData == playerId) { // what is this
                 window.open("gamePage.html?" + room_key, "_self");
-            }
-            else {
+            } else {
                 challenger.transaction(function (currentData) {
                     return playerId;
                 });

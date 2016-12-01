@@ -13,6 +13,7 @@ var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 var CLASS_PLAYER_ID = 'pid';
 var CLASS_PLAYER_WINS = 'win';
 var CLASS_PLAYER_LOSSES = 'loss';
+var CLASS_PLAYER_GAME = 'in-room';
 
 
 //TODO: localize these variable
@@ -33,6 +34,13 @@ var Player = function() {
     this.init();
 };
 
+// localization of player object
+Player.playerId = '';
+Player.totalWins = -1;
+Player.totalLosses = -1;
+Player.gameRoom = '';
+Player.online = false;
+
 // handles player status and changes variable when user signed in or signed out
 Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
@@ -45,9 +53,13 @@ Player.prototype.playerHandler = function(player) {
 
                 // get player data for display
                 firebase.database().ref('players/' + playerId).once('value', function(obj) {
+                    //TODO: change to appropriate URL
+                    var gameRoom = obj.val().game_room ? '<a href="something">Yes</a>' : 'No';
+
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
+                    $("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
                 });
 
                 // html element display
@@ -65,9 +77,10 @@ Player.prototype.playerHandler = function(player) {
                     playerId = validateInput(prompt('Get yourself a username'));
                 }
 
+                playerId = playerId.toLowerCase();
                 rootRef.child('players').once('value', function(check) {
                     // regulation in database
-                    while (check.hasChild(playerId.toLowerCase())) {
+                    while (check.hasChild(playerId)) {
                         alert(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
@@ -79,17 +92,19 @@ Player.prototype.playerHandler = function(player) {
                     $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
 
                     // database operations
-                    rootRef.child('playerUID').child(uid).set(playerId.toLowerCase());
-                    rootRef.child('players').child(playerId.toLowerCase()).set({
+                    rootRef.child('playerUID').child(uid).set(playerId);
+                    rootRef.child('players').child(playerId).set({
                         totalWins: 0,
                         totalLosses: 0,
                         online: true,
-                        bio: ''
+                        game_room: ''
                     });
 
-                    $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId.toLowerCase());
+                    // for profile page
+                    $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
+                    $("." + CLASS_PLAYER_GAME).html('In Game: No');
 
                     // 'initialize' global variables
                     totalWins = 0;
@@ -132,6 +147,7 @@ Player.prototype.facebookSignIn = function() {
 
 // Sign-Out
 Player.prototype.signOut = function() {
+    playerId = '';
     this.auth.signOut();
 };
 
@@ -142,6 +158,31 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
+};
+
+Player.join = function(room_key) {
+    // joining a room
+    if (playerId) {
+        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
+        var owner = this.ref.child('lobby').child(room_key).child('owner');
+        owner.transaction(function(currentData) {
+            if (currentData == playerId) { // what is this
+                window.open("gamePage.html?" + room_key, "_self");
+            } else {
+                challenger.transaction(function(currentData) {
+                    return playerId;
+                });
+                window.open("gamePage.html?" + room_key, "_self");
+            }
+        });
+    }
+};
+
+Player.leave = function(room_key) {
+    // leaving a room
+    if (playerId) {
+
+    }
 };
 
 // validate username
