@@ -30,7 +30,12 @@ var Chat = function() {
     this.messageContent.on('keyup', this.toggleButton.bind(this));
     this.messageContent.on('change', this.toggleButton.bind(this));
 
-    this.init();
+    // firebase stuff
+    this.chatRef = firebase.database().ref('lobby').child(this.room_key).child('chat');
+    this.auth = firebase.auth();
+
+    // bind auth state handler
+    this.auth.onAuthStateChanged(this.chatHandler.bind(this));
 };
 
 // display message on the textfield
@@ -69,8 +74,8 @@ Chat.prototype.loadMessages = function() {
         this.displayMessage(snapshot.key, val.pid, val.text);
     }.bind(this);
 
-    this.chatRef.child(this.room_key).limitToLast(12).on('child_added', setMessage);
-    this.chatRef.child(this.room_key).limitToLast(12).on('child_changed', setMessage);
+    this.chatRef.limitToLast(12).on('child_added', setMessage);
+    this.chatRef.limitToLast(12).on('child_changed', setMessage);
 };
 
 Chat.prototype.saveMessage = function(e) {
@@ -79,14 +84,10 @@ Chat.prototype.saveMessage = function(e) {
     // Check that the user entered a message and is signed in.
     if (this.messageContent.val() && this.auth.currentUser) {
         // Add a new message entry to the Firebase Database.
-        var chatKey = this.chatRef.child(this.room_key).push().key;
-        var update = {};
-        update[this.room_key + '/' + chatKey] = {
+        this.chatRef.push({
             text: this.messageContent.val(),
             pid: playerId
-        };
-
-        this.chatRef.update(update).then(function() {
+        }).then(function() {
             // Clear message text field and SEND button state.
             this.messageContent.val('');
             this.toggleButton();
@@ -94,15 +95,7 @@ Chat.prototype.saveMessage = function(e) {
             // error problems
             console.error('Error writing new message to Firebase Database', error);
         });
-
     }
-};
-
-Chat.prototype.init = function() {
-    this.chatRef = firebase.database().ref('chat');
-    this.auth = firebase.auth();
-
-    this.auth.onAuthStateChanged(this.chatHandler.bind(this));
 };
 
 // handles those who signed in and those who didn't
