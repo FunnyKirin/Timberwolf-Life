@@ -55,7 +55,7 @@
                     <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
                 </p>
             </div>
-            
+
             <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
             <!--    1. this canvas is for large screen. -->
             <div class="w3-col w3-container w3-padding-16 m6 w3-center w3-hide-medium w3-hide-small">
@@ -68,10 +68,10 @@
 
             <!-- Right section-char room is shown on large scrren. -->
             <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small">
-                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge" > 
-                    <span id="message-filler"></span> 
+                <!-- WHERE MESSAGES DISPLAY -->
+                <div style="text-align:left" id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge" >
+                    <span id="message-filler"></span>
                 </div>
-                
 
                 <div id="chat">
                     <form id="message-form" action="#" class="w3-container w3-margin-top">
@@ -81,21 +81,8 @@
                         <button id="submit" disabled type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
                     </form>
                 </div>
-                <!--
-                <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
-                    <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
-                    <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-                    <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
-                </div>
-                -->
             </div>
 
-            
-                
-            
-            
-            
         </div>
         <!-- Buttom part-->
         <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
@@ -126,7 +113,7 @@
     </script>
     <!-- Left side pop-up info panel. -->
     <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top"  id="online_left_side_info_panel">
-        
+
         <h1 class="w3-text-sand w3-padding-24">TL</h1>
         <div class="w3-container w3-padding-16">
             <p class="w3-text-red w3-xlarge"><i class="glyphicon glyphicon-tower w3-large"></i> Player Name </p>
@@ -141,7 +128,7 @@
         <p>
             <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
         </p>
-        
+
     </nav>
 
     <!-- Overlay effect when opening left_side on small screens -->
@@ -154,15 +141,15 @@
     <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top"  id="online_right_side_chat_panel">
 
         <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round-xlarge w3-section" > <span id="message-filler"></span> </div>
-                
+
         <div id="message-form" action="#" class="w3-container w3-margin-top">
             <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
             <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-center w3-animate-zoom w3-hover-sand">Send</button>
             <input id="mediaCapture" type="file" accept="image/*,capture=camera">
             <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-center" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
         </div>
-        
-        
+
+
     </nav>
 
     <!-- Overlay effect when opening right_side on small screens -->
@@ -171,7 +158,7 @@
 
 
 
-    
+
     <!-- The how to play info -->
     <div id="Instruction" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-8 w3-round">
