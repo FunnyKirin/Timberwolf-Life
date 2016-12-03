@@ -55,6 +55,37 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	font-weight:bold; 
 }
 
+.left_side_info_panel-style {
+	display:none;
+	z-index:3;
+	width:200px;
+	font-weight:bold; 
+}
+
+
+.right_side_chat_room-style {
+	display:none;
+	right:0;
+	z-index:3;
+	width:200px;
+	font-weight:bold; 
+}
+
+.online_game_bottom_buttons {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.local_game_bottom_buttons {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+
 .login-dropdown {
 	right:1;
 }
@@ -95,6 +126,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 .game_page_message_box {
 	height: 450px;
 	width: 350px;
+}
+
+.game_page_small_message_box {
+	height: 350px;
+	width: 180px;
+	margin-left: 10px;
 }
 
 .game_page_message_input {

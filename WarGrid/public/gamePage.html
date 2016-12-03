@@ -13,29 +13,33 @@
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-camo.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/map.js"></script>
     <script src="scripts/onlineGame.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="scripts/chat.js"></script>
     <script>
         // Initialize Firebase
         var config = {
-            apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw"
-            , authDomain: "timberwolf-build3.firebaseapp.com"
-            , databaseURL: "https://timberwolf-build3.firebaseio.com"
-            , storageBucket: "timberwolf-build3.appspot.com"
-            , messagingSenderId: "288270916702"
+            apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw",
+            authDomain: "timberwolf-build3.firebaseapp.com",
+            databaseURL: "https://timberwolf-build3.firebaseio.com",
+            storageBucket: "timberwolf-build3.appspot.com",
+            messagingSenderId: "288270916702"
         };
         firebase.initializeApp(config);
     </script>
 </head>
 
 <body class="body-max-width w3-grey w3-content">
+
+    <!-- The body has four sections. Left, middle, right and buttom. -->
     <div id="gameDiv" class="w3-container w3-center w3-padding-64">
         <div class="w3-container w3-card-24 w3-dark-grey w3-round-xlarge">
-            <div class="w3-container w3-col w3-padding-16 m3 w3-left">
+            <!-- Left section-game info panel, panel is shown on large screen, -->
+            <div class="w3-container w3-col w3-padding-16 m3 w3-left w3-hide-medium w3-hide-small">
                 <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
                 <div class="w3-container w3-padding-16">
                     <p class="w3-text-red w3-xlarge"><i class="glyphicon glyphicon-tower w3-xxlarge"></i> Player Name </p>
@@ -51,67 +55,146 @@
                     <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
                 </p>
             </div>
-            <div class="w3-col w3-container w3-padding-16 m6 w3-center">
+            
+            <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
+            <!--    1. this canvas is for large screen. -->
+            <div class="w3-col w3-container w3-padding-16 m6 w3-center w3-hide-medium w3-hide-small">
                 <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512"> </canvas>
             </div>
-            <div class="w3-col w3-container w3-padding-16 m3 w3-right ">
-                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge"> <span id="message-filler"></span> </div>
-                <!--this <div> should be <form>, however, if change it to form, the map content will disappear -->
+            <!--    2. this canvas is for medium and small screen. -->
+            <div class="w3-container w3-padding-16  w3-center w3-hide-large">
+                <canvas id="game_small_canvas" class="w3-sand w3-round-xlarge w3-center" width="256" height="256"> </canvas>
+            </div>
+
+            <!-- Right section-char room is shown on large scrren. -->
+            <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small">
+                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round-xlarge" > 
+                    <span id="message-filler"></span> 
+                </div>
+                
+
+                <div id="chat">
+                    <form id="message-form" action="#" class="w3-container w3-margin-top">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield-floating-label">
+                            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" placeholder="Message..." id="message">
+                        </div>
+                        <button id="submit" disabled type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
+                    </form>
+                </div>
+                <!--
                 <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message...">
+                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
                     <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
                     <input id="mediaCapture" type="file" accept="image/*,capture=camera">
                     <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
                 </div>
+                -->
             </div>
+
+            
+                
+            
+            
+            
         </div>
-        <!--
-            <input id="confirmButton" type="button" value="Confirm" />
-            -->
+        <!-- Buttom part-->
+        <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
+                <a class="w3-btn-floating" onclick="w3_online_left_open()"><-</a>
+                <a class="w3-btn-floating" onclick="w3_online_right_open()">-></a>
+        </div>
+        <!-- span line to display the cell left number. -->
         <div class="w3-container w3-row w3-center"> <span id="text">Cell left: 0</span> </div>
+        <!-- button group includes 4 buttons to use. -->
         <div class="w3-container w3-row w3-center">
-            <button id="resetButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
-            <button id="confirmButton" value="Confirm" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
-            <button id="ghostButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
-            <button id="surrenderButton" class="w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="document.getElementById('Surrender').style.display='block'">Surrender</button>
+            <button id="resetButton" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
+            <button id="confirmButton" value="Confirm" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
+            <button id="ghostButton" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
+            <button id="surrenderButton" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="document.getElementById('Surrender').style.display='block'">Surrender</button>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
     <script>
         initGameOfLife();
     </script>
-    <!--For pop-up instructon block -->
-    <!-- Menu Modal -->
+    <!-- Left side pop-up info panel. -->
+    <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top"  id="online_left_side_info_panel">
+        
+        <h1 class="w3-text-sand w3-padding-24">TL</h1>
+        <div class="w3-container w3-padding-16">
+            <p class="w3-text-red w3-xlarge"><i class="glyphicon glyphicon-tower w3-large"></i> Player Name </p>
+            <p class="w3-text-light-grey">Occupied cell: xx</p>
+            <p class="w3-text-light-grey">Left cell to win: xx</p>
+        </div>
+        <div class="w3-container w3-padding-16">
+            <p class="w3-text-blue w3-xlarge"><i class="glyphicon glyphicon-tower w3-large"></i> Player Name </p>
+            <p class="w3-text-light-grey">Occupied cell: xx</p>
+            <p class="w3-text-light-grey">Left cell to win: xx</p>
+        </div>
+        <p>
+            <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
+        </p>
+        
+    </nav>
+
+    <!-- Overlay effect when opening left_side on small screens -->
+    <div class="online_left_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_online_left_close()" title="close side menu" id="myOnlineLeftlay"></div>
+
+
+
+
+    <!-- Right side pop-up chat room. -->
+    <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top"  id="online_right_side_chat_panel">
+
+        <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round-xlarge w3-section" > <span id="message-filler"></span> </div>
+                
+        <div id="message-form" action="#" class="w3-container w3-margin-top">
+            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
+            <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-center w3-animate-zoom w3-hover-sand">Send</button>
+            <input id="mediaCapture" type="file" accept="image/*,capture=camera">
+            <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-center" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
+        </div>
+        
+        
+    </nav>
+
+    <!-- Overlay effect when opening right_side on small screens -->
+    <div class="online_right_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_online_right_close()" title="close side menu" id="myOnlineRightlay"></div>
+
+
+
+
+    
+    <!-- The how to play info -->
     <div id="Instruction" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-8 w3-round">
             <div class="w3-container w3-black"> <span onclick="document.getElementById('Instruction').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
                 <h1>Instruction: </h1> </div>
             <div class="w3-container w3-camo-forest">
-                <br/> This is a Turn-Based Strategy game that requires two players to play against each other
+                <br/> This game is a turn based strategy game that requires two players play against each other. Both player need to play on one machine for now.
                 <br/>
-                <br/> Your goal is to occupy the entire map with your live or dead cells, once a cell is occupied by your live cell, it become part of your terrtory until it get occupied by your opponent
+                <br/> Players' goal is to occupy the entire map with their live cells or dead cells, once a cell is occupied by a player's live cell, it become part of the player's terrtory until it get occupied by another player.
                 <br/>
-                <br/> You can place a number of living cells each turn. Press "confirm" for all live cells to render 1 frame based on Game of Life algorithm (see details below)
+                <br/> Player can place certain amount of living cells each turn, after pressing "confirm", all live cells of current player will render 1 frame base on game of life algorithm, then it is the other player's turn.
                 <br/>
-                <br/> The number of Live cells you can place depends on your terrtory. You only place cells in or next to their terrtory (including diagonal placement)
+                <br/> The amount of Live cells players can place is depend on the size of their terrtory; and players can only place cells in or next to their terrtory.
                 <br/>
-                <br/> Yellow cells predict the result of your placement, you can toggle this feature by pressing "Ghost On/Off"
+                <br/> Yellow cells will indicate position of your live cells in the next turn based on your current placement, you can turn it on/off by pressing "Ghost on/off button
                 <br/>
-                <br/> Press "Reset" to cancel all the placement during your turn
+                <br/> "Reset" button will cancel all placement of the current turn.
                 <br/>
-                <br/> Game of life algorithm:
-                <br/>
-                <br/> 1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-                <br/>
-                <br/> 2. Any live cell with two or three live neighbours lives on to the next generation.
-                <br/>
-                <br/> 3. Any live cell with more than three live neighbours dies, as if by over-population.
-                <br/>
-                <br/> 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-                <br/>
-                <br/>
-            </div>
+                <br/> </div>
         </div>
     </div>
+
+    <!-- The pop-up surrender info block. -->
     <div id="Surrender" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-8 w3-round">
             <div class="w3-container w3-section w3-black">
@@ -123,6 +206,13 @@
             </div>
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            window.chat = new Chat();
+            window.player = new Player();
+        }
+    </script>
 </body>
 
 </html>

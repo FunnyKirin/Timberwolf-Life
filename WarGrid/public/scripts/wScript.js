@@ -9,6 +9,55 @@ function w3_close() {
     document.getElementById("myOverlay").style.display = "none";
 }
 
+// for local game page, left game info panel.
+function w3_local_left_open() {
+    document.getElementById("local_left_side_info_panel").style.display = "block";
+    document.getElementById("myLocalLeftlay").style.display = "block";
+}
+
+function w3_local_left_close() {
+    document.getElementById("local_left_side_info_panel").style.display = "none";
+    document.getElementById("myLocalLeftlay").style.display = "none";
+}
+
+
+// for local game page, right chat room panel.
+function w3_local_right_open() {
+    document.getElementById("local_right_side_chat_panel").style.display = "block";
+    document.getElementById("myLocalRightlay").style.display = "block";
+}
+
+function w3_local_right_close() {
+    document.getElementById("local_right_side_chat_panel").style.display = "none";
+    document.getElementById("myLocalRightlay").style.display = "none";
+}
+
+
+// for online game page, left game info panel.
+function w3_online_left_open() {
+    document.getElementById("online_left_side_info_panel").style.display = "block";
+    document.getElementById("myOnlineLeftlay").style.display = "block";
+}
+
+function w3_online_left_close() {
+    document.getElementById("online_left_side_info_panel").style.display = "none";
+    document.getElementById("myOnlineLeftlay").style.display = "none";
+}
+
+
+// for online game page, right chat room panel.
+function w3_online_right_open() {
+    document.getElementById("online_right_side_chat_panel").style.display = "block";
+    document.getElementById("myOnlineRightlay").style.display = "block";
+}
+
+function w3_online_right_close() {
+    document.getElementById("online_right_side_chat_panel").style.display = "none";
+    document.getElementById("myOnlineRightlay").style.display = "none";
+}
+
+
+
 function profile_open() {
     window.open("profilePage.html", "_self");
 }

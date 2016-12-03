@@ -1,3 +1,6 @@
+// Constants for sign-ins
+
+// These are for the login button
 var GOOGLE_SIGNIN_ID = "google-sign-in";
 var FACEBOOK_SIGNIN_ID = "facebook-sign-in";
 var SIGNOUT_ID = "sign-out";
@@ -5,8 +8,21 @@ var PROFILE_PIC_ID = "profile-pic";
 var PLAYER_ID_ID = "player-id";
 var PLAYER_PROFILE_ID = "player-profile-desktop";
 var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
-var playerId = '';
-var Player = function () {
+
+// These are for Profile Page
+var CLASS_PLAYER_ID = 'pid';
+var CLASS_PLAYER_WINS = 'win';
+var CLASS_PLAYER_LOSSES = 'loss';
+var CLASS_PLAYER_GAME = 'in-room';
+
+
+//TODO: localize these variable
+var playerId = ''; // online user ID
+var totalWins = -1; // use -1 as uninitialized...for now
+var totalLosses = -1; // use -1 as uninitialized...for now
+
+// Player class (object)
+var Player = function() {
     console.log('[INFO] Loading Player Module...');
     this.playerId = '';
     this.profilePic = document.getElementById(PROFILE_PIC_ID);
@@ -17,82 +33,160 @@ var Player = function () {
     this.buttonProfile = document.getElementById(PLAYER_PROFILE_ID);
     this.init();
 };
-Player.prototype.playerHandler = function (player) {
+
+// localization of player object
+Player.playerId = '';
+Player.totalWins = -1;
+Player.totalLosses = -1;
+Player.gameRoom = '';
+Player.online = false;
+
+// handles player status and changes variable when user signed in or signed out
+Player.prototype.playerHandler = function(player) {
     if (player) { // logged in
         var uid = player.uid;
         // check if user is already registered
-        this.ref.child('playerUID').child(uid).once('value', function (snapshot) {
+        this.ref.child('playerUID').child(uid).once('value', function(snapshot) {
             if (snapshot.val()) { // already registered
                 playerId = snapshot.val();
                 console.log('Logged in as', playerId);
+
+                // get player data for display
+                firebase.database().ref('players/' + playerId).once('value', function(obj) {
+                    //TODO: change to appropriate URL
+                    var gameRoom = obj.val().game_room ? '<a href="something">Yes</a>' : 'No';
+
+                    $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
+                    $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
+                    $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
+                    $("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
+                });
+
+                // html element display
+                $("." + GOOGLE_SIGNIN_ID).hide();
+                $("." + FACEBOOK_SIGNIN_ID).hide();
+                $("." + SIGNOUT_ID).show();
+                $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
+
             } else { // user registration
                 var rootRef = firebase.database().ref();
                 playerId = validateInput(prompt('Get yourself a username'));
-                //playerId = 'no';
+
                 // check if playerId is empty
                 while (!playerId) {
                     playerId = validateInput(prompt('Get yourself a username'));
-                    //playerId = 'steve';
                 }
-                rootRef.child('players').once('value', function (check) {
+
+                playerId = playerId.toLowerCase();
+                rootRef.child('players').once('value', function(check) {
                     // regulation in database
-                    while (check.hasChild(playerId.toLowerCase())) {
+                    while (check.hasChild(playerId)) {
                         alert(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
-                    rootRef.child('playerUID').child(uid).set(playerId.toLowerCase());
-                    rootRef.child('players').child(playerId.toLowerCase()).set({
+
+                    // html element display
+                    $("." + GOOGLE_SIGNIN_ID).hide();
+                    $("." + FACEBOOK_SIGNIN_ID).hide();
+                    $("." + SIGNOUT_ID).show();
+                    $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
+
+                    // database operations
+                    rootRef.child('playerUID').child(uid).set(playerId);
+                    rootRef.child('players').child(playerId).set({
                         totalWins: 0,
                         totalLosses: 0,
                         online: true,
-                        bio: ''
+                        game_room: ''
                     });
+
+                    // for profile page
+                    $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
+                    $("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
+                    $("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
+                    $("." + CLASS_PLAYER_GAME).html('In Game: No');
+
+                    // 'initialize' global variables
+                    totalWins = 0;
+                    totalLosses = 0;
+
                 });
-                
+
                 console.log('Logged in as', playerId);
             } // if user's not registered
-            
-            // html element display
-            $("." + GOOGLE_SIGNIN_ID).hide();
-            $("." + FACEBOOK_SIGNIN_ID).hide();
-            $("." + SIGNOUT_ID).show();
-            $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> " + playerId);
         });
-    }
-    else { // logged out
+    } else { // logged out
+        playerId = '';
+
         $("." + GOOGLE_SIGNIN_ID).show();
         $("." + FACEBOOK_SIGNIN_ID).show();
         $("." + SIGNOUT_ID).hide();
         $("." + PLAYER_PROFILE_ID).html("<i class=\"material-icons\">person</i> Login");
     }
 };
-Player.prototype.googleSignIn = function () {
+
+// Google Sign-In
+Player.prototype.googleSignIn = function() {
     console.log("Google authentication");
     var google = new firebase.auth.GoogleAuthProvider();
     google.addScope("https://www.googleapis.com/auth/userinfo.email");
     google.addScope("https://www.googleapis.com/auth/userinfo.profile");
-    this.auth.signInWithPopup(google).catch(function (error) {
+    this.auth.signInWithPopup(google).catch(function(error) {
         console.log("ERROR: ", error);
     });
 };
-Player.prototype.facebookSignIn = function () {
+
+//TODO: Facebook Sign-In
+Player.prototype.facebookSignIn = function() {
     console.log("Facebook authentication");
     var facebook = new firebase.auth.FacebookAuthProvider();
-    this.auth.signInWithPopup(facebook).catch(function (error) {
+    this.auth.signInWithPopup(facebook).catch(function(error) {
         console.log("ERROR: ", error);
     });
 };
-Player.prototype.signOut = function () {
+
+// Sign-Out
+Player.prototype.signOut = function() {
+    playerId = '';
     this.auth.signOut();
 };
-Player.prototype.init = function () {
+
+// Initialize
+Player.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };
-var validateInput = function (s) {
+
+Player.join = function(room_key) {
+    // joining a room
+    if (playerId) {
+        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
+        var owner = this.ref.child('lobby').child(room_key).child('owner');
+        owner.transaction(function(currentData) {
+            if (currentData == playerId) { // what is this
+                window.open("gamePage.html?" + room_key, "_self");
+            } else {
+                challenger.transaction(function(currentData) {
+                    return playerId;
+                });
+                window.open("gamePage.html?" + room_key, "_self");
+            }
+        });
+    }
+};
+
+Player.leave = function(room_key) {
+    // leaving a room
+    if (playerId) {
+
+    }
+};
+
+// validate username
+var validateInput = function(s) {
     var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
     var invalid = true;
     var ret = s;
@@ -103,12 +197,10 @@ var validateInput = function (s) {
                 if (ret.includes(regulation[i])) {
                     ret = prompt('Don\'t add special characters besides _');
                     invalid = true;
-                }
-                else if (ret.length <= 3) {
+                } else if (ret.length <= 3) {
                     ret = prompt('Too short');
                     invalid = true;
-                }
-                else if (ret.length >= 32) {
+                } else if (ret.length >= 32) {
                     ret = prompt('Too long');
                     invalid = true;
                 }
