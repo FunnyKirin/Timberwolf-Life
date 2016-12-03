@@ -26,28 +26,23 @@ function lobbyInit() {
         innerHTML_array[2] = "\<div class=\"w3-third w3-container \"\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
-
-        snapshot.forEach(function(data) {
-            var randomID= Math.floor((Math.random() * 1000) + 1);
-
+        snapshot.forEach(function (data) {
+            var randomID = Math.floor((Math.random() * 1000) + 1);
             //retrieve map images
             var storageRef = firebase.storage().ref();
             var returnimage = storageRef.child('images/' + data.val().map).toString();
             var mapImageSrc;
             if (returnimage.startsWith('gs://')) {
-
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata) {
+                firebase.storage().refFromURL(returnimage).getMetadata().then(function (metadata) {
                     mapImageSrc = document.getElementById(data.val().map + randomID);
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
             }
-
             // for each map, distribute into three vertical sections by row order.
             innerHTML_array[divider_num] += "\<div name=\"myCards\" class=\"myMapCard w3-container w3-center w3-card-2 w3-round-large w3-section\"\>\<img id = \"" + data.val().map + randomID + "\"src=\"";
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
-            innerHTML_array[divider_num] += "\<p class=\"w3-left w3-section\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-section\"\>" + getName(data.val().owner) + "\<\/p\>\<\/div\>"; // if reach to the third column, reset it.
-
+            innerHTML_array[divider_num] += "\<p class=\"w3-left w3-section\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-section\"\>" + data.val().owner + "\<\/p\>\<\/div\>"; // if reach to the third column, reset it.
             // if reach to the third column, reset it.
             if (divider_num === 2) divider_num = -1;
             // increase index and count.
@@ -96,6 +91,9 @@ function lobbyJoin(room_key) {
         });
     }
     else {
-        alert('You need to login first');
+        challenger.transaction(function (currentData) {
+            return "Anonymous";
+        });
+        window.open("gamePage.html?" + room_key, "_self");
     }
 }
