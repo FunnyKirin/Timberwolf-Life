@@ -8,7 +8,6 @@ var ID_MESSAGES = 'messages';
 var MESSAGE_TEMPLATE =
     '<div class="message-container">' +
     '<div class="chat-spacing"></div>' +
-    '<div class="chat-name"></div>' +
     '<div class="chat-message"></div>' +
     '</div>';
 
@@ -34,7 +33,7 @@ var Chat = function() {
     this.init();
 };
 
-// displayy message on the textfield
+// display message on the textfield
 Chat.prototype.displayMessage = function(key, name, text) {
     var div = document.getElementById(key);
 
@@ -46,11 +45,10 @@ Chat.prototype.displayMessage = function(key, name, text) {
         div.setAttribute('id', key);
         this.messageList.appendChild(div);
     }
-    div.querySelector('.chat-name').textContent = name;
 
     var messageElement = div.querySelector('.chat-message');
     if (text) { // If the message is text.
-        messageElement.textContent = text;
+        messageElement.textContent = name + ": " + text;
         // Replace all line breaks by <br>.
         messageElement.innerHTML = messageElement.innerHTML.replace(/\n/g, '<br>');
     }
