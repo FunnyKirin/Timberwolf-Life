@@ -1,7 +1,6 @@
 var BUTTON_CREATE_ID = 'create';
 var ROOM_GRID_ID = 'room-grid';
 var KEY_LOBBY = 'lobby';
-
 //TODO: localize these
 var authorized = false;
 var auth;
@@ -18,7 +17,6 @@ function lobbyInit() {
     // initialize variables for easier access
     dbref = firebase.database().ref();
     auth = firebase.auth();
-
     dbref.child('lobby').on('value', function (snapshot) {
         var count = 0;
         // divider the layout into three vertical sections.
@@ -48,7 +46,6 @@ function lobbyInit() {
             innerHTML_array[divider_num] += "https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186\"";
             innerHTML_array[divider_num] += "; style=\"width:100%\" ; onclick=\"lobbyJoin(\'" + data.key + "\')\"\>";
             innerHTML_array[divider_num] += "\<p class=\"w3-left w3-section\"\>" + data.val().map + "\<\/p\>\<p class=\"w3-right w3-section\"\>" + data.val().owner + "\<\/p\>\<\/div\>"; // if reach to the third column, reset it.
-
             // if reach to the third column, reset it.
             if (divider_num === 2) divider_num = -1;
             // increase index and count.
@@ -72,26 +69,26 @@ function lobbyInit() {
 
 function lobbyLeave() {
     if (authorized) {
-        dbref.child('lobby').child(room_key).child('challenger').once('value', function(snapshot) {
-            if (playerId == snapshot.val()) {
-
-            }
+        dbref.child('lobby').child(room_key).child('challenger').once('value', function (snapshot) {
+            if (playerId == snapshot.val()) {}
         });
         challenger.transaction('');
-    } else {
+    }
+    else {
         alert('You need to login first');
     }
 }
 
 function lobbyJoin(room_key) {
-    var ref= firebase.database().ref();
+    var ref = firebase.database().ref();
+    var challenger = ref.child('lobby').child(room_key).child('challenger');
+    var owner = ref.child('lobby').child(room_key).child('owner');
     if (authorized) {
-        var challenger = ref.child('lobby').child(room_key).child('challenger');
-        var owner = ref.child('lobby').child(room_key).child('owner');
         owner.transaction(function (currentData) {
             if (currentData == playerId) { // what is this
                 window.open("gamePage.html?" + room_key, "_self");
-            } else {
+            }
+            else {
                 challenger.transaction(function (currentData) {
                     return playerId;
                 });
@@ -100,7 +97,24 @@ function lobbyJoin(room_key) {
         });
     }
     else {
-        ref.child('lobby').child(room_key).child('challenger').set("An");
-        window.open("gamePage.html?" + room_key, "_self");
+        var ownerName;
+        owner.once("value", function(snapshot){
+            ownerName=snapshot.val();
+        });
+        var challenger;
+        challenger.once("value", function(snapshot){
+            challenger=snapshot.val();
+          
+        });
+        if (owner == "") {
+           window.open("gamePage.html?" + room_key+" 1", "_self");  ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
+        }
+        else if (challenger == "") {
+           window.open("gamePage.html?" + room_key+" 2", "_self");  ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
+            
+        }
+        else {
+            window.open("gamePage.html?" + room_key, "_self");
+        }
     }
 }
