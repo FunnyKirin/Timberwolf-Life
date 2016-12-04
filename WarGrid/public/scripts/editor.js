@@ -216,132 +216,123 @@ function respondToDeleteMap() {
 function respondToResizeMap() {
     var customRow = rowInput.value;
 
-    if ((customRow <= 16) && (customRow >= 4)){
-        if ((canvasWidth % customRow) != 0){
+    if ((customRow <= 16) && (customRow >= 4)) {
+        if ((canvasWidth % customRow) !== 0) {
             console.log("need to change canvas width!");
-            while ( (canvasWidth % customRow) != 0){
+            while ((canvasWidth % customRow) !== 0) {
                 canvasWidth += 1;
             }
             canvas.width = canvasWidth;
             console.log("new canvas width: " + canvasWidth);
         }
-    }else{
+    } else {
         window.alert("Please enter a number between 4 and 32");
         return false;
     }
-   
+
     cellLength = canvasWidth / customRow;
-    canvas2D.clearRect(0,0,canvasWidth, canvasHeight);
+    canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     resetEditor();
 
 }
 
 function respondToSaveMap() {
-    var creator = creatorInput.value;
-    var mapname = mapNameInput.value;
-    mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
-    if (mapname === '') {
-        // text was all whitespace
-        console.log("map name was all whitesapce");
-        alert("Please Fill Out the Map Name");
-        return false;
-    } else {
-        console.log("map name has real content");
-}
-
-
-    if (key !== null)
-    {
-        dbref = this.db.ref().child('maps/' + key);
-        //  this.dbref = this.db.ref('map');
-        dbref.update({
-            map: mapname,
-            creator: creator,
-            data: renderGrid,
-            x: gridWidth,
-            y: gridWidth
-        });
-    }
-    else
-    {
-        var storageRef = firebase.storage().ref();
-        mapImg = canvas.toDataURL("image/png");
-        console.log(mapImg);
-        storageRef.child('images/' + mapname).putString(mapImg,'data_url');
-
-        /* the code below retrieve the image from firebase storage
-        var returnimage = storageRef.child('images/' + 'map name').toString();
-        console.log("returnimage " + returnimage.key);
-        if (returnimage.startsWith('gs://')){
-            console.log("startswith gs://");
-            firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
-                console.log("metadata: " + metadata.downloadURLs[0]);
-                imageElement.src = metadata.downloadURLs[0];
-            });
-        }
-        console.log("returnimage: "  + returnimage);
-        */
-
-
-               db.ref().child('maps/').once('value', function(snapshot){
-            if (!snapshot.hasChild(mapname)){
-                db.ref().child('maps/' + mapname).set({
-                    map: mapname,
-                    creator: creator,
-                    data: renderGrid,
-                    x: gridWidth,
-                    y: gridWidth
-                });
-            }else{
-                alert("The map name already exists");
-            }
-        });
-
-
-    }
-
-
-
-
     //add progress bar feature.
     var elem = document.getElementById("myBar");
     var width = 0;
     var id = setInterval(frame, 10);
 
-
-
-
-    function frame()
-    {
-        if(width >= 100)
-        {
-        clearInterval(id);
+    function frame() {
+        if (width >= 100) {
+            clearInterval(id);
+        } else {
+            width++;
+            elem.style.width = width + '%';
+            document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
         }
-        else
-        {
-          width++;
-          elem.style.width = width + '%';
-          document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
+    }
+
+    if (playerId) {
+        var creator = playerId;
+        var mapname = mapNameInput.value;
+        mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
+        if (mapname === '') {
+            // text was all whitespace
+            console.log("map name was all whitesapce");
+            alert("Please Fill Out the Map Name");
+            return false;
+        } else {
+            console.log("map name has real content");
         }
+
+
+        if (key !== null) {
+            dbref = this.db.ref().child('maps/' + key);
+            //  this.dbref = this.db.ref('map');
+            dbref.update({
+                map: mapname,
+                creator: creator,
+                data: renderGrid,
+                x: gridWidth,
+                y: gridWidth
+            });
+        } else {
+
+            // conditionalize this so the image doesn't change when a map name exists
+            var storageRef = firebase.storage().ref();
+            mapImg = canvas.toDataURL("image/png");
+            console.log(mapImg);
+            storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
+
+            /* the code below retrieve the image from firebase storage
+            var returnimage = storageRef.child('images/' + 'map name').toString();
+            console.log("returnimage " + returnimage.key);
+            if (returnimage.startsWith('gs://')){
+                console.log("startswith gs://");
+                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
+                    console.log("metadata: " + metadata.downloadURLs[0]);
+                    imageElement.src = metadata.downloadURLs[0];
+                });
+            }
+            console.log("returnimage: "  + returnimage);
+            */
+
+
+            db.ref().child('maps/').once('value', function(snapshot) {
+                if (!snapshot.hasChild(mapname)) {
+                    db.ref().child('maps/' + mapname).set({
+                        map: mapname,
+                        creator: creator,
+                        data: renderGrid,
+                        x: gridWidth,
+                        y: gridWidth
+                    });
+                } else {
+                    alert("The map name already exists");
+                }
+            });
+        }
+    } else {
+        alert('You must first log in to use this feature');
     }
 }
 
 function respondToLoadAMap() {
     var loadMapName = loadmapInput.value;
     dbref = this.db.ref().child('maps');
-    dbref.child(loadMapName).on("value", function(snapshot){
-    rowInput.value = snapshot.val().x;
-    respondToResizeMap();
-    mapNameInput.value = snapshot.val().map;
-    mapNameInput.disabled = true;
-    renderGrid = snapshot.val().data;
-    renderCells();
+    dbref.child(loadMapName).on("value", function(snapshot) {
+        rowInput.value = snapshot.val().x;
+        respondToResizeMap();
+        mapNameInput.value = snapshot.val().map;
+        mapNameInput.disabled = true;
+        renderGrid = snapshot.val().data;
+        renderCells();
     });
 }
 
 function respondToDeleteAMap() {
     console.log("start to delete map");
-    console.log("key: "+ key);
+    console.log("key: " + key);
     dbref = this.db.ref().child('maps/' + mapNameInput.value);
     dbref.remove();
     console.log("map delete");
