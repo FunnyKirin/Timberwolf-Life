@@ -297,7 +297,6 @@ function respondToSaveMap() {
             console.log("returnimage: "  + returnimage);
             */
 
-
             db.ref().child('maps/').once('value', function(snapshot) {
                 if (!snapshot.hasChild(mapname)) {
                     db.ref().child('maps/' + mapname).set({
