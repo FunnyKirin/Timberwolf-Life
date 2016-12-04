@@ -149,9 +149,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 
 .game_page_message_box {
-  overflow-y: auto;
-  margin-bottom: 10px;
-  
+	text-align:left;
+  	overflow-y: auto;
 }
 
 /*
