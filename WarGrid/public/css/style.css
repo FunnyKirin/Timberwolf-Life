@@ -147,6 +147,13 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	margin-left: 60px;
 }
 
+
+.game_page_message_box {
+  overflow-y: auto;
+  margin-bottom: 10px;
+  height: calc(100% - 80px);
+}
+
 /*
 .map-image {
 	height: 150px;
