@@ -106,7 +106,7 @@ function lobbyJoin(room_key) {
             challenger=snapshot.val();
           
         });
-        alert(owner);
+        
         if (owner == "") {
            window.open("gamePage.html?" + room_key+" 1", "_self");  ref.child('lobby').child(room_key).child('owner').set("Anonymous");
         }
