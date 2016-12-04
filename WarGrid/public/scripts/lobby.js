@@ -97,17 +97,18 @@ function lobbyJoin(room_key) {
         });
     }
     else {
-        var ownerName;
+        var owner;
         owner.once("value", function(snapshot){
-            ownerName=snapshot.val();
+            owner=snapshot.val();
         });
         var challenger;
         challenger.once("value", function(snapshot){
             challenger=snapshot.val();
           
         });
+        alert(owner);
         if (owner == "") {
-           window.open("gamePage.html?" + room_key+" 1", "_self");  ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
+           window.open("gamePage.html?" + room_key+" 1", "_self");  ref.child('lobby').child(room_key).child('owner').set("Anonymous");
         }
         else if (challenger == "") {
            window.open("gamePage.html?" + room_key+" 2", "_self");  ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
