@@ -1,6 +1,5 @@
 var room;
 var loadMapName;
-
 //PlayerData
 var anonymous = 0;
 var playerIndex;
@@ -185,8 +184,6 @@ function initFirebase() {
             renderGrid = snapshot.val().grid;
             renderGame();
             swapGrids();
-
-
             if (currentPlayer == playerIndex) {
                 nextTurn();
                 renderGhostRenderCells();
@@ -288,6 +285,13 @@ function respondToMouseClick(event) {
                         if (leftNumber == playerIndex) {
                             boolean = 1;
                         }
+                        //check ghostCell
+                        var neighborValue = ghostGrid[index];
+                        var rightNumber = neighborValue % 10;
+                        var leftNumber = Math.floor(neighborValue / 10);
+                        if (leftNumber == currentPlayer) {
+                            boolean = 1;
+                        }
                     }
                     //it is!
                     if (boolean == 1) {
@@ -300,15 +304,62 @@ function respondToMouseClick(event) {
             else {
                 setGridCell(ghostGrid, clickRow, clickCol, 0);
                 cellNumber++;
+                //if boolean2 ==1, we cant withdraw that placement.
+                var boolean2 = 0;
+                for (var i = 0; i <= gridHeight; i++) {
+                    for (var j = 0; j < gridWidth; j++) {
+                        var cell = getGridCell(ghostGrid, i, j);
+                        if (cell == LIVE_CELL + currentPlayer * 10) {
+                            var checkGrid = JSON.parse(JSON.stringify(ghostGrid));
+                            if (checkPath(i, j, checkGrid) == false) {
+                                boolean2 = 1;
+                            }
+                        }
+                    }
+                }
+                if (boolean2 == 1) {
+                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                    cellNumber--;
+                }
+            }
+            //reset game UI
+            renderGame();
+            renderGhostRenderCells();
+            renderGhost();
+            renderGridLines();
+            initUI();
+        }
+    }
+}
+//Check if a live cell in ghost grid have a path to territory.
+//para: Cell
+//return: boolean
+//use recursion
+function checkPath(i, j, checkGrid) {
+    setGridCell(checkGrid, i, j, 0);
+    var cellType = determineCellType(i, j);
+    var cellsToCheck = cellLookup[cellType];
+    for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+        var neighborCol = j + cellsToCheck.cellValues[counter];
+        var neighborRow = i + cellsToCheck.cellValues[counter + 1];
+        var index = (neighborRow * gridWidth) + neighborCol;
+        var neighborValue = updateGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            return true;
+        }
+        //check ghostCell
+        var neighborValue = checkGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            if (checkPath(neighborRow, neighborCol, checkGrid)) {
+                return true;
             }
         }
-        //reset game UI
-        renderGame();
-        renderGhostRenderCells();
-        renderGhost();
-        renderGridLines();
-        initUI();
     }
+    return false;
 }
 //These function will be used to render ghost cells
 function renderGhost() {
@@ -459,7 +510,6 @@ function nextTurn() {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
-
             if (leftNumber == playerIndex) {
                 territory++;
             }
@@ -793,33 +843,3 @@ function checkSetup() {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
-
-// handles the operation of leaving a game room
-var leaveRoom = function() {
-    var room_key = window.location.search.substring(1);
-    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-    var challenger = roomRef.child('challenger');
-    var owner = roomRef.child('owner');
-
-    if (playerId) {
-        // async listener challenger variable
-        challenger.once('value', function(snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                challenger.transaction(function(e) {
-                    return '';
-                });
-                if (playerId != snapshot.val()) { // you are the challenger
-                    console.log('Player ' + playerId + ' has been promoted to owner');
-                    owner.transaction(function(e) {
-                        return playerId;
-                    });
-                }
-            } else { // there's only an owner
-                // [IMPORTANT] in this case, we are getting rid of the room
-                roomRef.remove();
-            }
-        });
-    } else { //TODO: you are not logged in
-
-    }
-};
