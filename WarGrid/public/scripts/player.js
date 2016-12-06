@@ -149,33 +149,6 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
-
-    // on browser window close, leave current chat room
-    window.onunload = this.leave.bind(this);
-};
-
-// handles the operation of leaving a game room
-Player.prototype.leave = function() {
-    var room_key = window.location.search.substring(1);
-    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-    var challenger = roomRef.child('challenger');
-    var owner = roomRef.child('owner');
-
-    // async listener challenger variable
-    challenger.once('value', function(snapshot) {
-        if (snapshot.val()) { // we have a challenger
-            challenger.transaction(function(e) {
-                return '';
-            });
-            if (playerId != snapshot.val()) { // you are the challenger
-                alert('Player ' + playerId + ' has been promoted to owner');
-                owner.transaction(playerId);
-            }
-        } else { // there's only an owner
-            // [IMPORTANT] in this case, we are getting rid of the room
-            roomRef.remove();
-        }
-    });
 };
 
 // validate username
