@@ -1,6 +1,5 @@
 var room;
 var loadMapName;
-
 //PlayerData
 var anonymous = 0;
 var playerIndex;
@@ -155,17 +154,18 @@ function initFirebase() {
         anonymous = 1;
     }
     room = database.ref().child("lobby").child(url);
-    room.once('value', function(snapshot) {
+    room.once('value', function (snapshot) {
         currentPlayer = snapshot.val().currentPlayer;
         renderGrid = snapshot.val().grid;
         renderGame();
         swapGrids();
         //get player Index
         if (anonymous === 0) {
-            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function(abc) {
+            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function (abc) {
                 if (abc.val() == snapshot.val().owner) {
                     playerIndex = 1;
-                } else if (abc.val() == snapshot.val().challenger) {
+                }
+                else if (abc.val() == snapshot.val().challenger) {
                     playerIndex = 2;
                 }
                 if (snapshot.val().currentPlayer == playerIndex) {
@@ -177,7 +177,7 @@ function initFirebase() {
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-    room.on('value', function(snapshot) {
+    room.on('value', function (snapshot) {
         //alert(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -185,8 +185,6 @@ function initFirebase() {
             renderGrid = snapshot.val().grid;
             renderGame();
             swapGrids();
-
-
             if (currentPlayer == playerIndex) {
                 nextTurn();
                 renderGhostRenderCells();
@@ -228,7 +226,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -236,7 +234,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -285,6 +283,13 @@ function respondToMouseClick(event) {
                         if (leftNumber == playerIndex) {
                             boolean = 1;
                         }
+                        //check ghostCell
+                        var neighborValue = ghostGrid[index];
+                        var rightNumber = neighborValue % 10;
+                        var leftNumber = Math.floor(neighborValue / 10);
+                        if (leftNumber == currentPlayer) {
+                            boolean = 1;
+                        }
                     }
                     //it is!
                     if (boolean == 1) {
@@ -297,15 +302,62 @@ function respondToMouseClick(event) {
             else {
                 setGridCell(ghostGrid, clickRow, clickCol, 0);
                 cellNumber++;
+                //if boolean2 ==1, we cant withdraw that placement.
+                var boolean2 = 0;
+                for (var i = 0; i <= gridHeight; i++) {
+                    for (var j = 0; j < gridWidth; j++) {
+                        var cell = getGridCell(ghostGrid, i, j);
+                        if (cell == LIVE_CELL + currentPlayer * 10) {
+                            var checkGrid = JSON.parse(JSON.stringify(ghostGrid))
+                            if (checkPath(i, j, checkGrid) == false) {
+                                boolean2 = 1;
+                            }
+                        }
+                    }
+                }
+                if (boolean2 == 1) {
+                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                    cellNumber--;
+                }
+            }
+            //reset game UI
+            renderGame();
+            renderGhostRenderCells();
+            renderGhost();
+            renderGridLines();
+            initUI();
+        }
+    }
+}
+//Check if a live cell in ghost grid have a path to territory.
+//para: Cell
+//return: boolean
+//use recursion
+function checkPath(i, j, checkGrid) {
+    setGridCell(checkGrid, i, j, 0);
+    var cellType = determineCellType(i, j);
+    var cellsToCheck = cellLookup[cellType];
+    for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+        var neighborCol = j + cellsToCheck.cellValues[counter];
+        var neighborRow = i + cellsToCheck.cellValues[counter + 1];
+        var index = (neighborRow * gridWidth) + neighborCol;
+        var neighborValue = updateGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            return true;
+        }
+        //check ghostCell
+        var neighborValue = checkGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            if (checkPath(neighborRow, neighborCol, checkGrid)) {
+                return true;
             }
         }
-        //reset game UI
-        renderGame();
-        renderGhostRenderCells();
-        renderGhost();
-        renderGridLines();
-        initUI();
     }
+    return false;
 }
 //These function will be used to render ghost cells
 function renderGhost() {
@@ -422,10 +474,10 @@ function confirmMove() {
 }
 //send map info to database after pressing confirm
 function writeMap(grid) {
-    room.child("grid").transaction(function(currentData) {
+    room.child("grid").transaction(function (currentData) {
         return grid;
     });
-    room.child("currentPlayer").transaction(function(currentData) {
+    room.child("currentPlayer").transaction(function (currentData) {
         currentData = currentData === 1 ? 2 : 1;
         return currentData;
     });
@@ -456,7 +508,6 @@ function nextTurn() {
         for (var j = 0; j < gridWidth; j++) {
             var cell = getGridCell(renderGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
-
             if (leftNumber == playerIndex) {
                 territory++;
             }
@@ -581,7 +632,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * playerIndex;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -621,7 +673,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -772,13 +825,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
@@ -786,7 +840,8 @@ function getRelativeCoords(event) {
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
         alert('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
-    } else if (config.storageBucket === '') {
+    }
+    else if (config.storageBucket === '') {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
