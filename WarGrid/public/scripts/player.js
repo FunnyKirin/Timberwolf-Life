@@ -147,6 +147,7 @@ Player.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
+    
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };
