@@ -869,7 +869,7 @@ var leaveRoom = function() {
                 }
             }
         });
-    } else { // you are not logged in
+    } else { //TODO: you are not logged in
 
     }
 };

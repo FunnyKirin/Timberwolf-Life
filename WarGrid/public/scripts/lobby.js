@@ -5,8 +5,7 @@ var KEY_LOBBY = 'lobby';
 var authorized = false;
 var auth;
 var dbref;
-
-var roomSetting=0;
+var roomSetting = 0;
 
 function lobby() {
     console.log('[INFO] Loading Lobby Module...');
@@ -31,7 +30,7 @@ function lobbyInit() {
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
         snapshot.forEach(function (data) {
-            if ((data.val().challenger == ""&&roomSetting==0)||roomSetting==1) {
+            if ((data.val().challenger == "" && roomSetting == 0) || roomSetting == 1) {
                 var randomID = Math.floor((Math.random() * 1000) + 1);
                 //retrieve map images
                 var storageRef = firebase.storage().ref();
@@ -73,36 +72,10 @@ function lobbyInit() {
     });
 }
 
-function changeRoomSetting(){
-    if(roomSetting)
-        roomSetting=0;
-    else
-        roomSetting=1;
+function changeRoomSetting() {
+    if (roomSetting) roomSetting = 0;
+    else roomSetting = 1;
     lobbyInit();
-}
-
-// handles the operation of leaving a game room
-function lobbyLeave(room_key) {
-    if (authorized) { // user has logged in
-        var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-        var challenger = roomRef.child('challenger');
-        var owner = roomRef.child('owner');
-        challenger.once('value', function (snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                challenger.transaction('');
-                if (playerId != snapshot.val()) { // you are a challenger
-                    console.log('Player ' + playerId + ' has been promoted to owner');
-                    owner.transaction(playerId);
-                }
-            }
-            else { // there's only an owner
-                // [IMPORTANT] in this case, we are getting rid of the room
-                roomRef.remove();
-            }
-        });
-    }
-    else { //TODO: anonymous users
-    }
 }
 // handles the operation of joining a room
 function lobbyJoin(room_key) {
