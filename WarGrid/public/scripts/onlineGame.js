@@ -243,10 +243,7 @@ function initEventHandlers() {
         renderGridLines();
     });
 
-<<<<<<< HEAD
-=======
     // remove game room properly
->>>>>>> 26fdea531d8e5d839b3c0221b14a77cd08be7d51
     window.onunload = leaveRoom.bind(this);
 }
 /* This function initilizes all UI texts
