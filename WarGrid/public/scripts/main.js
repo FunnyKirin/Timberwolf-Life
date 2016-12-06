@@ -287,51 +287,23 @@ function respondToMouseClick(event) {
         else {
             setGridCell(ghostGrid, clickRow, clickCol, 0);
             cellNumber++;
-
             //if boolean2 ==1, we cant withdraw that placement.
             var boolean2 = 0;
             for (var i = 0; i <= gridHeight; i++) {
                 for (var j = 0; j < gridWidth; j++) {
                     var cell = getGridCell(ghostGrid, i, j);
-
                     if (cell == LIVE_CELL + currentPlayer * 10) {
-                        alert(cell);
-                        var cellType = determineCellType(i, j);
-                        var cellsToCheck = cellLookup[cellType];
-                        var boolean = 0;
-                        for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
-                            var neighborCol = j + cellsToCheck.cellValues[counter];
-                            var neighborRow = i + cellsToCheck.cellValues[counter + 1];
-                            var index = (neighborRow * gridWidth) + neighborCol;
-                            var neighborValue = updateGrid[index];
-                            var rightNumber = neighborValue % 10;
-                            var leftNumber = Math.floor(neighborValue / 10);
-                            if (leftNumber == currentPlayer) {
-                                boolean = 1;
-                            }
-                            //check ghostCell
-                            var neighborValue = ghostGrid[index];
-                            var rightNumber = neighborValue % 10;
-                            var leftNumber = Math.floor(neighborValue / 10);
-                            if (leftNumber == currentPlayer) {
-                                boolean = 1;
-                            }
-                        }
-                        if (boolean == 0) {
+                        var checkGrid = JSON.parse(JSON.stringify(ghostGrid))
+                        if (checkPath(i, j, checkGrid) == false) {
                             boolean2 = 1;
                         }
                     }
-
-
                 }
             }
-
-            alert(boolean2);
             if (boolean2 == 1) {
                 setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
                 cellNumber--;
             }
-
         }
         //reset game UI
         renderGame();
@@ -340,6 +312,36 @@ function respondToMouseClick(event) {
         renderGridLines();
         initUI();
     }
+}
+//Check if a live cell in ghost grid have a path to territory.
+//para: Cell
+//return: boolean
+//use recursion
+function checkPath(i, j, checkGrid) {
+    setGridCell(checkGrid, i, j, 0);
+    var cellType = determineCellType(i, j);
+    var cellsToCheck = cellLookup[cellType];
+    for (var counter = 0; counter < (cellsToCheck.numNeighbors * 2); counter += 2) {
+        var neighborCol = j + cellsToCheck.cellValues[counter];
+        var neighborRow = i + cellsToCheck.cellValues[counter + 1];
+        var index = (neighborRow * gridWidth) + neighborCol;
+        var neighborValue = updateGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            return true;
+        }
+        //check ghostCell
+        var neighborValue = checkGrid[index];
+        var rightNumber = neighborValue % 10;
+        var leftNumber = Math.floor(neighborValue / 10);
+        if (leftNumber == currentPlayer) {
+            if (checkPath(neighborRow, neighborCol, checkGrid)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 //These function will be used to render ghost cells
 function renderGhost() {
@@ -581,7 +583,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -621,7 +624,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -772,13 +776,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
