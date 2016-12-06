@@ -13,11 +13,12 @@ function lobby() {
     lobbyInit();
 }
 
+// initialize lobby
 function lobbyInit() {
     // initialize variables for easier access
     dbref = firebase.database().ref();
     auth = firebase.auth();
-    dbref.child('lobby').on('value', function (snapshot) {
+    dbref.child('lobby').on('value', function(snapshot) {
         var count = 0;
         // divider the layout into three vertical sections.
         var innerHTML = "";
@@ -28,15 +29,14 @@ function lobbyInit() {
         innerHTML_array[2] = "\<div class=\"w3-third w3-container \"\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
-        var divider_num = 0;
-        snapshot.forEach(function (data) {
+        snapshot.forEach(function(data) {
             var randomID = Math.floor((Math.random() * 1000) + 1);
             //retrieve map images
             var storageRef = firebase.storage().ref();
             var returnimage = storageRef.child('images/' + data.val().map).toString();
             var mapImageSrc;
             if (returnimage.startsWith('gs://')) {
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function (metadata) {
+                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata) {
                     mapImageSrc = document.getElementById(data.val().map + randomID);
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
@@ -61,60 +61,73 @@ function lobbyInit() {
         $("#" + ROOM_GRID_ID).html(innerHTML);
         console.log("Number of rooms: ", count);
     });
-    auth.onAuthStateChanged(function (player) {
+    auth.onAuthStateChanged(function(player) {
         authorized = player ? true : false;
         console.log(authorized ? 'authorized' : 'unauthorized');
     });
+
+    dbref.child('lobby').on('child_removed', function(snapshot) {
+        window.location.href(window.location.origin + 'index.html');
+    });
 }
 
-function lobbyLeave() {
-    if (authorized) {
-        dbref.child('lobby').child(room_key).child('challenger').once('value', function (snapshot) {
-            if (playerId == snapshot.val()) {}
+// handles the operation of leaving a game room
+function lobbyLeave(room_key) {
+    if (authorized) { // user has logged in
+        var roomRef = firebase.database().ref('lobby/' + room_key); // game session
+        var challenger = roomRef.child('challenger');
+        var owner = roomRef.child('owner');
+        challenger.once('value', function(snapshot) {
+            if (snapshot.val()) { // we have a challenger
+                challenger.transaction('');
+                if (playerId != snapshot.val()) { // you are a challenger
+                    console.log('Player ' + playerId + ' has been promoted to owner');
+                    owner.transaction(playerId);
+                }
+            } else { // there's only an owner
+                // [IMPORTANT] in this case, we are getting rid of the room
+                roomRef.remove();
+            }
         });
-        challenger.transaction('');
-    }
-    else {
-        alert('You need to login first');
+    } else { //TODO: anonymous users
+
     }
 }
 
+// handles the operation of joining a room
 function lobbyJoin(room_key) {
     var ref = firebase.database().ref();
     var challenger = ref.child('lobby').child(room_key).child('challenger');
     var owner = ref.child('lobby').child(room_key).child('owner');
+
     if (authorized) {
-        owner.transaction(function (currentData) {
+        owner.transaction(function(currentData) {
             if (currentData == playerId) { // what is this
                 window.open("gamePage.html?" + room_key, "_self");
-            }
-            else {
-                challenger.transaction(function (currentData) {
+            } else {
+                challenger.transaction(function(currentData) {
                     return playerId;
                 });
                 window.open("gamePage.html?" + room_key, "_self");
             }
         });
-    }
-    else {
-        var owner;
-        owner.once("value", function(snapshot){
-            owner=snapshot.val();
+    } else {
+        owner.once("value", function(snapshot) {
+            owner = snapshot.val();
         });
-        var challenger;
-        challenger.once("value", function(snapshot){
-            challenger=snapshot.val();
-          
+        challenger.once("value", function(snapshot) {
+            challenger = snapshot.val();
+
         });
-        
-        if (owner == "") {
-           window.open("gamePage.html?" + room_key+" 1", "_self");  ref.child('lobby').child(room_key).child('owner').set("Anonymous");
-        }
-        else if (challenger == "") {
-           window.open("gamePage.html?" + room_key+" 2", "_self");  ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
-            
-        }
-        else {
+
+        if (owner === "") {
+            window.open("gamePage.html?" + room_key + " 1", "_self");
+            ref.child('lobby').child(room_key).child('owner').set("Anonymous");
+        } else if (challenger === "") {
+            window.open("gamePage.html?" + room_key + " 2", "_self");
+            ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
+
+        } else {
             window.open("gamePage.html?" + room_key, "_self");
         }
     }
