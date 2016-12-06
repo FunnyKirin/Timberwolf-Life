@@ -243,6 +243,8 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
+
+    window.onunload = leaveRoom.bind(this);
 }
 /* This function initilizes all UI texts
  */
@@ -845,3 +847,33 @@ function checkSetup() {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
+
+// handles the operation of leaving a game room
+var leaveRoom = function() {
+    var room_key = window.location.search.substring(1);
+    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
+    var challenger = roomRef.child('challenger');
+    var owner = roomRef.child('owner');
+
+    if (playerId) {
+        // async listener challenger variable
+        challenger.once('value', function(snapshot) {
+            if (snapshot.val()) { // we have a challenger
+                challenger.transaction(function(e) {
+                    return '';
+                });
+                if (playerId != snapshot.val()) { // you are the challenger
+                    console.log('Player ' + playerId + ' has been promoted to owner');
+                    owner.transaction(function(e) {
+                        return playerId;
+                    });
+                }
+            } else { // there's only an owner
+                // [IMPORTANT] in this case, we are getting rid of the room
+                roomRef.remove();
+            }
+        });
+    } else { //TODO: you are not logged in
+
+    }
+};
