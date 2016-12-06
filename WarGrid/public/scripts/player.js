@@ -164,8 +164,10 @@ Player.prototype.leave = function() {
     // async listener challenger variable
     challenger.once('value', function(snapshot) {
         if (snapshot.val()) { // we have a challenger
-            challenger.transaction('');
-            if (playerId != snapshot.val()) { // you are a challenger
+            challenger.transaction(function(e) {
+                return '';
+            });
+            if (playerId != snapshot.val()) { // you are the challenger
                 alert('Player ' + playerId + ' has been promoted to owner');
                 owner.transaction(playerId);
             }
