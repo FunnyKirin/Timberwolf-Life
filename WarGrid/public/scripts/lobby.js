@@ -65,34 +65,9 @@ function lobbyInit() {
         authorized = player ? true : false;
         console.log(authorized ? 'authorized' : 'unauthorized');
     });
-
-    dbref.child('lobby').on('child_removed', function(snapshot) {
-        window.location.href(window.location.origin);
-    });
 }
 
-// handles the operation of leaving a game room
-function lobbyLeave(room_key) {
-    if (authorized) { // user has logged in
-        var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-        var challenger = roomRef.child('challenger');
-        var owner = roomRef.child('owner');
-        challenger.once('value', function(snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                challenger.transaction('');
-                if (playerId != snapshot.val()) { // you are a challenger
-                    console.log('Player ' + playerId + ' has been promoted to owner');
-                    owner.transaction(playerId);
-                }
-            } else { // there's only an owner
-                // [IMPORTANT] in this case, we are getting rid of the room
-                roomRef.remove();
-            }
-        });
-    } else { //TODO: anonymous users
 
-    }
-}
 
 // handles the operation of joining a room
 function lobbyJoin(room_key) {
@@ -126,7 +101,6 @@ function lobbyJoin(room_key) {
         } else if (challenger === "") {
             window.open("gamePage.html?" + room_key + " 2", "_self");
             ref.child('lobby').child(room_key).child('challenger').set("Anonymous");
-
         } else {
             window.open("gamePage.html?" + room_key, "_self");
         }

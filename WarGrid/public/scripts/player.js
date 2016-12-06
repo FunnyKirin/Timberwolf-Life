@@ -31,15 +31,9 @@ var Player = function() {
     this.buttonSigninFacebook = document.getElementById(FACEBOOK_SIGNIN_ID);
     this.buttonSignout = document.getElementById(SIGNOUT_ID);
     this.buttonProfile = document.getElementById(PLAYER_PROFILE_ID);
+
     this.init();
 };
-
-// localization of player object
-Player.playerId = '';
-Player.totalWins = -1;
-Player.totalLosses = -1;
-Player.gameRoom = '';
-Player.online = false;
 
 // handles player status and changes variable when user signed in or signed out
 Player.prototype.playerHandler = function(player) {
@@ -53,13 +47,10 @@ Player.prototype.playerHandler = function(player) {
 
                 // get player data for display
                 firebase.database().ref('players/' + playerId).once('value', function(obj) {
-                    //TODO: change to appropriate URL
-                    var gameRoom = obj.val().game_room ? '<a href="something">Yes</a>' : 'No';
-
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
-                    $("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
+                    //$("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
                 });
 
                 // html element display
@@ -158,31 +149,31 @@ Player.prototype.init = function() {
     this.auth = firebase.auth();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
+
+    // on browser window close, leave current chat room
+    window.onunload = this.leave.bind(this);
 };
 
-Player.join = function(room_key) {
-    // joining a room
-    if (playerId) {
-        var challenger = this.ref.child('lobby').child(room_key).child('challenger');
-        var owner = this.ref.child('lobby').child(room_key).child('owner');
-        owner.transaction(function(currentData) {
-            if (currentData == playerId) { // what is this
-                window.open("gamePage.html?" + room_key, "_self");
-            } else {
-                challenger.transaction(function(currentData) {
-                    return playerId;
-                });
-                window.open("gamePage.html?" + room_key, "_self");
+// handles the operation of leaving a game room
+Player.prototype.leave = function() {
+    var room_key = window.location.search.substring(1);
+    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
+    var challenger = roomRef.child('challenger');
+    var owner = roomRef.child('owner');
+
+    // async listener challenger variable
+    challenger.once('value', function(snapshot) {
+        if (snapshot.val()) { // we have a challenger
+            challenger.transaction('');
+            if (playerId != snapshot.val()) { // you are a challenger
+                alert('Player ' + playerId + ' has been promoted to owner');
+                owner.transaction(playerId);
             }
-        });
-    }
-};
-
-Player.leave = function(room_key) {
-    // leaving a room
-    if (playerId) {
-
-    }
+        } else { // there's only an owner
+            // [IMPORTANT] in this case, we are getting rid of the room
+            roomRef.remove();
+        }
+    });
 };
 
 // validate username
