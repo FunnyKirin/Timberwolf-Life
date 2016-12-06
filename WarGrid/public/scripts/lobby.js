@@ -67,7 +67,7 @@ function lobbyInit() {
     });
 
     dbref.child('lobby').on('child_removed', function(snapshot) {
-        window.location.href(window.location.origin + 'index.html');
+        window.location.href(window.location.origin);
     });
 }
 
