@@ -246,6 +246,7 @@ function initEventHandlers() {
         renderGridLines();
     });
 
+    // remove game room properly
     window.onunload = leaveRoom.bind(this);
 }
 /* This function initilizes all UI texts
