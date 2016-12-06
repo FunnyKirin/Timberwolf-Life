@@ -855,18 +855,18 @@ var leaveRoom = function() {
         // async listener challenger variable
         challenger.once('value', function(snapshot) {
             if (snapshot.val()) { // we have a challenger
-                challenger.transaction(function(e) {
-                    return '';
-                });
-                if (playerId != snapshot.val()) { // you are the challenger
-                    console.log('Player ' + playerId + ' has been promoted to owner');
-                    owner.transaction(function(e) {
-                        return playerId;
+                if (playerId == snapshot.val()) { // you are the challenger
+                    challenger.transaction(function(e) {
+                        return '';
                     });
                 }
-            } else { // there's only an owner
-                // [IMPORTANT] in this case, we are getting rid of the room
-                roomRef.remove();
+            }
+        });
+        owner.once('value', function(snapshot) {
+            if (snapshot.val()) { // we have a challenger
+                if (playerId == snapshot.val()) { // you are the challenger
+                    roomRef.remove();
+                }
             }
         });
     } else { // you are not logged in
