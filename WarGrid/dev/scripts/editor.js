@@ -57,6 +57,8 @@ var deleteButton;
 // RENDERING VARIABLES
 var cellLength;
 
+var LOAD_MAP_SELECTOR_ID = 'load-map-options';
+
 function initEditor() {
     console.log("initEditor()");
     checkSetup();
@@ -68,6 +70,7 @@ function initEditor() {
     initEventHandlers();
     resetEditor();
     initGrid();
+    initSelectorContent();
 }
 
 function initConstants() {
@@ -119,7 +122,6 @@ function initButton() {
     mapNameInput = document.getElementById("mapname");
 
     loadmapInput = document.getElementById("loadMapField");
-    loadButton = document.getElementById("loadMap_button");
 
     rowInput = document.getElementById("resizeRow");
     columnInput = document.getElementById("resizeColumn");
@@ -156,7 +158,6 @@ function initFirebase() {
 
 function initEventHandlers() {
     save.onclick = respondToSaveMaps;
-    loadButton.onclick = respondToLoadMap;
     canvas.onclick = respondToMouseClick;
     deleteButton.onclick = respondToDeleteMap;
     resizeButton.onclick = respondToResizeMap;
@@ -206,7 +207,14 @@ function respondToSaveMaps() {
 }
 
 function respondToLoadMap() {
-    respondToLoadAMap();
+    var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
+    var mapRef = firebase.database().ref().child('maps');
+    mapRef.child(mapName).on("value", function(snapshot) {
+        rowInput.value = snapshot.val().x;
+        respondToResizeMap();
+        renderGrid = snapshot.val().data;
+        renderCells();
+    });
 }
 
 function respondToDeleteMap() {
@@ -488,4 +496,16 @@ function checkSetup() {
             'You may also need to visit the Storage tab and paste the name of your bucket which is ' +
             'displayed there.');
     }
+}
+
+function initSelectorContent() {
+    var mapRef = firebase.database().ref('maps'); // maps reference
+    mapRef.once("value", function(snapshot) {
+        var optionHTML = '<option value="" disabled selected>Load Existing Map</option>';
+        snapshot.forEach(function(data) {
+            optionHTML += '<option value="' + data.key + '">' + data.key + '</option>';
+        });
+        $("#" + LOAD_MAP_SELECTOR_ID).html(optionHTML);
+        $("#" + LOAD_MAP_SELECTOR_ID).change(respondToLoadMap);
+    });
 }

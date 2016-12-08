@@ -311,7 +311,7 @@ function respondToMouseClick(event) {
                         var cell = getGridCell(ghostGrid, i, j);
                         if (cell == LIVE_CELL + currentPlayer * 10) {
                             var checkGrid = JSON.parse(JSON.stringify(ghostGrid));
-                            if (checkPath(i, j, checkGrid) == false) {
+                            if (checkPath(i, j, checkGrid) === false) {
                                 boolean2 = 1;
                             }
                         }
