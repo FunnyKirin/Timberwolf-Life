@@ -45,12 +45,14 @@ Player.prototype.playerHandler = function(player) {
                 playerId = snapshot.val();
                 console.log('Logged in as', playerId);
 
+                var inGame = snapshot.val().gameRoom ? 'Yes: <a href="' + snapshot.val().gameRoom + '">' : 'No';
+
                 // get player data for display
                 firebase.database().ref('players/' + playerId).once('value', function(obj) {
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
-                    //$("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
+                    $("." + CLASS_PLAYER_GAME).html('In Game: ' + inGame);
                 });
 
                 // html element display
@@ -88,7 +90,8 @@ Player.prototype.playerHandler = function(player) {
                         totalWins: 0,
                         totalLosses: 0,
                         online: true,
-                        game_room: ''
+                        gameRoom: '',
+                        campaign: 1
                     });
 
                     // for profile page
@@ -127,7 +130,6 @@ Player.prototype.googleSignIn = function() {
     });
 };
 
-//TODO: Facebook Sign-In
 Player.prototype.facebookSignIn = function() {
     console.log("Facebook authentication");
     var facebook = new firebase.auth.FacebookAuthProvider();
@@ -147,14 +149,19 @@ Player.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
-    
+
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };
 
 // validate username
 var validateInput = function(s) {
-    var regulation = ['+', '-', '@', '.', ',', '=', '*', '&', ' '];
+    var regulation = [
+        '+', '-', '@', '.', ',', '=', '*', '&',
+        ' ', ':', '/', '#', '$', '%', '^', '(',
+        ')', '!', '`', '~', ';', ':', '<', '>',
+        '?', '[', ']', '{', '}', '|', '\\'
+    ];
     var invalid = true;
     var ret = s;
     if (ret) {
@@ -165,7 +172,7 @@ var validateInput = function(s) {
                     ret = prompt('Don\'t add special characters besides _');
                     invalid = true;
                 } else if (ret.length <= 3) {
-                    ret = prompt('Too short');
+                    ret = prompt('Make it 4 characters or longer');
                     invalid = true;
                 } else if (ret.length >= 32) {
                     ret = prompt('Too long');

@@ -96,6 +96,11 @@ function localGame_open()
   window.open("localGamePage.html","_self" );
 }
 
+function campaign_open()
+{
+  window.open("campaign.html","_self" );
+}
+
 /*//Automatic slideshow
 function carousel()
 {

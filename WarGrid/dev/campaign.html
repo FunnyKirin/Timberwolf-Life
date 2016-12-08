@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Create</title>
+    <title>Campaign</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/w3.css">
@@ -18,6 +18,7 @@
     <script src="scripts/createPage.js"></script>
     <script src="scripts/lobby.js"></script>
     <script src="scripts/player.js"></script>
+    <script src="scripts/campaign.js"></script>
     <script src="scripts/load.js"></script>
 
 </head>
@@ -75,7 +76,7 @@
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
         <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
         <a href="#" onclick="localGame_open()" class="w3-padding">LOCAL GAME</a>
-        <a href="#campaign" onclick="localGame_open()" class="w3-padding">CAMPAIGN</a>
+        <a href="#campaign" onclick="campaign_open()" class="w3-padding">CAMPAIGN</a>
     </nav>
 
     <!-- Top menu on medium and small screens -->
@@ -105,24 +106,11 @@
 
 
         <div class="pushdown-content-in-use w3-container ">
-            <h2>Create Room</h2>
-            <p>Select Maps:</p>
+            <h2>Campaign</h2>
 
-
-            <div id="maps" class="w3-row-padding w3-card-8 w3-panel w3-col m12 w3-round-large">
-                <!--
-                <div class="w3-third w3-padding-24">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/wargrid-cbca4.appspot.com/o/images%2Fmap_t_1.PNG?alt=media&token=636a2622-cb06-473d-8144-3efa2a92a186"; style="width:80%";
-                    onclick="game_open()">
-                    <p>...</p>
-                </div>
-                <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512">
-                </canvas>
- -->
+            <div id="campaign" class="w3-row-padding w3-card-8 w3-panel w3-col m12 w3-round-large">
 
             </div>
-
-
         </div>
 
     </div>
