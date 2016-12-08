@@ -864,7 +864,7 @@ var leaveRoom = function() {
         });
         owner.once('value', function(snapshot) {
             if (snapshot.val()) { // we have a challenger
-                if (playerId == snapshot.val()) { // you are the challenger
+                if (playerId == snapshot.val()) { // you are the owner
                     roomRef.remove();
                 }
             }

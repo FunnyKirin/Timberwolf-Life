@@ -14,26 +14,37 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="scripts/app.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/map.js"></script>
     <script src="scripts/onlineGame.js"></script>
     <script src="scripts/player.js"></script>
     <script src="scripts/chat.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw",
-            authDomain: "timberwolf-build3.firebaseapp.com",
-            databaseURL: "https://timberwolf-build3.firebaseio.com",
-            storageBucket: "timberwolf-build3.appspot.com",
-            messagingSenderId: "288270916702"
-        };
-        firebase.initializeApp(config);
-    </script>
 </head>
 
 <body class="body-max-width w3-grey w3-content">
+
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '1239589969432849',
+                xfbml: true,
+                version: 'v2.6'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <!-- The body has four sections. Left, middle, right and buttom. -->
     <div id="gameDiv" class="w3-container w3-center w3-padding-64">
@@ -69,7 +80,7 @@
             <!-- Right section-char room is shown on large scrren. -->
             <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small">
                 <!-- WHERE MESSAGES DISPLAY, style is in style.css-->
-                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round" >
+                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round">
                     <span id="message-filler">
                     </span>
                 </div>
@@ -87,8 +98,9 @@
         </div>
         <!-- Buttom part-->
         <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
-                <a class="w3-btn-floating" onclick="w3_online_left_open()"><-</a>
-                <a class="w3-btn-floating" onclick="w3_online_right_open()">-></a>
+            <a class="w3-btn-floating" onclick="w3_online_left_open()">
+                <-</a>
+                    <a class="w3-btn-floating" onclick="w3_online_right_open()">-></a>
         </div>
         <!-- span line to display the cell left number. -->
         <div class="w3-container w3-row w3-center"> <span id="text">Cell left: 0</span> </div>
@@ -113,7 +125,7 @@
         initGameOfLife();
     </script>
     <!-- Left side pop-up info panel. -->
-    <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top"  id="online_left_side_info_panel">
+    <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top" id="online_left_side_info_panel">
 
         <h1 class="w3-text-sand w3-padding-24">TL</h1>
         <div class="w3-container w3-padding-16">
@@ -139,14 +151,14 @@
 
 
     <!-- Right side pop-up chat room. -->
-    <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top"  id="online_right_side_chat_panel">
+    <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top" id="online_right_side_chat_panel">
 
-        <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section" >
+        <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section">
             <span id="message-filler"></span>
         </div>
 
         <div id="message-form" action="#" class="w3-container w3-margin-top">
-            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
+            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message...">
             <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-center w3-animate-zoom w3-hover-sand">Send</button>
             <input id="mediaCapture" type="file" accept="image/*,capture=camera">
             <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-center" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>

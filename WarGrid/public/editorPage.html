@@ -13,21 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
 
-    <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDGsr1C8rl73f04ChbtptlAAlh0GWt0BHw",
-            authDomain: "timberwolf-build3.firebaseapp.com",
-            databaseURL: "https://timberwolf-build3.firebaseio.com",
-            storageBucket: "timberwolf-build3.appspot.com",
-            messagingSenderId: "288270916702"
-        };
-        firebase.initializeApp(config);
-    </script>
-
-
+    <script src="scripts/app.js"></script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/player.js"></script>
     <script src="scripts/editor.js"></script>
@@ -43,6 +31,27 @@
 
 
 <body class="body-max-width w3-light-grey w3-content ">
+
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '1239589969432849',
+                xfbml: true,
+                version: 'v2.6'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header.
     <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
@@ -152,7 +161,7 @@
                 <form id="map-form" action="#" class="w3-container w3-card-4 w3-light-grey w3-text-grey w3-round-xlarge">
 
                     <h2 class="w3-center">Map Info</h2>
-<!--
+                    <!--
                     <div class="w3-row w3-section">
                         <div class="editor_page_map_icon w3-col"><i class="w3-xxlarge fa fa-user"></i></div>
 
