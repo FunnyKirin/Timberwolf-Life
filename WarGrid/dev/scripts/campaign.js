@@ -1,12 +1,14 @@
 var SELECT_CAMPAIGN_ID = "campaign";
 
 var Campaign = function() {
-
+    firebase.auth().onAuthStateChanged(this.loadCampaign.bind(this));
 };
 
+
+
 // for now, campaign is only made for players who logged in
-Campaign.loadCampaign = function() {
-    if (playerId) {
+Campaign.prototype.loadCampaign = function(player) {
+    if (player) {
         var playerRef = firebase.database().ref('players');
         var campaignRef = firebase.database().ref('campaign');
 
@@ -68,7 +70,6 @@ Campaign.loadCampaign = function() {
                 console.log("You are at level ", player.campaign);
             });
         });
-
 
     } else { // go back to lobby
         alert('You need to login first');

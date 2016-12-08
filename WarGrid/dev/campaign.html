@@ -16,7 +16,6 @@
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/createPage.js"></script>
-    <script src="scripts/lobby.js"></script>
     <script src="scripts/player.js"></script>
     <script src="scripts/campaign.js"></script>
     <script src="scripts/load.js"></script>
@@ -25,7 +24,6 @@
 
 
 <body class="body-max-width w3-light-grey w3-content">
-
     <script>
         window.fbAsyncInit = function() {
             FB.init({
@@ -103,8 +101,6 @@
     <div class="web-page-content w3-main">
         <!-- Push down content on small screens  -->
         <div class="pushdown-content w3-hide-large"></div>
-
-
         <div class="pushdown-content-in-use w3-container ">
             <h2>Campaign</h2>
 
@@ -114,10 +110,11 @@
         </div>
 
     </div>
+    
     <script>
-        loadMaps();
-        firebase.auth().onAuthStateChanged(function(player) {
-            authorized = player ? true : false;
-        });
+        window.onload = function() {
+            window.player = new Player();
+            window.campaign = new Campaign();
+        }
     </script>
 </body>
