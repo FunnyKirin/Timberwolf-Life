@@ -92,7 +92,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#7277ff";
     GHOST_COLOR = "rgba(255,0,0,0.5)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#80bfff";
+    VOID_COLOR = "#9B7653";
 
     //COLORS FOR RENDERING
     GRID_LINES_COLOR = "#CCCCCC";
