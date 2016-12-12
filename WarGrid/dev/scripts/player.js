@@ -91,7 +91,7 @@ Player.prototype.playerHandler = function(player) {
                         totalLosses: 0,
                         online: true,
                         gameRoom: '',
-                        campaign: 1
+                        campaign: 0
                     });
 
                     // for profile page

@@ -101,21 +101,12 @@ function campaign_open()
   window.open("campaign.html","_self" );
 }
 
-/*//Automatic slideshow
-function carousel()
+function campaignEditor_open()
 {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    for (i = 0; i < x.length; i++) {
-       x[i].style.display = "none";
-    }
-    myIndex++;
-    if (myIndex > x.length) {myIndex = 1}
-    x[myIndex-1].style.display = "block";
-    setTimeout(carousel, 5000); // Change image every 2 seconds
+  window.open("campaignEditor.html","_self" );
 }
-*/
-//search bar from home page
+
+// search bar from home page
 function searchRoom() {
     var input, filter, cards, li, a, i;
     input = document.getElementById("myInput");
@@ -157,6 +148,7 @@ function click_map(element) {
     var captionText = document.getElementById("caption");
     captionText.innerHTML = element.alt;
 }
+
 //SlideShow from aboutPage
 var slideIndex = 1;
 //showDivs(slideIndex);

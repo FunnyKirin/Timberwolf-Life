@@ -1,4 +1,3 @@
-//cell code
 var DEAD_CELL;
 var LIVE_CELL;
 var VOID_CELL;
@@ -50,7 +49,6 @@ var resizeButton;
 var imageElement;
 var mapImg;
 var key;
-var deleteButton;
 
 // RENDERING VARIABLES
 var cellLength;
@@ -58,7 +56,6 @@ var cellLength;
 var LOAD_MAP_SELECTOR_ID = 'load-map-options';
 
 function initEditor() {
-    console.log("initEditor()");
     checkSetup();
     initFirebase();
     initConstants();
@@ -72,7 +69,6 @@ function initEditor() {
 }
 
 function initConstants() {
-    console.log("initConstants()");
     //THESE REPRESENT THE POSSIBLE STATS FOR EACH CELL
     EMPTY_CELL = 0;
     LIVE_CELL = 1;
@@ -107,7 +103,6 @@ function initConstants() {
 }
 
 function initCanvas() {
-    console.log("initCanvas()");
     canvas = document.getElementById("editor_canvas");
     canvas2D = canvas.getContext("2d");
 
@@ -116,8 +111,8 @@ function initCanvas() {
 }
 
 function initButton() {
-    creatorInput = document.getElementById("creator");
-    mapNameInput = document.getElementById("mapname");
+    mapNameInput = document.getElementById("mapName");
+    mapLevelInput = document.getElementById("mapLevel");
 
     loadmapInput = document.getElementById("loadMapField");
 
@@ -126,29 +121,23 @@ function initButton() {
     resizeButton = document.getElementById("resizeButton");
 
     save = document.getElementById("save_button");
-    deleteButton = document.getElementById("delete_button");
 
     resetButton = document.getElementById("reset_button");
 }
 
 function initEditorData() {
-    console.log("initEditorData()");
     cellLength = 64;
 }
 
 function initGrid() {
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
-    console.log("gridWidth: " + gridWidth);
-    console.log("gridHeight: " + gridHeight);
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             setGridCell(renderGrid, i, j, EMPTY_CELL);
         }
     }
 }
-
-
 
 function initFirebase() {
     this.db = firebase.database();
@@ -157,7 +146,6 @@ function initFirebase() {
 function initEventHandlers() {
     save.onclick = respondToSaveMap;
     canvas.onclick = respondToMouseClick;
-    deleteButton.onclick = respondToDeleteMap;
     resizeButton.onclick = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
@@ -200,17 +188,13 @@ function respondToMouseClick(event) {
 
 function respondToLoadMap() {
     var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
-    var mapRef = firebase.database().ref().child('maps');
-    mapRef.child(mapName).on("value", function(snapshot) {
+    var mapRef = firebase.database().ref().child('campaign');
+    mapRef.child(mapName).on('value', function(snapshot) {
         rowInput.value = snapshot.val().x;
         respondToResizeMap();
         renderGrid = snapshot.val().data;
         renderCells();
     });
-}
-
-function respondToDeleteMap() {
-    respondToDeleteAMap();
 }
 
 function respondToResizeMap() {
@@ -253,58 +237,50 @@ function respondToSaveMap() {
     }
 
     if (playerId) {
-        var creator = playerId;
-        var mapname = mapNameInput.value;
-        mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
-        if (mapname === '') {
+        var mapName = mapNameInput.value;
+        var mapLevel = mapLevelInput.value;
+
+        mapName = mapName.replace(/^\s+/, '').replace(/\s+$/, '');
+        if (mapName === '') { // name of the map
             // text was all whitespace
-            console.log("map name was all whitesapce");
-            alert("Please Fill Out the Map Name");
+            console.log("Empty Field");
             return false;
-        } else {
-            console.log("map name has real content");
         }
 
 
+        if (mapLevel === '') { // level of the map
+            // text was all whitespace
+            console.log("Empty Field");
+            return false;
+        }
+        mapLevel = parseInt(mapLevel);
+
         if (key !== null) {
-            dbref = this.db.ref().child('maps/' + key);
-            //  this.dbref = this.db.ref('map');
+            dbref = this.db.ref().child('campaign/' + key);
             dbref.update({
-                map: mapname,
-                creator: creator,
+                map: mapName,
                 data: renderGrid,
                 x: gridWidth,
                 y: gridWidth
             });
         } else {
-            /* the code below retrieve the image from firebase storage
-            var returnimage = storageRef.child('images/' + 'map name').toString();
-            console.log("returnimage " + returnimage.key);
-            if (returnimage.startsWith('gs://')){
-                console.log("startswith gs://");
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
-                    console.log("metadata: " + metadata.downloadURLs[0]);
-                    imageElement.src = metadata.downloadURLs[0];
-                });
-            }
-            console.log("returnimage: "  + returnimage);
-            */
-
-            db.ref().child('maps/').once('value', function(snapshot) {
-                // saves a thumbnail to firebase storage
+            // database reference
+            db.ref().child('campaign').once('value', function(snapshot) {
+                // conditionalize this so the image doesn't change when a map name exists
                 var storageRef = firebase.storage().ref();
                 mapImg = canvas.toDataURL("image/png");
                 console.log(mapImg);
-                storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
+                storageRef.child('images/' + mapName).putString(mapImg, 'data_url');
 
-                // saves the actual map data
-                if (!snapshot.hasChild(mapname)) {
-                    db.ref().child('maps/' + mapname).set({
-                        map: mapname,
-                        creator: creator,
+                // saves the actual map
+                if (!snapshot.hasChild(mapName)) {
+                    db.ref().child('campaign/' + mapName).set({
+                        map: mapName,
+                        level: mapLevel,
                         data: renderGrid,
                         x: gridWidth,
-                        y: gridWidth
+                        y: gridWidth,
+                        story: ''
                     });
                 } else {
                     alert("The map name already exists");
@@ -318,7 +294,7 @@ function respondToSaveMap() {
 
 function respondToLoadAMap() {
     var loadMapName = loadmapInput.value;
-    dbref = this.db.ref().child('maps');
+    dbref = this.db.ref().child('campaign');
     dbref.child(loadMapName).on("value", function(snapshot) {
         rowInput.value = snapshot.val().x;
         respondToResizeMap();
@@ -329,20 +305,9 @@ function respondToLoadAMap() {
     });
 }
 
-function respondToDeleteAMap() {
-    console.log("start to delete map");
-    console.log("key: " + key);
-    dbref = this.db.ref().child('maps/' + mapNameInput.value);
-    dbref.remove();
-    console.log("map delete");
-    resetEditor();
-}
-
 function respondToResetEditor() {
     initEditor();
 }
-
-
 
 function renderCells() {
     //SET THE PROPER RENDER COLOR
@@ -375,43 +340,34 @@ function renderCells() {
                 canvas2D.fillRect(x, y, cellLength, cellLength);
             }
 
-
         }
     }
     renderGridLines();
 }
 
-
-
 function resetEditor() {
-    console.log("resetEditor()");
-    gridWidth = canvasWidth / cellLength;
-    gridHeight = canvasHeight / cellLength;
-    mapNameInput.value = '';
+    gridWidth = canvasWidth / cellLength; // width goes back to default
+    gridHeight = canvasHeight / cellLength; // height goes back to default
+    mapNameInput.value = ''; // name field clear
     mapNameInput.disabled = false;
+    mapLevelInput.value = ''; // level field clear
+    mapLevelInput.disabled = false;
     key = null;
     renderGrid = [];
     initGrid();
     testGrid = [];
-    console.log("gridWidth: " + gridWidth);
-    console.log("gridHeight: " + gridHeight);
-    renderEdiotr();
+    console.log("Canvas Width: " + gridWidth);
+    console.log("Canvas Height: " + gridHeight);
+
+    renderGridLines();
     renderCells();
 }
 
-
-function renderEdiotr() {
-    console.log("renderEdiotr()");
-    renderGridLines();
-}
-
-
-
 function renderGridLines() {
-    console.log("renderGridLines()");
+    // canvas style
     canvas2D.strokeStyle = GRID_LINES_COLOR;
 
-    //vertical LINES
+    // vertical lines
     for (var i = 0; i < gridWidth; i++) {
         var x1 = i * cellLength;
         var y1 = 0;
@@ -422,7 +378,8 @@ function renderGridLines() {
         canvas2D.lineTo(x2, y2);
         canvas2D.stroke();
     }
-    // HORIZONTAL LINES
+
+    // horizontal lines
     for (var j = 0; j < gridHeight; j++) {
         var x_1 = 0;
         var y_1 = j * cellLength;
@@ -433,8 +390,6 @@ function renderGridLines() {
         canvas2D.stroke();
     }
 }
-
-
 
 function getGridCell(grid, row, col, value) {
     if (!isValidCell(row, col)) {
@@ -491,7 +446,7 @@ function checkSetup() {
 }
 
 function initSelectorContent() {
-    var mapRef = firebase.database().ref('maps'); // maps reference
+    var mapRef = firebase.database().ref('campaign'); // maps reference
     mapRef.once("value", function(snapshot) {
         var optionHTML = '<option value="" disabled selected>Load Existing Map</option>';
         snapshot.forEach(function(data) {

@@ -2,7 +2,7 @@ function loadMaps() {
     var SELECT_MAP_ID = "maps";
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
-    this.ref.child('maps').on('value', function (snapshot) {
+    this.ref.child('maps').on('value', function(snapshot) {
         /*
         var count = 0;
         var innerHTML = "";
@@ -27,13 +27,13 @@ function loadMaps() {
         innerHTML_array[2] = "\<div class=\"w3-third w3-container\"\>";
         // use divider_num to determine which vertical section need to write
         var divider_num = 0;
-        snapshot.forEach(function (data) {
+        snapshot.forEach(function(data) {
             //retrieve map images
             var storageRef = firebase.storage().ref();
             var returnimage = storageRef.child('images/' + data.val().map).toString();
             var mapImageSrc;
             if (returnimage.startsWith('gs://')) {
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function (metadata) {
+                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata) {
                     mapImageSrc = document.getElementById(data.val().map);
                     mapImageSrc.src = metadata.downloadURLs[0];
                 });
@@ -60,31 +60,35 @@ function loadMaps() {
     });
 }
 
+// triggers when the picture of a map is clicked in create page
 function createRoom(map) {
-    var newKey = this.ref.child("lobby").push().key;
+    var dbRef = firebase.database().ref(); // ref to db
+    var newKey = dbRef.child("lobby").push().key; // new key for room
     var lobby = {};
     var grid = [];
-    //  load map into grid
-    this.ref.child('maps').orderByValue().limitToLast(100).on("value", function (snapshot) {
-        snapshot.forEach(function (data) {
-            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-            if (data.val().map === map) {
-                grid = data.val().data;
-            }
-        });
-    });
+
+    // don't know why this is here
     if (!authorized) {
         playerId = "";
     }
-    //create room
-    var lobbyData = {
-        map: map
-        , challenger: ''
-        , owner: playerId
-        , grid: grid
-        , currentPlayer: 1
-    };
-    lobby['/lobby/' + newKey] = lobbyData;
-    this.ref.update(lobby);
-    game_open(newKey);
+
+    // load map into grid
+    dbRef.child('maps').child(map).once('value', function(snapshot) {
+        if (snapshot.val()) { // if the map exists of course
+            grid = snapshot.val().data; // set the grid data
+
+            // actual data
+            var lobbyData = {
+                map: map,
+                challenger: '',
+                owner: playerId,
+                grid: grid,
+                currentPlayer: 1
+            };
+
+            lobby['/lobby/' + newKey] = lobbyData; // directory
+            dbRef.update(lobby); // updates the database, create the room
+            game_open(newKey); // redirection
+        }
+    });
 }

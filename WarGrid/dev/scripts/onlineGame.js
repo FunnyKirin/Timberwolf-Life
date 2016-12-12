@@ -87,8 +87,10 @@ function initGameOfLife() {
     initEventHandlers();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
+    // Cells Left Text, not really initializing UI
     initUI();
-    //Start first Turn;
+
+    // Now start the first turn
 }
 
 function initConstants() {
@@ -246,12 +248,14 @@ function initEventHandlers() {
     // remove game room properly
     window.onunload = leaveRoom.bind(this);
 }
-/* This function initilizes all UI texts
+/*
+ * This function initilizes all UI texts
  */
 function initUI() {
+    // reset game UI
     $("#text").text("Cell left: " + cellNumber);
-    //reset game UI
 }
+
 /*
  * This function handle mouse click event, cells will only be placed on ghost grid
  * until the player click confirm.
