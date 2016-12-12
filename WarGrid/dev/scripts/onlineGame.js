@@ -845,31 +845,36 @@ function checkSetup() {
 }
 
 // handles the operation of leaving a game room
+// this is called when a user closes a tab
 var leaveRoom = function() {
-    var room_key = window.location.search.substring(1);
-    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-    var challenger = roomRef.child('challenger');
-    var owner = roomRef.child('owner');
+    var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
+    var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
+    var lobbyRef = firebase.database().ref('lobby'); // database root
+    var roomRef = lobbyRef.child(room_key); // game session
+    var challenger = roomRef.child('challenger'); // the challenger
+    var owner = roomRef.child('owner'); // the owner
 
-    if (playerId) {
-        // async listener challenger variable
-        challenger.once('value', function(snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                if (playerId == snapshot.val()) { // you are the challenger
-                    challenger.transaction(function(e) {
-                        return '';
-                    });
-                }
+    roomRef.once('value', function(roomSnap) {
+        if (roomSnap.val()) { // check if the room exists first
+            // the challenger is gone whatsoever
+            challenger.transaction(function(e) {
+                return '';
+            });
+        }
+    });
+
+    if (playerId) { // if the player signed in
+        // if the owner quits, the room disappears
+        owner.once('value', function(ownerSnap) {
+            if (ownerSnap.val() == playerId) {
+                roomRef.remove();
             }
         });
-        owner.once('value', function(snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                if (playerId == snapshot.val()) { // you are the owner
-                    roomRef.remove();
-                }
-            }
-        });
-    } else { //TODO: you are not logged in
-
+    } else { // guest player
+        // if it's the owner
+        if (raw_key.slice(-1) == '1') {
+            roomRef.remove();
+        }
     }
+
 };

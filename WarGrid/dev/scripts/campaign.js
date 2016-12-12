@@ -7,6 +7,10 @@ var Campaign = function() {
 
 
 // for now, campaign is only made for players who logged in
+// firebase ref('campaign')
+// the maps cannot be directly edited?
+// campaign editor available to public for now
+// compared to normal maps, campaign has a story it does not have a chat
 Campaign.prototype.loadCampaign = function(player) {
     if (player) {
         var playerRef = firebase.database().ref('players');

@@ -47,7 +47,6 @@ var ghostGrid;
 var brightGrid;
 
 //button
-var loadmap;
 var resizeButton;
 var imageElement;
 var mapImg;
