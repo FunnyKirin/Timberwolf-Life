@@ -245,8 +245,14 @@ function initEventHandlers() {
         renderGridLines();
     });
 
+    // confirms leaving before actually leaving otherwise users may leave without actually want to leave
+    // tongue twister level 1
+    window.onbeforeunload = function() {
+        return 'If you leave, you lose';
+    };
     // remove game room properly
     window.onunload = leaveRoom.bind(this);
+
 }
 /*
  * This function initilizes all UI texts
