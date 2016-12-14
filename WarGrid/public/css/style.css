@@ -158,6 +158,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	overflow-y: auto;
 }
 
+
+.adSlides-section {
+	margin-top:150px;
+}
+
 /*
 .map-image {
 	height: 150px;

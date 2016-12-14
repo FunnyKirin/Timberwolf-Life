@@ -22,6 +22,11 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/map.js"></script>
     <script src="scripts/main.js"></script>
+
+
+    <style>
+        .adSlides {display:none;}
+    </style>
 </head>
 
 
@@ -77,45 +82,17 @@
                 <canvas id="game_small_canvas" class="w3-sand w3-round-xlarge w3-center" width="256" height="256"> </canvas>
             </div>
 
-            <!-- Right section-char room is shown on large scrren.
-            <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small">
-                <div id="messages"   class="game_page_message_box w3-container w3-card-0 w3-sand w3-round" >
-                    <span id="message-filler" >
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    testing<br>
-                    </span>
-                </div>
-
-                <div id="message-form" action="#" class="w3-container w3-margin-top">
-                    <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
-                    <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
-                    <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-                    <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-right" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
+            <!-- Right section-char room is shown on large scrren. -->
+            <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small ">
+                <div class="adSlides-section w3-container w3-content">
+                  <img class="adSlides" src="images/canary.png" onclick="openAd(1)">
+                  <img class="adSlides" src="images/awesome.png" onclick="openAd(2)">
+                  <img class="adSlides" src="images/ikb.png" onclick="openAd(3)">
+                  <img class="adSlides" src="images/wisteria.png" onclick="openAd(4)">
+                  <img class="adSlides" src="images/salmon.png" onclick="openAd(5)">
                 </div>
             </div>
-            -->
+            
 
         </div>
         <!-- Buttom part-->
@@ -136,6 +113,10 @@
     <!-- set up the game. -->
     <script>
         initGameOfLife();
+
+        // set up the ad slides.
+        var myIndex = 0;
+        carousel();
     </script>
 
 
@@ -171,30 +152,7 @@
 
         <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section" >
             <span id="message-filler">
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
-                testing<br>
+                
             </span>
         </div>
 

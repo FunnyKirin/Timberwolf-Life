@@ -96,11 +96,31 @@ function localGame_open()
   window.open("localGamePage.html","_self" );
 }
 
-/*//Automatic slideshow
+
+function openAd(x)
+{
+    
+    if(x===1)
+        window.open("https://canarylife.firebaseapp.com/", "_blank");
+    else if(x===2)
+        window.open("http://www.awesome-life-game.appspot.com/", "_blank");
+    else if(x===3)
+        window.open("https://ikb-life.firebaseapp.com/", "_blank");
+    else if(x===4)
+        window.open("https://wisteria-life.appspot.com/", "_blank");
+    else if(x===5)
+        window.open("https://salmon-life.firebaseapp.com/", "_blank");
+    
+
+    //window.open("https://canarylife.firebaseapp.com/", "_blank");
+
+}
+
+//ad slideshow
 function carousel()
 {
     var i;
-    var x = document.getElementsByClassName("mySlides");
+    var x = document.getElementsByClassName("adSlides");
     for (i = 0; i < x.length; i++) {
        x[i].style.display = "none";
     }
@@ -109,7 +129,7 @@ function carousel()
     x[myIndex-1].style.display = "block";
     setTimeout(carousel, 5000); // Change image every 2 seconds
 }
-*/
+
 //search bar from home page
 function searchRoom() {
     var input, filter, cards, li, a, i;
@@ -152,36 +172,7 @@ function click_map(element) {
     var captionText = document.getElementById("caption");
     captionText.innerHTML = element.alt;
 }
-//SlideShow from aboutPage
-var slideIndex = 1;
-//showDivs(slideIndex);
-function plusDivs(n) {
-    showDivs(slideIndex += n);
-}
 
-function currentDiv(n) {
-    showDivs(slideIndex = n);
-}
-
-function showDivs(n) {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("demo");
-    if (n > x.length) {
-        slideIndex = 1;
-    }
-    if (n < 1) {
-        slideIndex = x.length;
-    }
-    for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" w3-white", "");
-    }
-    x[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " w3-white";
-}
 /*  show the drop_down menu which contains google and facebook sign in when user click the login icon */
 function show_drop_down_menu_on_large_screen() {
     var x = document.getElementById("dropdown_menu_on_large_screen");
@@ -207,26 +198,4 @@ function handleBrowseClick() {
     var fileinput = document.getElementById("mediaCapture");
     fileinput.click();
 }
-// progess bar from map editor page.
-/* put it into editor.js
-function barMove()
-{
-  var elem = document.getElementById("myBar");
-  var width = 0;
-  var id = setInterval(frame, 10);
 
-  function frame()
-  {
-    if(width >= 100)
-    {
-    clearInterval(id);
-    }
-    else
-    {
-      width++;
-      elem.style.width = width + '%';
-      document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
-    }
-  }
-}
-*/
