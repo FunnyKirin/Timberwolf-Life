@@ -160,11 +160,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 
 .adSlides-local-section {
-	margin-top:150px;
+	margin-top:30px;
+	margin-bottom:60px;
 }
 
-.adSlides-local-section  {
-	margin-top:20px;
+.adSlides-game-section  {
+	margin-top:30px;
+	margin-bottom:60px;
+
 }
 
 /*
