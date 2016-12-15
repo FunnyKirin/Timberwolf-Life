@@ -22,6 +22,8 @@ var CELL_LENGTH_X;
 var CELL_LENGTH_Y;
 var GRID_LINE_LENGTH_RENDERING_THRESHOLD;
 
+var INIT_CANVAS_WIDTH;
+
 //database relate
 var database;
 var creator;
@@ -45,7 +47,6 @@ var brightGrid;
 
 //button
 var loadmap;
-var resizeButton;
 var imageElement;
 var mapImg;
 var key;
@@ -54,6 +55,7 @@ var key;
 var cellLength;
 
 var LOAD_MAP_SELECTOR_ID = 'load-map-options';
+var RESIZE_SELECTOR_ID = 'resize-options';
 
 function initEditor() {
     checkSetup();
@@ -100,6 +102,9 @@ function initConstants() {
     MIN_CELL_LENGTH = 1;
     CELL_LENGTH_INC = 2;
     GRID_LINE_LENGTH_RENDERING_THRESHOLD = 8;
+
+    //canvas size
+    INIT_CANVAS_WIDTH = 512;
 }
 
 function initCanvas() {
@@ -116,9 +121,8 @@ function initButton() {
 
     loadmapInput = document.getElementById("loadMapField");
 
-    rowInput = document.getElementById("resizeRow");
+    rowSelect = document.getElementById(RESIZE_SELECTOR_ID);
     columnInput = document.getElementById("resizeColumn");
-    resizeButton = document.getElementById("resizeButton");
 
     save = document.getElementById("save_button");
 
@@ -146,7 +150,6 @@ function initFirebase() {
 function initEventHandlers() {
     save.onclick = respondToSaveMap;
     canvas.onclick = respondToMouseClick;
-    resizeButton.onclick = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
 
@@ -198,8 +201,8 @@ function respondToLoadMap() {
 }
 
 function respondToResizeMap() {
-    var customRow = rowInput.value;
-    canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
+    var customRow = parseInt($('#' + RESIZE_SELECTOR_ID).val());
+    canvasWidth = INIT_CANVAS_WIDTH; //INIT_CANVAS_WIDTH IS 512
 
     if ((customRow <= 16) && (customRow >= 8)) {
         if ((canvasWidth % customRow) !== 0) {
@@ -211,12 +214,12 @@ function respondToResizeMap() {
         window.alert("Please enter a number between 8 and 16 ");
         return false;
     }
-    canvasWidth +=1;//plus 1 to draw the right most and bottom line
+    canvasWidth += 1; //plus 1 to draw the right most and bottom line
     //canvasHeight +=1;
     canvas.width = canvasWidth;
     canvas.height = canvasWidth;
 
-    cellLength = (canvasWidth-1) / customRow;
+    cellLength = (canvasWidth - 1) / customRow;
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     resetEditor();
 
@@ -455,4 +458,11 @@ function initSelectorContent() {
         $("#" + LOAD_MAP_SELECTOR_ID).html(optionHTML);
         $("#" + LOAD_MAP_SELECTOR_ID).change(respondToLoadMap);
     });
+
+        var optionHTML = '<option value="" disabled selected>Select Size</option>';
+        for (var i = 8; i <= 16; i++) {
+            optionHTML += '<option value="' + i + '">' + i + ' x ' + i + '</option>';
+        }
+        $("#" + RESIZE_SELECTOR_ID).html(optionHTML);
+        $('#' + RESIZE_SELECTOR_ID).change(respondToResizeMap);
 }
