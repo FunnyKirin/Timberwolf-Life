@@ -145,7 +145,7 @@ function initConstants() {
 function initFirebase() {
     // Shortcuts to Firebase SDK features.
     this.auth = firebase.auth();
-    this.database = firebase.database();
+    var database = firebase.database();
     this.storage = firebase.storage();
     var url = window.location.search.substring(1);
     if (url.length > 20) {
@@ -154,17 +154,17 @@ function initFirebase() {
         anonymous = 1;
     }
     room = database.ref().child("lobby").child(url);
-    room.once('value', function(snapshot) {
+    room.once('value', function (snapshot) {
         currentPlayer = snapshot.val().currentPlayer;
         renderGrid = snapshot.val().grid;
-        renderGame();
-        swapGrids();
+        loadMapName = snapshot.val().map;
         //get player Index
         if (anonymous === 0) {
-            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function(abc) {
+            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function (abc) {
                 if (abc.val() == snapshot.val().owner) {
                     playerIndex = 1;
-                } else if (abc.val() == snapshot.val().challenger) {
+                }
+                else if (abc.val() == snapshot.val().challenger) {
                     playerIndex = 2;
                 }
                 if (snapshot.val().currentPlayer == playerIndex) {
@@ -174,9 +174,26 @@ function initFirebase() {
         }
         //alert("you are player " + playerIndex);
     });
+    firebase.database().ref("maps").child(loadMapName).once("value", function (data) {
+        //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+        var x = data.val().x;
+        if (canvasWidth % x !== 0) {
+            while (canvasWidth % x !== 0) {
+                canvasWidth += 1;
+            }
+        }
+        $("#game_canvas").attr("width", canvasWidth);
+        $("#game_canvas").attr("height", canvasWidth);
+        canvasHeight = canvasWidth;
+        cellLength = canvasWidth / x;
+        gridWidth = canvasWidth / cellLength;
+        gridHeight = canvasHeight / cellLength;
+        renderGame();
+        swapGrids();
+    });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-    room.on('value', function(snapshot) {
+    room.on('value', function (snapshot) {
         //alert(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -225,7 +242,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -233,7 +250,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -242,7 +259,6 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-
     // remove game room properly
     window.onunload = leaveRoom.bind(this);
 }
@@ -476,10 +492,10 @@ function confirmMove() {
 }
 //send map info to database after pressing confirm
 function writeMap(grid) {
-    room.child("grid").transaction(function(currentData) {
+    room.child("grid").transaction(function (currentData) {
         return grid;
     });
-    room.child("currentPlayer").transaction(function(currentData) {
+    room.child("currentPlayer").transaction(function (currentData) {
         currentData = currentData === 1 ? 2 : 1;
         return currentData;
     });
@@ -491,8 +507,7 @@ function checkVictory() {
             var cell = getGridCell(updateGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber != -1) {
-                if (cell != VOID_CELL && leftNumber != playerIndex) {
-                    console.log(leftNumber + " " + playerIndex);
+                if (cell != VOID_CELL && leftNumber == (3 - currentPlayer)) {
                     return 0;
                 }
             }
@@ -521,7 +536,6 @@ function nextTurn() {
 }
 //calculalte amount of cells player can place
 function getCellNumber(territory) {
-    
     return Math.floor(3 + territory / 7);
 }
 
@@ -635,7 +649,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * playerIndex;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -675,7 +690,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -826,13 +842,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
@@ -840,37 +857,36 @@ function getRelativeCoords(event) {
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
         alert('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
-    } else if (config.storageBucket === '') {
+    }
+    else if (config.storageBucket === '') {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
-
 // handles the operation of leaving a game room
-var leaveRoom = function() {
+var leaveRoom = function () {
     var room_key = window.location.search.substring(1);
     var roomRef = firebase.database().ref('lobby/' + room_key); // game session
     var challenger = roomRef.child('challenger');
     var owner = roomRef.child('owner');
-
     if (playerId) {
         // async listener challenger variable
-        challenger.once('value', function(snapshot) {
+        challenger.once('value', function (snapshot) {
             if (snapshot.val()) { // we have a challenger
                 if (playerId == snapshot.val()) { // you are the challenger
-                    challenger.transaction(function(e) {
+                    challenger.transaction(function (e) {
                         return '';
                     });
                 }
             }
         });
-        owner.once('value', function(snapshot) {
+        owner.once('value', function (snapshot) {
             if (snapshot.val()) { // we have a challenger
                 if (playerId == snapshot.val()) { // you are the owner
                     roomRef.remove();
                 }
             }
         });
-    } else { //TODO: you are not logged in
-
+    }
+    else { //TODO: you are not logged in
     }
 };
