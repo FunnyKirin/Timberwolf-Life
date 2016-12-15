@@ -118,6 +118,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	width: 100px;
 }
 
+.editor_slider_bar {
+	width: 200px;
+}
+
 
 
 .editor_page_map_icon {
