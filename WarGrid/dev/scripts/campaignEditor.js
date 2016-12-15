@@ -270,7 +270,7 @@ function respondToSaveMap() {
                 var storageRef = firebase.storage().ref();
                 mapImg = canvas.toDataURL("image/png");
                 console.log(mapImg);
-                storageRef.child('images/' + mapName).putString(mapImg, 'data_url');
+                storageRef.child('campaign/' + mapName).putString(mapImg, 'data_url');
 
                 // saves the actual map
                 if (!snapshot.hasChild(mapName)) {
