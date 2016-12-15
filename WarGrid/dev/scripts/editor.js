@@ -270,14 +270,8 @@ function respondToSaveMap() {
             });
         } else {
             db.ref().child('maps/').once('value', function(snapshot) {
-                // saves a thumbnail to firebase storage
-                var storageRef = firebase.storage().ref();
-                mapImg = canvas.toDataURL("image/png");
-                storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
 
                 // saves the actual map data
-                console.log("in saving gridWidth: " + gridWidth);
-                console.log("in saving gridHeight: " + gridHeight);
                 if (!snapshot.hasChild(mapname)) {
                     db.ref().child('maps/' + mapname).set({
                         map: mapname,
@@ -286,6 +280,10 @@ function respondToSaveMap() {
                         x: gridWidth,
                         y: gridWidth
                     });
+                    // saves a thumbnail to firebase storage
+                    var storageRef = firebase.storage().ref();
+                    mapImg = canvas.toDataURL("image/png");
+                    storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
                 } else {
                     alert("The map name already exists");
                 }
@@ -310,8 +308,19 @@ function respondToLoadAMap() {
 }
 
 function respondToDeleteAMap() {
-    dbref = this.db.ref().child('maps/' + mapNameInput.value);
+    var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
+    dbref = this.db.ref().child('maps/' + mapName);
     dbref.remove();
+    // Create a reference to the map image to delete
+    var storageRef = firebase.storage().ref();
+    var deleteRef = storageRef.child('images/' + mapName);
+
+    // Delete the file
+    deleteRef.delete().then(function() {
+        // File deleted successfully
+    }).catch(function(error) {
+        // Uh-oh, an error occurred!
+    });
     resetEditor();
 }
 
@@ -384,7 +393,7 @@ function renderGridLines() {
     canvas2D.strokeStyle = GRID_LINES_COLOR;
 
     //vertical LINES
-    for (var i = 0; i < gridWidth; i++) {
+    for (var i = 0; i <= gridWidth; i++) {
         var x1 = i * cellLength;
         var y1 = 0;
         var x2 = x1;
@@ -395,7 +404,7 @@ function renderGridLines() {
         canvas2D.stroke();
     }
     // HORIZONTAL LINES
-    for (var j = 0; j < gridHeight; j++) {
+    for (var j = 0; j <= gridHeight; j++) {
         var x_1 = 0;
         var y_1 = j * cellLength;
         var x_2 = canvasWidth;
