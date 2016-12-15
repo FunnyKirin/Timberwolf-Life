@@ -101,34 +101,37 @@ function openAd(x)
 {
     
     if(x===1)
-        window.open("https://canarylife.firebaseapp.com/", "_blank");
+        window.open("https://canarylife.firebaseapp.com/",          "_blank");
     else if(x===2)
-        window.open("http://www.awesome-life-game.appspot.com/", "_blank");
+        window.open("http://www.awesome-life-game.appspot.com/",    "_blank");
     else if(x===3)
-        window.open("https://ikb-life.firebaseapp.com/", "_blank");
+        window.open("https://ikb-life.firebaseapp.com/",            "_blank");
     else if(x===4)
-        window.open("https://wisteria-life.appspot.com/", "_blank");
-    else if(x===5)
-        window.open("https://salmon-life.firebaseapp.com/", "_blank");
+        window.open("http://fire-brick-life.appspot.com/",          "_blank");
     
-
-    //window.open("https://canarylife.firebaseapp.com/", "_blank");
-
 }
-
-//ad slideshow
-function carousel()
+// randomly pick ad pic and display it.
+function pick_and_display_adPic(x)
 {
+    var n = Math.floor(Math.random() *4);       // so far there are only 4 pics right now, later need to change this.
     var i;
-    var x = document.getElementsByClassName("adSlides");
-    for (i = 0; i < x.length; i++) {
-       x[i].style.display = "none";
+    if(x === 1)
+        var x = document.getElementsByClassName("local_adSlides");
+    else if(x === 2)
+        var x = document.getElementsByClassName("game_adSlides");       // if put x, y inside in one for loop, error.
+
+    for(i = 0; i < x.length; i++)
+    {
+        if(i === n)
+        {
+            x[i].style.display = "block";
+            break;
+        }
     }
-    myIndex++;
-    if (myIndex > x.length) {myIndex = 1}
-    x[myIndex-1].style.display = "block";
-    setTimeout(carousel, 5000); // Change image every 2 seconds
+
 }
+
+
 
 //search bar from home page
 function searchRoom() {
@@ -146,26 +149,8 @@ function searchRoom() {
         }
     }
 }
-/*
-function myFunction()
-{
-  var input, filter, table, tr, td, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
-*/
+
+
 function click_map(element) {
     document.getElementById("img01").src = element.src;
     document.getElementById("modal01").style.display = "block";

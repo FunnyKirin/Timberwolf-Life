@@ -93,10 +93,10 @@ function initGameOfLife() {
     initEventHandlers();
     // RESET EVERYTHING, CLEARING THE CANVAS
     resetGameOfLife();
-    // Load map from server
-    initUI();
     //Start first Turn;
     initMap();
+    // Load map from server
+    initUI();
 }
 
 function initConstants() {
@@ -173,17 +173,25 @@ function initMap() {
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
-    dbref.orderByValue().limitToLast(100).on("value", function (snapshot) {
-        snapshot.forEach(function (data) {
-            //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-            if (data.val().map === loadMapName) {
-                key = data.key;
-                renderGrid = data.val().data;
-                renderGame();
-                nextTurn();
-                swapGrids();
+    dbref.child(loadMapName).on("value", function (data) {
+        //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
+        key = data.key;
+        renderGrid = data.val().data;
+        var x = data.val().x;
+        if (canvasWidth % x !== 0) {
+            while (canvasWidth % x !== 0) {
+                canvasWidth += 1;
             }
-        });
+        }
+        $("#game_canvas").attr("width", canvasWidth);
+        $("#game_canvas").attr("height", canvasWidth);
+        canvasHeight = canvasWidth;
+        cellLength = canvasWidth / x;
+        gridWidth = canvasWidth / cellLength;
+        gridHeight = canvasHeight / cellLength;
+        renderGame();
+        nextTurn();
+        swapGrids();
     });
     /*
     $.getJSON("maps/test_map_2.json", function (json) {
@@ -440,8 +448,7 @@ function checkVictory() {
             var cell = getGridCell(updateGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber != -1) {
-                if (cell != VOID_CELL && leftNumber != currentPlayer) {
-                    console.log(leftNumber + " " + currentPlayer);
+                if (cell != VOID_CELL && leftNumber == (3 - currentPlayer)) {
                     return 0;
                 }
             }

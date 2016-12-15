@@ -23,9 +23,8 @@
     <script src="scripts/map.js"></script>
     <script src="scripts/main.js"></script>
 
-
     <style>
-        .adSlides {display:none;}
+        .local_adSlides {display:none;}
     </style>
 </head>
 
@@ -60,11 +59,10 @@
                 <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
 
                 <div class="adSlides-local-section w3-container w3-content w3-center">
-                  <img class="adSlides" src="images/canary.png" onclick="openAd(1)">
-                  <img class="adSlides" src="images/awesome.png" onclick="openAd(2)">
-                  <img class="adSlides" src="images/ikb.png" onclick="openAd(3)">
-                  <img class="adSlides" src="images/wisteria.png" onclick="openAd(4)">
-                  <img class="adSlides" src="images/salmon.png" onclick="openAd(5)">
+                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/canary.png"      onclick="openAd(1)">
+                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/awesome.png"     onclick="openAd(2)">
+                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/ikb.png"         onclick="openAd(3)">
+                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/fireBrick.png"   onclick="openAd(4)">
                 </div>
                 <!--
                 <div class="w3-container w3-padding-16">
@@ -111,7 +109,7 @@
             <button id="resetButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
             <button id="confirmButton" value="Confirm" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
             <button id="ghostButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
-
+            <button class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="localGame_open()">Exit</button>
         </div>
     </div>
     <!-- set up the game. -->
@@ -119,8 +117,7 @@
         initGameOfLife();
 
         // set up the ad slides.
-        var myIndex = 0;
-        carousel();
+        pick_and_display_adPic(1);
     </script>
 
 

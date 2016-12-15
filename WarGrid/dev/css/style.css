@@ -110,9 +110,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	margin-top:83px;
 }
 
+.editor_page_input {
+	width: 200px;
+}
 
 .editor_page_bar_buttons{
-	width: 120px;
+	width: 100px;
 }
 
 .editor_page_map_icon {
@@ -121,6 +124,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 .editor_page_progressbar {
 	width:1%;
+}
+
+.cam_map_input {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .game_page_message_box {
@@ -158,11 +166,22 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	overflow-y: auto;
 }
 
-/*
-.map-image {
-	height: 150px;
-	width: 300px;
-
+.adSlides-local-section {
+	margin-bottom:30px;
 }
-*/
+
+.adSlides-game-section  {
+	margin-bottom:30px;
+}
+
+.local_adSlides {
+	width: 85%;
+	margin-left: 20px;
+}
+
+.game_adSlides {
+	width: 85%;
+	margin-left: 20px;
+}
+
 
