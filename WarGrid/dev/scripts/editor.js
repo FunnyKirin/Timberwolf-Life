@@ -16,8 +16,6 @@ var VOID_COLOR;
 var GRID_LINES_COLOR;
 
 //interface adjustments
-var MAX_CELL_LENGTH;
-var MIN_CELL_LENGTH;
 var CELL_LENGTH_INC;
 var CELL_LENGTH_X;
 var CELL_LENGTH_Y;
@@ -31,6 +29,7 @@ var mapName;
 // CANVAS VARIABLES
 var canvasWidth;
 var canvasHeight;
+var INIT_CANVAS_WIDTH;
 var canvas;
 var canvas2D;
 
@@ -58,7 +57,6 @@ var cellLength;
 var LOAD_MAP_SELECTOR_ID = 'load-map-options';
 
 function initEditor() {
-    console.log("initEditor()");
     checkSetup();
     initFirebase();
     initConstants();
@@ -72,7 +70,6 @@ function initEditor() {
 }
 
 function initConstants() {
-    console.log("initConstants()");
     //THESE REPRESENT THE POSSIBLE STATS FOR EACH CELL
     EMPTY_CELL = 0;
     LIVE_CELL = 1;
@@ -100,14 +97,13 @@ function initConstants() {
     GRID_LINES_COLOR = "#CCCCCC";
 
     // CELL LENGTH CONSTANTS
-    MAX_CELL_LENGTH = 64;
-    MIN_CELL_LENGTH = 1;
-    CELL_LENGTH_INC = 2;
     GRID_LINE_LENGTH_RENDERING_THRESHOLD = 8;
+
+    //canvas size
+    INIT_CANVAS_WIDTH = 512;
 }
 
 function initCanvas() {
-    console.log("initCanvas()");
     canvas = document.getElementById("editor_canvas");
     canvas2D = canvas.getContext("2d");
 
@@ -132,15 +128,12 @@ function initButton() {
 }
 
 function initEditorData() {
-    console.log("initEditorData()");
     cellLength = 64;
 }
 
 function initGrid() {
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
-    console.log("gridWidth: " + gridWidth);
-    console.log("gridHeight: " + gridHeight);
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             setGridCell(renderGrid, i, j, EMPTY_CELL);
@@ -165,9 +158,7 @@ function initEventHandlers() {
 function respondToMouseClick(event) {
     // GET THE PATTERN SELECTED IN THE DROP DOWN LIST
     var patternsList = document.getElementById("cell_type");
-    console.log("patternsList: " + patternsList);
     var selectedPattern = patternsList.options[patternsList.selectedIndex].value;
-    console.log("selectedPattern: " + selectedPattern);
     if (selectedPattern === "images/Void.png") {
         SELECTED_CELL = VOID_CELL;
     }
@@ -194,7 +185,6 @@ function respondToMouseClick(event) {
     var clickRow = Math.floor(canvasCoords.y / cellLength);
 
     setGridCell(renderGrid, clickRow, clickCol, SELECTED_CELL);
-    console.log("renderGrid: " + renderGrid);
     renderCells();
 }
 
@@ -215,22 +205,24 @@ function respondToDeleteMap() {
 
 function respondToResizeMap() {
     var customRow = rowInput.value;
+    canvasWidth = INIT_CANVAS_WIDTH;
 
-    if ((customRow <= 16) && (customRow >= 4)) {
+    if ((customRow <= 16) && (customRow >= 8)) {
         if ((canvasWidth % customRow) !== 0) {
-            console.log("need to change canvas width!");
             while ((canvasWidth % customRow) !== 0) {
                 canvasWidth += 1;
             }
-            canvas.width = canvasWidth;
-            console.log("new canvas width: " + canvasWidth);
         }
     } else {
-        window.alert("Please enter a number between 4 and 32");
+        window.alert("Please enter a number between 8 and 16 ");
         return false;
     }
+    canvasWidth +=1;
+    canvasHeight +=1;
+    canvas.width = canvasWidth;
+    canvas.height = canvasWidth;
 
-    cellLength = canvasWidth / customRow;
+    cellLength = (canvasWidth-1) / customRow;
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     resetEditor();
 
@@ -258,7 +250,6 @@ function respondToSaveMap() {
         mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
         if (mapname === '') {
             // text was all whitespace
-            console.log("map name was all whitesapce");
             alert("Please Fill Out the Map Name");
             return false;
         } else {
@@ -277,24 +268,10 @@ function respondToSaveMap() {
                 y: gridWidth
             });
         } else {
-            /* the code below retrieve the image from firebase storage
-            var returnimage = storageRef.child('images/' + 'map name').toString();
-            console.log("returnimage " + returnimage.key);
-            if (returnimage.startsWith('gs://')){
-                console.log("startswith gs://");
-                firebase.storage().refFromURL(returnimage).getMetadata().then(function(metadata){
-                    console.log("metadata: " + metadata.downloadURLs[0]);
-                    imageElement.src = metadata.downloadURLs[0];
-                });
-            }
-            console.log("returnimage: "  + returnimage);
-            */
-
             db.ref().child('maps/').once('value', function(snapshot) {
                 // saves a thumbnail to firebase storage
                 var storageRef = firebase.storage().ref();
                 mapImg = canvas.toDataURL("image/png");
-                console.log(mapImg);
                 storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
 
                 // saves the actual map data
@@ -330,11 +307,8 @@ function respondToLoadAMap() {
 }
 
 function respondToDeleteAMap() {
-    console.log("start to delete map");
-    console.log("key: " + key);
     dbref = this.db.ref().child('maps/' + mapNameInput.value);
     dbref.remove();
-    console.log("map delete");
     resetEditor();
 }
 
@@ -355,8 +329,6 @@ function renderCells() {
             var y = i * cellLength;
             if (leftNumber > 0) {
                 if (rightNumber === 0) {
-                    console.log("DEAD_COLOR");
-                    console.log("leftNumber: " + leftNumber);
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 } else {
@@ -384,31 +356,28 @@ function renderCells() {
 
 
 function resetEditor() {
-    console.log("resetEditor()");
-    gridWidth = canvasWidth / cellLength;
-    gridHeight = canvasHeight / cellLength;
+    canvasWidth = canvas.width;
+    canvasHeight = canvas.height;
+    gridWidth = (canvasWidth-1)/ cellLength;
+    gridHeight = (canvasHeight-1) / cellLength;
     mapNameInput.value = '';
     mapNameInput.disabled = false;
     key = null;
     renderGrid = [];
     initGrid();
     testGrid = [];
-    console.log("gridWidth: " + gridWidth);
-    console.log("gridHeight: " + gridHeight);
     renderEdiotr();
     renderCells();
 }
 
 
 function renderEdiotr() {
-    console.log("renderEdiotr()");
     renderGridLines();
 }
 
 
 
 function renderGridLines() {
-    console.log("renderGridLines()");
     canvas2D.strokeStyle = GRID_LINES_COLOR;
 
     //vertical LINES
