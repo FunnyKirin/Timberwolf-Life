@@ -25,7 +25,7 @@
 
 
     <style>
-        .adSlides {display:none;}
+        .local_adSlides {display:none;}
     </style>
 </head>
 
@@ -60,11 +60,10 @@
                 <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
 
                 <div class="adSlides-local-section w3-container w3-content w3-center">
-                  <img class="adSlides" src="images/canary.png" onclick="openAd(1)">
-                  <img class="adSlides" src="images/awesome.png" onclick="openAd(2)">
-                  <img class="adSlides" src="images/ikb.png" onclick="openAd(3)">
-                  <img class="adSlides" src="images/wisteria.png" onclick="openAd(4)">
-                  <img class="adSlides" src="images/salmon.png" onclick="openAd(5)">
+                  <img class="local_adSlides" src="images/canary.png" onclick="openAd(1)">
+                  <img class="local_adSlides" src="images/awesome.png" onclick="openAd(2)">
+                  <img class="local_adSlides" src="images/ikb.png" onclick="openAd(3)">
+                  <img class="local_adSlides" src="images/fireBrick.png" onclick="openAd(4)">
                 </div>
                 <!--
                 <div class="w3-container w3-padding-16">
@@ -119,8 +118,7 @@
         initGameOfLife();
 
         // set up the ad slides.
-        var myIndex = 0;
-        carousel();
+        pick_and_display_adPic();
     </script>
 
 

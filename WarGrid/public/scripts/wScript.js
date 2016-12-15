@@ -107,12 +107,39 @@ function openAd(x)
     else if(x===3)
         window.open("https://ikb-life.firebaseapp.com/", "_blank");
     else if(x===4)
-        window.open("https://wisteria-life.appspot.com/", "_blank");
-    else if(x===5)
-        window.open("https://salmon-life.firebaseapp.com/", "_blank");
+        window.open("http://fire-brick-life.appspot.com/", "_blank");
+    
     
 
     //window.open("https://canarylife.firebaseapp.com/", "_blank");
+
+}
+// randomly pick ad pic and display it.
+function pick_and_display_adPic()
+{
+    var n = Math.floor(Math.random() *4);       // so far there are only 4 pics right now, later need to change this.
+    var i;
+    var x = document.getElementsByClassName("local_adSlides");
+
+    for(i = 0; i < x.length; i++)
+    {
+        if(i === n)
+        {
+            x[i].style.display = "block";
+            break;
+        }
+    }
+
+    var y = document.getElementsByClassName("game_adSlides");       // if put x, y inside in one for loop, error. 
+
+    for(i = 0; i < y.length; i++)
+    {
+        if(i === n)
+        {
+            y[i].style.display = "block";
+            break;
+        }
+    }
 
 }
 
