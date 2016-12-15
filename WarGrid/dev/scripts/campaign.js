@@ -39,7 +39,7 @@ Campaign.prototype.loadCampaign = function(player) {
                         if (player.campaign >= data.val().level) {
                             // finally, retrieve map images
                             var storageRef = firebase.storage().ref();
-                            var returnImage = storageRef.child('images/' + data.val().map).toString();
+                            var returnImage = storageRef.child('campaign/' + data.val().map).toString();
 
                             if (returnImage.startsWith('gs://')) {
                                 firebase.storage().refFromURL(returnImage).getMetadata().then(function(metadata) {

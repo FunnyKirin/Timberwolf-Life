@@ -185,7 +185,7 @@ function respondToMouseClick(event) {
     var clickRow = Math.floor(canvasCoords.y / cellLength);
 
     var cell = getGridCell(renderGrid, clickRow, clickCol);
-    if (cell == SELECTED_CELL){
+    if (cell == SELECTED_CELL) {
         SELECTED_CELL = EMPTY_CELL;
     }
 
@@ -265,52 +265,29 @@ function respondToSaveMap() {
         }
         mapLevel = parseInt(mapLevel);
 
-        if (key !== null) {
-            dbref = this.db.ref().child('campaign/' + key);
-            dbref.update({
-                map: mapName,
-                data: renderGrid,
-                x: gridWidth,
-                y: gridWidth
-            });
-        } else {
-            // database reference
-            db.ref().child('campaign').once('value', function(snapshot) {
-                // saves the actual map
-                if (!snapshot.hasChild(mapName)) {
-                    db.ref().child('campaign/' + mapName).set({
-                        map: mapName,
-                        level: mapLevel,
-                        data: renderGrid,
-                        x: gridWidth,
-                        y: gridWidth,
-                        story: ''
-                    });
-                    // saves a thumbnail to firebase storage
-                    var storageRef = firebase.storage().ref();
-                    mapImg = canvas.toDataURL("image/png");
-                    storageRef.child('campaign/' + mapname).putString(mapImg, 'data_url');
-                } else {
-                    alert("The map name already exists");
-                }
-            });
-        }
+        db.ref().child('campaign').once('value', function(snapshot) {
+            // saves the actual map
+            if (!snapshot.hasChild(mapName)) {
+                gridWidth = parseInt(gridWidth);
+                db.ref().child('campaign/' + mapName).set({
+                    map: mapName,
+                    level: mapLevel,
+                    data: renderGrid,
+                    x: gridWidth,
+                    y: gridWidth,
+                    story: ''
+                });
+                // saves a thumbnail to firebase storage
+                var storageRef = firebase.storage().ref();
+                mapImg = canvas.toDataURL("image/png");
+                storageRef.child('campaign/' + mapName).putString(mapImg, 'data_url');
+            } else {
+                alert("The map name already exists");
+            }
+        });
     } else {
         alert('You must first log in to use this feature');
     }
-}
-
-function respondToLoadAMap() {
-    var loadMapName = loadmapInput.value;
-    dbref = this.db.ref().child('campaign');
-    dbref.child(loadMapName).on("value", function(snapshot) {
-        rowInput.value = snapshot.val().x;
-        respondToResizeMap();
-        mapNameInput.value = snapshot.val().map;
-        mapNameInput.disabled = true;
-        renderGrid = snapshot.val().data;
-        renderCells();
-    });
 }
 
 function respondToResetEditor() {
@@ -464,10 +441,10 @@ function initSelectorContent() {
         $("#" + LOAD_MAP_SELECTOR_ID).change(respondToLoadMap);
     });
 
-        var optionHTML = '<option value="" disabled selected>Select Size</option>';
-        for (var i = 8; i <= 16; i++) {
-            optionHTML += '<option value="' + i + '">' + i + ' x ' + i + '</option>';
-        }
-        $("#" + RESIZE_SELECTOR_ID).html(optionHTML);
-        $('#' + RESIZE_SELECTOR_ID).change(respondToResizeMap);
+    var optionHTML = '<option value="" disabled selected>Select Size</option>';
+    for (var i = 8; i <= 16; i++) {
+        optionHTML += '<option value="' + i + '">' + i + ' x ' + i + '</option>';
+    }
+    $("#" + RESIZE_SELECTOR_ID).html(optionHTML);
+    $('#' + RESIZE_SELECTOR_ID).change(respondToResizeMap);
 }
