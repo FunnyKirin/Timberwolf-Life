@@ -268,12 +268,6 @@ function respondToSaveMap() {
         } else {
             // database reference
             db.ref().child('campaign').once('value', function(snapshot) {
-                // conditionalize this so the image doesn't change when a map name exists
-                var storageRef = firebase.storage().ref();
-                mapImg = canvas.toDataURL("image/png");
-                console.log(mapImg);
-                storageRef.child('images/' + mapName).putString(mapImg, 'data_url');
-
                 // saves the actual map
                 if (!snapshot.hasChild(mapName)) {
                     db.ref().child('campaign/' + mapName).set({
@@ -284,6 +278,10 @@ function respondToSaveMap() {
                         y: gridWidth,
                         story: ''
                     });
+                    // saves a thumbnail to firebase storage
+                    var storageRef = firebase.storage().ref();
+                    mapImg = canvas.toDataURL("image/png");
+                    storageRef.child('campaign/' + mapname).putString(mapImg, 'data_url');
                 } else {
                     alert("The map name already exists");
                 }
