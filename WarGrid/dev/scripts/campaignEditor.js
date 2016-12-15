@@ -199,22 +199,24 @@ function respondToLoadMap() {
 
 function respondToResizeMap() {
     var customRow = rowInput.value;
+    canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
 
-    if ((customRow <= 16) && (customRow >= 4)) {
+    if ((customRow <= 16) && (customRow >= 8)) {
         if ((canvasWidth % customRow) !== 0) {
-            console.log("need to change canvas width!");
             while ((canvasWidth % customRow) !== 0) {
                 canvasWidth += 1;
             }
-            canvas.width = canvasWidth;
-            console.log("new canvas width: " + canvasWidth);
         }
     } else {
-        window.alert("Please enter a number between 4 and 32");
+        window.alert("Please enter a number between 8 and 16 ");
         return false;
     }
+    canvasWidth +=1;//plus 1 to draw the right most and bottom line
+    //canvasHeight +=1;
+    canvas.width = canvasWidth;
+    canvas.height = canvasWidth;
 
-    cellLength = canvasWidth / customRow;
+    cellLength = (canvasWidth-1) / customRow;
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     resetEditor();
 
@@ -266,12 +268,6 @@ function respondToSaveMap() {
         } else {
             // database reference
             db.ref().child('campaign').once('value', function(snapshot) {
-                // conditionalize this so the image doesn't change when a map name exists
-                var storageRef = firebase.storage().ref();
-                mapImg = canvas.toDataURL("image/png");
-                console.log(mapImg);
-                storageRef.child('images/' + mapName).putString(mapImg, 'data_url');
-
                 // saves the actual map
                 if (!snapshot.hasChild(mapName)) {
                     db.ref().child('campaign/' + mapName).set({
@@ -282,6 +278,10 @@ function respondToSaveMap() {
                         y: gridWidth,
                         story: ''
                     });
+                    // saves a thumbnail to firebase storage
+                    var storageRef = firebase.storage().ref();
+                    mapImg = canvas.toDataURL("image/png");
+                    storageRef.child('campaign/' + mapname).putString(mapImg, 'data_url');
                 } else {
                     alert("The map name already exists");
                 }

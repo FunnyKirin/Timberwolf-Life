@@ -145,7 +145,7 @@ function initConstants() {
 function initFirebase() {
     // Shortcuts to Firebase SDK features.
     this.auth = firebase.auth();
-    var database = firebase.database();
+    this.database = firebase.database();
     this.storage = firebase.storage();
     var url = window.location.search.substring(1);
     if (url.length > 20) {
@@ -174,22 +174,27 @@ function initFirebase() {
         }
         //alert("you are player " + playerIndex);
     });
-    firebase.database().ref("maps").child(loadMapName).once("value", function (data) {
-        //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
-        var x = data.val().x;
-        if (canvasWidth % x !== 0) {
-            while (canvasWidth % x !== 0) {
-                canvasWidth += 1;
+    var map = database.ref().child("maps");
+    map.once("value").then(function (snapshot) {
+        snapshot.forEach(function (data) {
+            if (data.val().map == loadMapName) {
+                var x = data.val().x;
+                if (canvasWidth % x !== 0) {
+                    while (canvasWidth % x !== 0) {
+                        canvasWidth += 1;
+                    }
+                }
+                $("#game_canvas").attr("width", canvasWidth);
+                $("#game_canvas").attr("height", canvasWidth);
+                canvasHeight = canvasWidth;
+                cellLength = canvasWidth / x;
+                gridWidth = canvasWidth / cellLength;
+                gridHeight = canvasHeight / cellLength;
+                renderGame();
+                swapGrids();
             }
-        }
-        $("#game_canvas").attr("width", canvasWidth);
-        $("#game_canvas").attr("height", canvasWidth);
-        canvasHeight = canvasWidth;
-        cellLength = canvasWidth / x;
-        gridWidth = canvasWidth / cellLength;
-        gridHeight = canvasHeight / cellLength;
-        renderGame();
-        swapGrids();
+        });
+        //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
