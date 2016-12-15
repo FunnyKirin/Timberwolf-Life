@@ -288,7 +288,7 @@ function respondToMouseClick(event) {
         var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
         //check if there is already a cell in ghost grid,
         // if not:
-        if (cell != LIVE_CELL + playerIndex * 10) {
+        if (cell != LIVE_CELL + playerIndex * 10 && cell!= LIVE_CELL + 3-playerIndex *10) {
             if (ghostCell != LIVE_CELL + playerIndex * 10) {
                 //check if the player can place a cell at that position.
                 if (cellNumber > 0 && cell != VOID_CELL) {
