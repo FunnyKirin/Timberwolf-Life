@@ -277,8 +277,8 @@ function respondToSaveMap() {
                         map: mapname,
                         creator: creator,
                         data: renderGrid,
-                        x: gridWidth,
-                        y: gridWidth
+                        x: Math.floor(gridWidth),
+                        y: Math.floor(gridWidth)
                     });
                     // saves a thumbnail to firebase storage
                     var storageRef = firebase.storage().ref();
@@ -374,6 +374,7 @@ function resetEditor() {
     gridHeight = (canvasHeight) / cellLength;
     mapNameInput.value = '';
     mapNameInput.disabled = false;
+    rowInput.value = '';
     key = null;
     renderGrid = [];
     initGrid();
