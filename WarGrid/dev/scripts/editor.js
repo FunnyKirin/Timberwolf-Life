@@ -206,7 +206,7 @@ function respondToDeleteMap() {
 
 function respondToResizeMap() {
     var customRow = rowInput.value;
-    canvasWidth = INIT_CANVAS_WIDTH;
+    canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
 
     if ((customRow <= 16) && (customRow >= 8)) {
         if ((canvasWidth % customRow) !== 0) {
@@ -218,7 +218,7 @@ function respondToResizeMap() {
         window.alert("Please enter a number between 8 and 16 ");
         return false;
     }
-    canvasWidth +=1;
+    canvasWidth +=1;//plus 1 to draw the right most and bottom line
     //canvasHeight +=1;
     canvas.width = canvasWidth;
     canvas.height = canvasWidth;
