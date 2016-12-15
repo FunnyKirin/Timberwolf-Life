@@ -132,7 +132,6 @@ function initEditorData() {
 }
 
 function initGrid() {
-    console.log("initGrid: canvasWidth: " + canvasWidth);
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
     for (var i = 0; i <= gridHeight; i++) {
@@ -171,9 +170,6 @@ function respondToMouseClick(event) {
     if (selectedPattern === "images/P2_LIVE.png") {
         SELECTED_CELL = P2_LIVE_CELL;
     }
-    if (selectedPattern === "images/EMPTY_CELL.png") {
-        SELECTED_CELL = EMPTY_CELL;
-    }
     if (selectedPattern === "images/P1_DEAD.png") {
         SELECTED_CELL = P1_DEAD_CELL;
     }
@@ -185,6 +181,10 @@ function respondToMouseClick(event) {
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
 
+    var cell = getGridCell(renderGrid, clickRow, clickCol);
+    if (cell == SELECTED_CELL){
+        SELECTED_CELL = EMPTY_CELL;
+    }
     setGridCell(renderGrid, clickRow, clickCol, SELECTED_CELL);
     renderCells();
 }
@@ -219,7 +219,7 @@ function respondToResizeMap() {
         return false;
     }
     canvasWidth +=1;
-    canvasHeight +=1;
+    //canvasHeight +=1;
     canvas.width = canvasWidth;
     canvas.height = canvasWidth;
 
