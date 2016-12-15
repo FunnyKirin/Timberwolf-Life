@@ -99,8 +99,8 @@
         </div>
         <!-- Buttom part-->
         <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
-                <a class="w3-btn-floating" onclick="w3_local_left_open()"><-</a>
-                <a class="w3-btn-floating" onclick="w3_local_right_open()">-></a>
+                <a class="w3-btn-floating" onclick="document.getElementById('Instruction').style.display='block'"><i class="material-icons">announcement</i></a>
+                <a class="w3-btn-floating" onclick="w3_local_right_open()"><i class="material-icons">chat</i></a>
         </div>
         <!-- span line to display the cell left number. -->
         <div class="w3-container w3-row w3-center"> <span id="text">Cell left: 0</span> </div>
@@ -123,6 +123,7 @@
 
 
     <!-- Left side pop-up info panel. -->
+    <!--
     <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top"  id="local_left_side_info_panel">
 
         <h1 class="w3-text-sand w3-padding-24">TL</h1>
@@ -141,10 +142,11 @@
         </p>
 
     </nav>
-
+    -->
     <!-- Overlay effect when opening left_side on small screens -->
+    <!--
     <div class="local_left_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_local_left_close()" title="close side menu" id="myLocalLeftlay"></div>
-
+    -->
 
 
 

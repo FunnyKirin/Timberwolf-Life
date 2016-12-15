@@ -107,7 +107,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 }
 
 .pushdown-content-in-use{
-	margin-top:83px;
+	margin-top:0px;
 }
 
 .editor_page_input {
@@ -116,6 +116,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 .editor_page_bar_buttons{
 	width: 100px;
+}
+
+.editor_slider_bar {
+	width: 200px;
 }
 
 
@@ -174,12 +178,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 .local_adSlides {
 	width: 85%;
-	margin-left: 20px;
+	margin-left: 25px;
 }
 
 .game_adSlides {
 	width: 85%;
-	margin-left: 20px;
+	margin-left: 25px;
 }
 
 

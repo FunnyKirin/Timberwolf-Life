@@ -46,13 +46,9 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header.
-    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
-        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
-    </header>
-  -->
+    
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
-    <header class="header-max-width w3-container w3-top w3-hide-small w3-large w3-padding-16 ">
+    <header class="header-max-width w3-container w3-hide-small w3-large w3-padding-16">
 
         <div class="w3-dropdown-click w3-right">
             <a class="player-profile-desktop w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
@@ -134,9 +130,12 @@
 
 
                 <div class="w3-container w3-row w3-center">
+                    <div class="editor_slider_bar">8<input type="range" min="8" max="16" value="0" step="1" onchange="showValue(this.value)" >16</div>
+                    <span id="range" class="w3-half">8</span>
 
                     <input id="resizeRow" class="editor_page_input w3-input w3-margin w3-border w3-quarter" type="text" name="input a map" placeholder="map size">
                     <button id="resizeButton" type="button" value="resizeCanvas" class="editor_page_bar_buttons w3-btn w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom w3-quarter">Resize</button>
+                    
                 </div>
 
 
