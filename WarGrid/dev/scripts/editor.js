@@ -107,8 +107,8 @@ function initCanvas() {
     canvas = document.getElementById("editor_canvas");
     canvas2D = canvas.getContext("2d");
 
-    canvasWidth = canvas.width;
-    canvasHeight = canvas.height;
+    canvasWidth = canvas.width-1;
+    canvasHeight = canvas.height-1;
 }
 
 function initButton() {
@@ -132,6 +132,7 @@ function initEditorData() {
 }
 
 function initGrid() {
+    console.log("initGrid: canvasWidth: " + canvasWidth);
     gridWidth = canvasWidth / cellLength;
     gridHeight = canvasHeight / cellLength;
     for (var i = 0; i <= gridHeight; i++) {
@@ -275,6 +276,8 @@ function respondToSaveMap() {
                 storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
 
                 // saves the actual map data
+                console.log("in saving gridWidth: " + gridWidth);
+                console.log("in saving gridHeight: " + gridHeight);
                 if (!snapshot.hasChild(mapname)) {
                     db.ref().child('maps/' + mapname).set({
                         map: mapname,
@@ -356,10 +359,10 @@ function renderCells() {
 
 
 function resetEditor() {
-    canvasWidth = canvas.width;
-    canvasHeight = canvas.height;
-    gridWidth = (canvasWidth-1)/ cellLength;
-    gridHeight = (canvasHeight-1) / cellLength;
+    canvasWidth = canvas.width-1;
+    canvasHeight = canvas.height-1;
+    gridWidth = (canvasWidth)/ cellLength;
+    gridHeight = (canvasHeight) / cellLength;
     mapNameInput.value = '';
     mapNameInput.disabled = false;
     key = null;
