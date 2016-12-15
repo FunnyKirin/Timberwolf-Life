@@ -130,12 +130,15 @@
 
 
                 <div class="w3-container w3-row w3-center">
-                    <div class="editor_slider_bar">8<input type="range" min="8" max="16" value="0" step="1" onchange="showValue(this.value)" >16</div>
-                    <span id="range" class="w3-half">8</span>
+                    <div class="editor_slider_bar w3-container w3-quarter">
+                        <input type="range" min="8" max="16" value="0" step="1" onchange="showValue(this.value)" />
+                    </div>
+                    <span id="range" class="editor_slider_var w3-left w3-border">8</span>
 
+                    <!--
                     <input id="resizeRow" class="editor_page_input w3-input w3-margin w3-border w3-quarter" type="text" name="input a map" placeholder="map size">
                     <button id="resizeButton" type="button" value="resizeCanvas" class="editor_page_bar_buttons w3-btn w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom w3-quarter">Resize</button>
-                    
+                    -->
                 </div>
 
 
