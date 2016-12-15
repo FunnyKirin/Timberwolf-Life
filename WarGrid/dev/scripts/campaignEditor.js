@@ -184,6 +184,11 @@ function respondToMouseClick(event) {
     var clickCol = Math.floor(canvasCoords.x / cellLength);
     var clickRow = Math.floor(canvasCoords.y / cellLength);
 
+    var cell = getGridCell(renderGrid, clickRow, clickCol);
+    if (cell == SELECTED_CELL){
+        SELECTED_CELL = EMPTY_CELL;
+    }
+
     setGridCell(renderGrid, clickRow, clickCol, SELECTED_CELL);
     console.log("renderGrid: " + renderGrid);
     renderCells();
