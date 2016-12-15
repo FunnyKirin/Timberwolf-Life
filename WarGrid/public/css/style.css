@@ -110,10 +110,15 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	margin-top:83px;
 }
 
+.editor_page_input {
+	width: 200px;
+}
 
 .editor_page_bar_buttons{
-	width: 120px;
+	width: 100px;
 }
+
+
 
 .editor_page_map_icon {
 	width: 50px;
