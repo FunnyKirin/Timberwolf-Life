@@ -110,21 +110,34 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	margin-top:0px;
 }
 
-.editor_page_input {
-	width: 200px;
+.editor_page_input_1 {
+	
 }
 
-.editor_page_bar_buttons{
-	width: 100px;
+.editor_page_bar_buttons {
+	width: 80px;
+	
+}
+
+
+.editor_slider_bar_div {
+	height: 40px;
+}
+
+.editor_slider_label_div {
+	height: 40px;
 }
 
 .editor_slider_bar {
-	width: 230px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.editor_slider_var {
-	margin-left: 20px;
+.editor_slider_label {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
+
 
 input[type='range'] {
 -webkit-appearance: none;
