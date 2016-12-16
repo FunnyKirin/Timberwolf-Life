@@ -274,7 +274,7 @@ function initUI() {
     //reset game UI
 }
 /*
- * This function handle mouse click event, cells will only be placed on ghost grid
+ * This function handle mouse click event, cells wdill only be placed on ghost grid
  * until the player click confirm.
  */
 function respondToMouseClick(event) {
