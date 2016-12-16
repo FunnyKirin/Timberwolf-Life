@@ -96,10 +96,20 @@ function localGame_open()
   window.open("localGamePage.html","_self" );
 }
 
+function campaign_open()
+{
+  window.open("campaign.html","_self" );
+}
+
+function campaignEditor_open()
+{
+  window.open("campaignEditor.html","_self" );
+}
+
 
 function openAd(x)
 {
-    
+
     if(x===1)
         window.open("https://canarylife.firebaseapp.com/",          "_blank");
     else if(x===2)
@@ -108,7 +118,7 @@ function openAd(x)
         window.open("https://ikb-life.firebaseapp.com/",            "_blank");
     else if(x===4)
         window.open("http://fire-brick-life.appspot.com/",          "_blank");
-    
+
 }
 // randomly pick ad pic and display it.
 function pick_and_display_adPic(x)
@@ -189,4 +199,3 @@ function handleBrowseClick() {
     var fileinput = document.getElementById("mediaCapture");
     fileinput.click();
 }
-

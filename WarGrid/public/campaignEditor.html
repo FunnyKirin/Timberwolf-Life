@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Editor</title>
+    <title>Campaign Editor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/w3.css">
@@ -12,14 +12,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="scripts/editor.js"></script>
-
+    <script src="scripts/campaignEditor.js"></script>
 </head>
 
 
@@ -46,9 +44,13 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-
+    <!-- Top header for login on screens: hide on small screen since on small screen, there will be another header.
+    <header class="w3-container w3-top w3-hide-small w3-hide-medium w3-xlarge w3-padding-16">
+        <a class="w3-right w3-btn w3-dark-grey w3-padding w3-round-jumbo"><i class="material-icons">person</i>  Login</a>
+    </header>
+    -->
     <!-- Top header for login on screens: show on large screen; hide on small screen since on small screen, there will be another header. -->
-    <header class="header-max-width w3-container w3-hide-small w3-large w3-padding-16">
+    <header class="header-max-width w3-container w3-hide-small w3-large w3-padding-16 ">
 
         <div class="w3-dropdown-click w3-right">
             <a class="player-profile-desktop w3-btn w3-dark-grey w3-padding w3-round-jumbo w3-large" onclick="show_drop_down_menu_on_large_screen()"><i class="material-icons">person</i>  Login</a>
@@ -63,19 +65,20 @@
     <!-- Sidenav/menu -->
     <nav class="sidenav-style w3-sidenav w3-white w3-center w3-text-grey w3-collapse w3-top" id="mySidenav">
         <br>
-        <img src="images/icon.svg" class="icon">
+        <img src="images/Icon.svg" class="icon">
         <h3 class="w3-padding-64"><b>Timberwolf Life</b></h3>
         <a href="#index" onclick="index_open()" class="w3-padding">LOBBY</a>
         <a id="create" href="#create" onclick="create_open()" class="w3-padding">CREATE</a>
         <a href="#editor" onclick="editorPage_open()" class="w3-padding">MAP EDITOR</a>
         <a href="#profile" onclick="profile_open()" class="w3-padding">PROFILE</a>
         <a href="#" onclick="localGame_open()" class="w3-padding">LOCAL GAME</a>
-
+        <a href="#campaign" onclick="campaign_open()" class="w3-padding">CAMPAIGN</a>
+        <a href="#campaignEditor" onclick="campaignEditor_open()" class="w3-padding">CAMPAIGN EDITOR</a>
     </nav>
 
     <!-- Top menu on medium and small screens -->
     <header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
-        <img src="images/icon.svg" class="w3-left icon_small ">
+        <img src="images/Icon.svg" class="w3-left icon_small ">
         <span class="w3-left"> TL</span>
         <div class="w3-container w3-right w3-row">
             <a class="w3-btn-floating w3-right w3-white  w3-round-jumbo" onclick="w3_open()">&#9776;</a>
@@ -98,95 +101,70 @@
         <!-- Push down content on small screens  -->
         <div class="pushdown-content w3-hide-large"></div>
 
-
         <div class="pushdown-content-in-use w3-container ">
-            <h2>Draw Map</h2>
-            <p>Create your own map and upload it:</p>
-            <div class="w3-col w3-container w3-card-2 w3-round-large" style="width: 100%">
-
-
+            <h2>Campaign Editor</h2>
+            <div class="w3-threequarter w3-container w3-card-2 w3-round-large">
 
                 <form id="load-map-form" class="w3-container w3-row" action="#">
-
-<<<<<<< HEAD
-                    <select id="cell_type" class="editor_page_input_1 w3-select w3-margin w3-border w3-col m3" name="option">
-=======
                     <select id="load-map-options" class="editor_page_input w3-select w3-margin w3-border w3-quarter" name="option">
                     </select>
 
                     <select id="cell_type" class="editor_page_input w3-select w3-margin w3-border w3-quarter" name="option">
->>>>>>> 42b5a62a12687997482914e2b0f01acbd1bb3ece
-                        <option value="" disabled selected>Choose your option</option>
+                        <option value="" disabled selected>Choose Cell Type</option>
                         <option value="images/Void.png">Void Cell</option>
-                        <option value="images/P1_LIVE.png">Player1 Live Cell</option>
-                        <option value="images/P2_LIVE.png">Player2 Live Cell</option>
-                        <option value="images/P1_DEAD.png">Player1 Territory</option>
-                        <option value="images/P2_DEAD.png">Player2 Territory</option>
-                        <option value="images/EMPTY_CELL.png">Remove Cell</option>
+                        <option value="images/P1_LIVE.png">Player 1 </option>
+                        <option value="images/P2_LIVE.png">Player 2 Live Cell</option>
+                        <option value="images/P1_DEAD.png">Player 1 Territory</option>
+                        <option value="images/P2_DEAD.png">Player 2 Territory</option>
                     </select>
 
+                    <button id="reset_button" type="button" value="Reset" class="editor_page_bar_buttons w3-btn w3-quarter w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
 
-                    <button id="reset_button" type="button" value="Reset" class="editor_page_bar_buttons_row_1 w3-btn w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom w3-col m2">Reset</button>
+                </form>
 
+                <div class="w3-container w3-row w3-center">
 
-                    <input id="mapname" class="w3-input w3-margin editor_page_input_1 w3-border w3-col m3" name="map name" type="text" placeholder="Map Name">
-                  
-            
-                    <button id="save_button" type="button" value="save" class="editor_page_bar_buttons_row_1 w3-btn w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom w3-col m2" onclick="move()"> Upload </button>
+                    <select id="resize-options" class="editor_page_input w3-select w3-margin w3-border w3-quarter" name="option">
+                    </select>
 
-                    <!--
-                    <div class="w3-progress-container w3-col m3 w3-margin">
+                </div>
+
+                <div class="w3-container w3-center w3-padding-16">
+                    <canvas id="editor_canvas" width="512" height="512">
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="w3-quarter w3-container">
+
+                <form id="map-form" action="#" class="w3-container w3-card-4 w3-light-grey w3-text-grey w3-round-xlarge">
+
+                    <div class="w3-row w3-section">
+                        <div class="editor_page_map_icon w3-col"><i class="cam_map_input w3-xxlarge fa fa-map"></i></div>
+
+                        <div class="w3-rest">
+                            <input id="mapName" class="cam_map_input w3-input w3-border" type="text" placeholder="Give it a name">
+                        </div>
+
+                        <div class="editor_page_map_icon w3-col"><i class="cam_map_input w3-xxlarge fa fa-sort-amount-asc"></i></div>
+
+                        <div class="w3-rest">
+                            <input id="mapLevel" class="cam_map_input w3-input w3-border" type="text" placeholder="Give it a level">
+                        </div>
+                    </div>
+
+                    <p class="w3-center">
+                        <button id="save_button" type="button" value="save" class="w3-btn w3-section w3-dark-grey w3-medium w3-round-large w3-animate-zoom" onclick="move()"> Upload </button>
+                    </p>
+
+                    <div class="w3-progress-container">
                         <div id="myBar" class="editor_page_progressbar w3-progressbar w3-green w3-round">
                         </div>
                     </div>
 
-                    <p id="progressbar_num " class="w3-col m1 w3-margin">0%</p>
-                    -->
-
+                    <p id="progressbar_num" class="w3-center">0%</p>
                 </form>
-
-                <div class="w3-container">
-
-                    <form id="map-form" action="#" class=" w3-light-grey w3-text-grey w3-round-xlarge">
-        
-                        <input id="loadMapField" class="editor_page_input w3-input w3-margin w3-border w3-col m3" type="text" name="input a map" placeholder="Map Name">
-
-                        <div class="w3-btn-group w3-col m2 w3-margin">
-                            <button id="loadMap_button" type="button" value="loadMap" class="editor_page_bar_buttons w3-btn w3-left w3-dark-grey w3-large w3-round-large w3-animate-zoom ">Load</button>
-
-                            <button id="delete_button" type="button" value="delete" class="editor_page_bar_buttons w3-btn w3-right w3-dark-grey w3-large w3-round-large w3-animate-zoom ">Delete</button>
-                        </div>
-                    </form>
-
-                    <div class="editor_slider_bar_div w3-margin w3-col m3">
-                        <input class="editor_slider_bar" type="range" min="8" max="16" value="0" step="1" onchange="showValue(this.value)" />
-                    </div>
-                    <div class="editor_slider_label_div w3-col m1 w3-margin">
-                        <span class="editor_slider_label w3-left">Map size:</span>
-                        <span id="range" class="editor_slider_label w3-left">8</span>
-                    </div>
-                    <!--
-                    <input id="resizeRow" class="editor_page_input w3-input w3-margin w3-border w3-quarter" type="text" name="input a map" placeholder="map size">
-                    <button id="resizeButton" type="button" value="resizeCanvas" class="editor_page_bar_buttons w3-btn w3-margin w3-dark-grey w3-large w3-round-large w3-animate-zoom w3-quarter">Resize</button>
-                    -->
-
-                </div>
-                
-
-
-                <div class="w3-container w3-center w3-padding-16">
-                    <canvas id="editor_canvas" width="513" height="513">
-                    </canvas>
-                </div>
-
             </div>
-
-
-
-            
-
-                
-         
         </div>
     </div>
 
