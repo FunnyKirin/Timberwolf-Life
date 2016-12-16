@@ -158,7 +158,7 @@ function initEventHandlers() {
     loadButton.onclick = respondToLoadMap;
     canvas.onclick = respondToMouseClick;
     deleteButton.onclick = respondToDeleteMap;
-    resizeButton.onclick = respondToResizeMap;
+    //resizeButton.onclick = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
 
