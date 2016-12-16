@@ -228,6 +228,7 @@ function respondToResizeMap() {
 
 function respondToSaveMap() {
     //add progress bar feature.
+    /*
     var elem = document.getElementById("myBar");
     var width = 0;
     var id = setInterval(frame, 10);
@@ -241,7 +242,7 @@ function respondToSaveMap() {
             document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
         }
     }
-
+    */
     if (playerId) {
         var creator = playerId;
         var mapname = mapNameInput.value;
@@ -286,9 +287,13 @@ function respondToSaveMap() {
                 }
             });
         }
+
+        alert('Upload successfully!');
     } else {
         alert('You must first log in to use this feature');
     }
+
+
 }
 
 function respondToDeleteAMap() {
