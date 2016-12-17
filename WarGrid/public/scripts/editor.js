@@ -85,13 +85,13 @@ function initConstants() {
     EMPTY_COLOR = "#f1f1f1";
     LIVE_COLOR = [];
     DEAD_COLOR = [];
-    LIVE_COLOR[1] = "#bd1e24";  //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
-    DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
-    LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
-    DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
+    LIVE_COLOR[1] = "#FF0000";
+    DEAD_COLOR[1] = "#ff7272";
+    LIVE_COLOR[2] = "#1c23ff";
+    DEAD_COLOR[2] = "#7277ff";
     GHOST_COLOR = "rgba(255,0,0,0.5)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
+    VOID_COLOR = "#80bfff";
 
     //COLORS FOR RENDERING
     GRID_LINES_COLOR = "#CCCCCC";
@@ -116,6 +116,9 @@ function initButton() {
     mapNameInput = document.getElementById("mapname");
 
     loadmapInput = document.getElementById("loadMapField");
+
+    rowInput = document.getElementById("editor_size_bar");
+    console.log("rowInput: "+rowInput.value);
     columnInput = document.getElementById("resizeColumn");
     resizeButton = document.getElementById("resizeButton");
 
@@ -149,7 +152,7 @@ function initEventHandlers() {
     save.onclick = respondToSaveMap;
     canvas.onclick = respondToMouseClick;
     deleteButton.onclick = respondToDeleteMap;
-    //resizeButton.onclick = respondToResizeMap;
+    rowInput.onchange = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
 
@@ -191,6 +194,7 @@ function respondToLoadMap() {
     var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
     var mapRef = firebase.database().ref().child('maps');
     mapRef.child(mapName).on("value", function(snapshot) {
+        rowInput.value = snapshot.val().x;
         respondToResizeMap();
         renderGrid = snapshot.val().data;
         renderCells();
@@ -202,7 +206,7 @@ function respondToDeleteMap() {
 }
 
 function respondToResizeMap() {
-    var customRow = parseInt($('#range').text());
+    var customRow = rowInput.value;
     canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
 
     if ((customRow <= 16) && (customRow >= 8)) {
@@ -228,7 +232,6 @@ function respondToResizeMap() {
 
 function respondToSaveMap() {
     //add progress bar feature.
-    /*
     var elem = document.getElementById("myBar");
     var width = 0;
     var id = setInterval(frame, 10);
@@ -242,7 +245,7 @@ function respondToSaveMap() {
             document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
         }
     }
-    */
+
     if (playerId) {
         var creator = playerId;
         var mapname = mapNameInput.value;
@@ -287,13 +290,22 @@ function respondToSaveMap() {
                 }
             });
         }
-
-        alert('Upload successfully!');
     } else {
         alert('You must first log in to use this feature');
     }
+}
 
-
+function respondToLoadAMap() {
+    var loadMapName = loadmapInput.value;
+    dbref = this.db.ref().child('maps');
+    dbref.child(loadMapName).on("value", function(snapshot) {
+        rowInput.value = snapshot.val().x;
+        respondToResizeMap();
+        mapNameInput.value = snapshot.val().map;
+        mapNameInput.disabled = true;
+        renderGrid = snapshot.val().data;
+        renderCells();
+    });
 }
 
 function respondToDeleteAMap() {
@@ -363,6 +375,7 @@ function resetEditor() {
     gridHeight = (canvasHeight) / cellLength;
     mapNameInput.value = '';
     mapNameInput.disabled = false;
+    //rowInput.value = '';
     key = null;
     renderGrid = [];
     initGrid();
