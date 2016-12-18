@@ -141,13 +141,6 @@ function pick_and_display_adPic(x)
 
 }
 
-// slider bar for editor page.
-function showValue(newValue)
-{
-    document.getElementById("range").innerHTML=newValue;
-}
-
-
 
 //search bar from home page
 function searchRoom() {
