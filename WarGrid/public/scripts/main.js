@@ -109,15 +109,15 @@ function initConstants() {
     EMPTY_COLOR = "#ffffff";
     LIVE_COLOR = [];
     DEAD_COLOR = [];
-    LIVE_COLOR[1] = "#bd1e24";  //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
-    DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
-    LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
-    DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
+    LIVE_COLOR[1] = "#bd1e24"; //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
+    DEAD_COLOR[1] = "#e68989"; //option_1: e68989 | original: ff7272
+    LIVE_COLOR[2] = "#0067a7"; //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
+    DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
     GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
+    VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
     TOP_LEFT = 0;
     TOP_RIGHT = 1;
@@ -258,7 +258,7 @@ function respondToMouseClick(event) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (cell != LIVE_CELL + currentPlayer * 10&&cell!= LIVE_CELL + (3-currentPlayer) *10 ) {
+    if (cell != LIVE_CELL + currentPlayer * 10 && cell != LIVE_CELL + (3 - currentPlayer) * 10) {
         if (ghostCell != LIVE_CELL + currentPlayer * 10) {
             //check if the player can place a cell at that position.
             if (cellNumber > 0 && cell != VOID_CELL) {
@@ -477,7 +477,19 @@ function nextTurn() {
 }
 
 function getCellNumber(territory) {
-    return Math.floor(4 + territory / 5);
+    var size = 4;
+    var number = 3;
+    while (1) {
+        territory -= size;
+        if (territory > 0) {
+            number++;
+            size += 2;
+        }
+        else {
+            break;
+        }
+    }
+    return number;
 }
 
 function CellType(initNumNeighbors, initCellValues) {

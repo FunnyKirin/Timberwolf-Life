@@ -101,15 +101,15 @@ function initConstants() {
     EMPTY_COLOR = "#ffffff";
     LIVE_COLOR = [];
     DEAD_COLOR = [];
-    LIVE_COLOR[1] = "#bd1e24";  //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
-    DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
-    LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
-    DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
+    LIVE_COLOR[1] = "#bd1e24"; //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
+    DEAD_COLOR[1] = "#e68989"; //option_1: e68989 | original: ff7272
+    LIVE_COLOR[2] = "#0067a7"; //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
+    DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
     GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
+    VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
     TOP_LEFT = 0;
     TOP_RIGHT = 1;
@@ -264,10 +264,9 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
         return 'If you leave, you lose';
     };
     // remove game room properly
@@ -294,7 +293,7 @@ function respondToMouseClick(event) {
         var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
         //check if there is already a cell in ghost grid,
         // if not:
-        if (cell != LIVE_CELL + playerIndex * 10 && cell!= LIVE_CELL + 3-playerIndex *10) {
+        if (cell != LIVE_CELL + playerIndex * 10 && cell != LIVE_CELL + 3 - playerIndex * 10) {
             if (ghostCell != LIVE_CELL + playerIndex * 10) {
                 //check if the player can place a cell at that position.
                 if (cellNumber > 0 && cell != VOID_CELL) {
@@ -547,7 +546,19 @@ function nextTurn() {
 }
 //calculalte amount of cells player can place
 function getCellNumber(territory) {
-    return Math.floor(3 + territory / 7);
+    var size = 4;
+    var number = 3;
+    while (1) {
+        territory -= size;
+        if (territory > 0) {
+            number++;
+            size += 2;
+        }
+        else {
+            break;
+        }
+    }
+    return number;
 }
 
 function CellType(initNumNeighbors, initCellValues) {
@@ -873,34 +884,32 @@ function checkSetup() {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
-
 // handles the operation of leaving a game room
 // this is called when a user closes a tab
-var leaveRoom = function() {
+var leaveRoom = function () {
     var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
     var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
     var lobbyRef = firebase.database().ref('lobby'); // database root
     var roomRef = lobbyRef.child(room_key); // game session
     var challenger = roomRef.child('challenger'); // the challenger
     var owner = roomRef.child('owner'); // the owner
-
-    roomRef.once('value', function(roomSnap) {
+    roomRef.once('value', function (roomSnap) {
         if (roomSnap.val()) { // check if the room exists first
             // the challenger is gone whatsoever
-            challenger.transaction(function(e) {
+            challenger.transaction(function (e) {
                 return '';
             });
         }
     });
-
     if (playerId) { // if the player signed in
         // if the owner quits, the room disappears
-        owner.once('value', function(ownerSnap) {
+        owner.once('value', function (ownerSnap) {
             if (ownerSnap.val() == playerId) {
                 roomRef.remove();
             }
         });
-    } else { // guest player
+    }
+    else { // guest player
         // if it's the owner
         if (raw_key.slice(-1) == '1') {
             roomRef.remove();
