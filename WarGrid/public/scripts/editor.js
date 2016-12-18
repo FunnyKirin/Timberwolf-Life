@@ -294,6 +294,9 @@ function respondToSaveMap() {
                 }
             });
         }
+
+        // inform user the map is uploaded sucessfully.
+        alert("Upload successfully!");
     } else {
         alert('You must first log in to use this feature');
     }

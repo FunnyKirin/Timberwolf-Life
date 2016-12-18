@@ -106,24 +106,34 @@ function campaignEditor_open()
   window.open("campaignEditor.html","_self" );
 }
 
-
+// link each team image to their website. Order follows the google doc spreadsheets.
 function openAd(x)
 {
 
     if(x===1)
-        window.open("https://canarylife.firebaseapp.com/",          "_blank");
-    else if(x===2)
         window.open("http://www.awesome-life-game.appspot.com/",    "_blank");
+    else if(x===2)
+        window.open("https://canary-life.firebaseapp.com/",         "_blank");
     else if(x===3)
-        window.open("https://ikb-life.firebaseapp.com/",            "_blank");
+        window.open("https://firebrick-life.firebaseapp.com/",      "_blank");
     else if(x===4)
-        window.open("http://fire-brick-life.appspot.com/",          "_blank");
+        window.open("https://ikb-life.firebaseapp.com/",            "_blank");
+    else if(x===5)
+        window.open("https://jet-life.firebaseapp.com/",            "_blank");
+    else if(x===6)
+        window.open("https://purplelifegame.firebaseapp.com/",      "_blank");
+    else if(x===7)
+        window.open("https://salmon-life.firebaseapp.com/",         "_blank");
+    else if(x===8)
+        window.open("http://www.the-scarlet-life.appspot.com/",     "_blank");
+    else if(x===9)
+        window.open("https://wisteria-life.appspot.com/",           "_blank");
 
 }
 // randomly pick ad pic and display it.
 function pick_and_display_adPic(x)
 {
-    var n = Math.floor(Math.random() *4);       // so far there are only 4 pics right now, later need to change this.
+    var n = Math.floor(Math.random() *9);       // so far there are only 4 pics right now, later need to change this.
     var i;
     if(x === 1)
         var x = document.getElementsByClassName("local_adSlides");
