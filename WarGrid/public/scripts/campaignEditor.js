@@ -121,7 +121,6 @@ function initButton() {
 
     loadmapInput = document.getElementById("loadMapField");
 
-    rowSelect = document.getElementById(RESIZE_SELECTOR_ID);
     columnInput = document.getElementById("resizeColumn");
 
     save = document.getElementById("save_button");
@@ -156,9 +155,7 @@ function initEventHandlers() {
 function respondToMouseClick(event) {
     // GET THE PATTERN SELECTED IN THE DROP DOWN LIST
     var patternsList = document.getElementById("cell_type");
-    console.log("patternsList: " + patternsList);
     var selectedPattern = patternsList.options[patternsList.selectedIndex].value;
-    console.log("selectedPattern: " + selectedPattern);
     if (selectedPattern === "images/Void.png") {
         SELECTED_CELL = VOID_CELL;
     }
@@ -198,7 +195,7 @@ function respondToLoadMap() {
     var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
     var mapRef = firebase.database().ref().child('campaign');
     mapRef.child(mapName).on('value', function(snapshot) {
-        rowInput.value = snapshot.val().x;
+        $('#' + RESIZE_SELECTOR_ID).val(snapshot.val().x);
         respondToResizeMap();
         renderGrid = snapshot.val().data;
         renderCells();
