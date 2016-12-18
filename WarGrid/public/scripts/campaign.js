@@ -87,11 +87,6 @@ function createRoom(map) {
     var lobby = {}; // lobby placeholder
     var grid = []; // grid placeholder
 
-    // don't know why this is here
-    if (!firebase.auth().currentUser) {
-        playerId = '';
-    }
-
     // load map into grid
     dbRef.child('maps').child(map).once('value', function(snapshot) {
         if (snapshot.val()) { // if the map exists of course

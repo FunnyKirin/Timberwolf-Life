@@ -208,7 +208,7 @@ function respondToDeleteMap() {
 function respondToResizeMap() {
     var customRow = rowInput.value;
 
-    // update the map size var. 
+    // update the map size var.
     document.getElementById("range").innerHTML=customRow;
 
     canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
@@ -235,20 +235,6 @@ function respondToResizeMap() {
 }
 
 function respondToSaveMap() {
-    //add progress bar feature.
-    var elem = document.getElementById("myBar");
-    var width = 0;
-    var id = setInterval(frame, 10);
-
-    function frame() {
-        if (width >= 100) {
-            clearInterval(id);
-        } else {
-            width++;
-            elem.style.width = width + '%';
-            document.getElementById("progressbar_num").innerHTML = width * 1 + '%';
-        }
-    }
 
     if (playerId) {
         var creator = playerId;

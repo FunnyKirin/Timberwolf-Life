@@ -109,15 +109,15 @@ function initConstants() {
     EMPTY_COLOR = "#ffffff";
     LIVE_COLOR = [];
     DEAD_COLOR = [];
-    LIVE_COLOR[1] = "#bd1e24";  //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
-    DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
-    LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
-    DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
+    LIVE_COLOR[1] = "#bd1e24"; //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
+    DEAD_COLOR[1] = "#e68989"; //option_1: e68989 | original: ff7272
+    LIVE_COLOR[2] = "#0067a7"; //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
+    DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
     GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
+    VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
     TOP_LEFT = 0;
     TOP_RIGHT = 1;
@@ -173,7 +173,7 @@ function initMap() {
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
-    dbref.child(loadMapName).on("value", function (data) {
+    dbref.child(loadMapName).on("value", function(data) {
         //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
         key = data.key;
         renderGrid = data.val().data;
@@ -220,7 +220,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function () {
+    $("#ghostButton").click(function() {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -228,7 +228,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function () {
+    $("#resetButton").click(function() {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -258,7 +258,7 @@ function respondToMouseClick(event) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (cell != LIVE_CELL + currentPlayer * 10&&cell!= LIVE_CELL + (3-currentPlayer) *10 ) {
+    if (cell != LIVE_CELL + currentPlayer * 10 && cell != LIVE_CELL + (3 - currentPlayer) * 10) {
         if (ghostCell != LIVE_CELL + currentPlayer * 10) {
             //check if the player can place a cell at that position.
             if (cellNumber > 0 && cell != VOID_CELL) {
@@ -301,8 +301,8 @@ function respondToMouseClick(event) {
                 for (var j = 0; j < gridWidth; j++) {
                     var cell = getGridCell(ghostGrid, i, j);
                     if (cell == LIVE_CELL + currentPlayer * 10) {
-                        var checkGrid = JSON.parse(JSON.stringify(ghostGrid))
-                        if (checkPath(i, j, checkGrid) == false) {
+                        var checkGrid = JSON.parse(JSON.stringify(ghostGrid));
+                        if (checkPath(i, j, checkGrid) === false) {
                             boolean2 = 1;
                         }
                     }
@@ -321,6 +321,7 @@ function respondToMouseClick(event) {
         initUI();
     }
 }
+
 //Check if a live cell in ghost grid have a path to territory.
 //para: Cell
 //return: boolean
@@ -590,8 +591,7 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                }
-                else if (testCell == DEAD_CELL) {
+                } else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -631,8 +631,7 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -783,14 +782,13 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX
-            , y: event.offsetY
+            x: event.offsetX,
+            y: event.offsetY
         };
-    }
-    else {
+    } else {
         return {
-            x: event.layerX
-            , y: event.layerY
+            x: event.layerX,
+            y: event.layerY
         };
     }
 }
