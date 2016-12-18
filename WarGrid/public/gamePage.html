@@ -69,15 +69,15 @@
                 </div>
                 -->
                 <div class="adSlides-game-section w3-container w3-center w3-content">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png"     onclick="openAd(1)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png"      onclick="openAd(2)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/fireBrick_ad.png"   onclick="openAd(3)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png"         onclick="openAd(4)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png"         onclick="openAd(5)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png"      onclick="openAd(6)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png"      onclick="openAd(7)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/scarlet_ad.png"     onclick="openAd(8)">
-                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png"    onclick="openAd(9)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png"     onclick="openAd(1)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png"      onclick="openAd(2)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/fireBrick_ad.png"   onclick="openAd(3)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png"         onclick="openAd(4)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png"         onclick="openAd(5)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png"      onclick="openAd(6)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png"      onclick="openAd(7)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/scarlet_ad.png"     onclick="openAd(8)">
+                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png"    onclick="openAd(9)">
                 </div>
 
                 <p class="w3-container">
@@ -116,9 +116,8 @@
         </div>
         <!-- Buttom part-->
         <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
-            <a class="w3-btn-floating" onclick="w3_online_left_open()">
-                <-</a>
-                    <a class="w3-btn-floating" onclick="w3_online_right_open()">-></a>
+            <a class="w3-btn-floating" onclick="document.getElementById('Instruction').style.display='block'"><i class="material-icons">announcement</i></a>
+            <a class="w3-btn-floating" onclick="w3_local_right_open()"><i class="material-icons">chat</i></a>
         </div>
         <!-- span line to display the cell left number. -->
         <div class="w3-container w3-row w3-center"> <span id="text">Cell left: 0</span> </div>
@@ -140,12 +139,14 @@
 
 
     <script>
-        initGameOfLife();
-
         // set up the ad slides.
         pick_and_display_adPic(2);
+
+
+        initGameOfLife();
     </script>
     <!-- Left side pop-up info panel. -->
+    <!--
     <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top" id="online_left_side_info_panel">
 
         <h1 class="w3-text-sand w3-padding-24">TL</h1>
@@ -164,10 +165,10 @@
         </p>
 
     </nav>
-
-    <!-- Overlay effect when opening left_side on small screens -->
+    -->
+    <!-- Overlay effect when opening left_side on small screens 
     <div class="online_left_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_online_left_close()" title="close side menu" id="myOnlineLeftlay"></div>
-
+    -->
 
 
 

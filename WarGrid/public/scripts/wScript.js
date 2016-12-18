@@ -135,10 +135,11 @@ function pick_and_display_adPic(x)
 {
     var n = Math.floor(Math.random() *9);       // so far there are only 4 pics right now, later need to change this.
     var i;
+    var x;
     if(x === 1)
-        var x = document.getElementsByClassName("local_adSlides");
+        x = document.getElementsByClassName("local_adSlides");
     else if(x === 2)
-        var x = document.getElementsByClassName("game_adSlides");       // if put x, y inside in one for loop, error.
+        x = document.getElementsByClassName("game_adSlides");       
 
     for(i = 0; i < x.length; i++)
     {
