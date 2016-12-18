@@ -264,6 +264,12 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
+    
+    // confirms leaving before actually leaving otherwise users may leave without actually want to leave
+    // tongue twister level 1
+    window.onbeforeunload = function() {
+        return 'If you leave, you lose';
+    };
     // remove game room properly
     window.onunload = leaveRoom.bind(this);
 }
@@ -867,31 +873,37 @@ function checkSetup() {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
+
 // handles the operation of leaving a game room
-var leaveRoom = function () {
-    var room_key = window.location.search.substring(1);
-    var roomRef = firebase.database().ref('lobby/' + room_key); // game session
-    var challenger = roomRef.child('challenger');
-    var owner = roomRef.child('owner');
-    if (playerId) {
-        // async listener challenger variable
-        challenger.once('value', function (snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                if (playerId == snapshot.val()) { // you are the challenger
-                    challenger.transaction(function (e) {
-                        return '';
-                    });
-                }
+// this is called when a user closes a tab
+var leaveRoom = function() {
+    var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
+    var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
+    var lobbyRef = firebase.database().ref('lobby'); // database root
+    var roomRef = lobbyRef.child(room_key); // game session
+    var challenger = roomRef.child('challenger'); // the challenger
+    var owner = roomRef.child('owner'); // the owner
+
+    roomRef.once('value', function(roomSnap) {
+        if (roomSnap.val()) { // check if the room exists first
+            // the challenger is gone whatsoever
+            challenger.transaction(function(e) {
+                return '';
+            });
+        }
+    });
+
+    if (playerId) { // if the player signed in
+        // if the owner quits, the room disappears
+        owner.once('value', function(ownerSnap) {
+            if (ownerSnap.val() == playerId) {
+                roomRef.remove();
             }
         });
-        owner.once('value', function (snapshot) {
-            if (snapshot.val()) { // we have a challenger
-                if (playerId == snapshot.val()) { // you are the owner
-                    roomRef.remove();
-                }
-            }
-        });
-    }
-    else { //TODO: you are not logged in
+    } else { // guest player
+        // if it's the owner
+        if (raw_key.slice(-1) == '1') {
+            roomRef.remove();
+        }
     }
 };
