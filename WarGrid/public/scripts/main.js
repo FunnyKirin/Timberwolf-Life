@@ -478,7 +478,19 @@ function nextTurn() {
 }
 
 function getCellNumber(territory) {
-    return Math.floor(4 + territory / 5);
+    var size = 4;
+    var number = 3;
+    while (1) {
+        territory -= size;
+        if (territory > 0) {
+            number++;
+            size += 2;
+        }
+        else {
+            break;
+        }
+    }
+    return number;
 }
 
 function CellType(initNumNeighbors, initCellValues) {
