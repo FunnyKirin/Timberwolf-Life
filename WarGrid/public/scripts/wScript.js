@@ -203,3 +203,41 @@ function handleBrowseClick() {
     var fileinput = document.getElementById("mediaCapture");
     fileinput.click();
 }
+
+
+
+function determineCanvasSize() {
+    // Step 0: get the browser window size.
+    var x = $(window).width();
+    var y = $(window).height();
+
+    console.log("x: ", x);
+    console.log("y: ", y);
+
+    //var canvas = document.getElementById('local_game_canvas')[0];
+    // Step 1: set the canvas size;
+    if(x > 600)     // if browser window greater than 990, meaning larger screen, then -> set canvas to 512x512.
+    {
+        $("#game_canvas").attr("width","512"); 
+        $("#game_canvas").attr("height","512");
+        // Also change the class vars.
+        $("#game_canvas_div").attr("class","w3-container w3-padding-16 w3-col m6 w3-center");
+        $("#game_canvas").attr("class","w3-sand w3-round-xlarge");
+    }
+    else if(x <= 600)       // if browser window less than 990, meaning small screen, then -> set canvas to 256x256.
+    {
+        $("#game_canvas").attr("width","256"); 
+        $("#game_canvas").attr("height","256"); 
+        // Also change the class vars.
+        $("#game_canvas_div").attr("class","w3-container w3-padding-16 w3-center w3-border");
+        $("#game_canvas").attr("class","w3-sand w3-round-xlarge w3-center w3-border");
+    }
+    else
+    {
+        alert("Error: in  determineCanvasSize");
+    }
+
+    console.log("canvas x: ", $("#game_canvas").attr("width"));
+    console.log("canvas y: ", $("#game_canvas").attr("height"));
+   
+}
