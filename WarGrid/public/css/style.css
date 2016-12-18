@@ -110,21 +110,34 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 	margin-top:0px;
 }
 
-.editor_page_input {
-	width: 200px;
+.editor_page_input_1 {
+	
 }
 
-.editor_page_bar_buttons{
-	width: 100px;
+.editor_page_bar_buttons {
+	
+	
+}
+
+
+.editor_slider_bar_div {
+	height: 40px;
+}
+
+.editor_slider_label_div {
+	height: 40px;
 }
 
 .editor_slider_bar {
-	width: 230px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.editor_slider_var {
-	margin-left: 20px;
+.editor_slider_label {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
+
 
 input[type='range'] {
 -webkit-appearance: none;
@@ -163,7 +176,7 @@ padding-left:2px; padding-right:2px;
 
 .myMapCard {
 	width: 70%;
-	margin-left: 60px;
+	margin-left: 50px;
 }
 
 
@@ -194,6 +207,45 @@ padding-left:2px; padding-right:2px;
 .game_adSlides {
 	width: 85%;
 	margin-left: 25px;
+}
+
+.moving_block {
+    width: 60px;
+    height: 60px;
+    background-color: red;
+    position: relative;
+    /* Safari 4.0 - 8.0 */
+    -webkit-animation-name: example;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-delay: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    /* Standard syntax */
+    animation-name: example;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes example {
+    0%   {background-color:#e68989; left:300px; top:0px;}
+    25%  {background-color:#bd1e24; left:525px; top:0px;}
+    50%  {background-color:#0067a7; left:750px; top:0px;}
+    75%  {background-color:#a9aac6; left:975px; top:0px;}
+    100% {background-color:#a9947b; left:1200px; top:0px;}
+}
+
+/* Standard syntax */
+@keyframes example {
+    0%   {background-color:#e68989; left:300px; top:0px;}
+    25%  {background-color:#bd1e24; left:525px; top:0px;}
+    50%  {background-color:#0067a7; left:750px; top:0px;}
+    75%  {background-color:#a9aac6; left:975px; top:0px;}
+    100% {background-color:#a9947b; left:1200px; top:0px;}
 }
 
 

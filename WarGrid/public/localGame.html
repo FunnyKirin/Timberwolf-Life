@@ -59,10 +59,15 @@
                 <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
 
                 <div class="adSlides-local-section w3-container w3-content w3-center">
-                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/canary.png"      onclick="openAd(1)">
-                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/awesome.png"     onclick="openAd(2)">
-                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/ikb.png"         onclick="openAd(3)">
-                  <img class="local_adSlides w3-card-4 w3-round-large" src="images/fireBrick.png"   onclick="openAd(4)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png"     onclick="openAd(1)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png"      onclick="openAd(2)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/fireBrick_ad.png"   onclick="openAd(3)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png"         onclick="openAd(4)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png"         onclick="openAd(5)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png"      onclick="openAd(6)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png"      onclick="openAd(7)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/scarlet_ad.png"     onclick="openAd(8)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png"    onclick="openAd(9)">
                 </div>
                 <!--
                 <div class="w3-container w3-padding-16">
@@ -114,10 +119,11 @@
     </div>
     <!-- set up the game. -->
     <script>
-        initGameOfLife();
-
         // set up the ad slides.
         pick_and_display_adPic(1);
+
+
+        initGameOfLife();
     </script>
 
 
@@ -162,8 +168,6 @@
         <div id="message-form" action="#" class="w3-container w3-margin-top">
             <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
             <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-center w3-animate-zoom w3-hover-sand">Send</button>
-            <input id="mediaCapture" type="file" accept="image/*,capture=camera">
-            <button id="submitImage" title="Add an image" class="game_page_browse_img w3-btn w3-dark-grey w3-margin-top w3-center" onclick="handleBrowseClick()"> <i class="material-icons">image</i> </button>
         </div>
 
 

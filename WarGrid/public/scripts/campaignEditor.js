@@ -86,13 +86,13 @@ function initConstants() {
     EMPTY_COLOR = "#f1f1f1";
     LIVE_COLOR = [];
     DEAD_COLOR = [];
-    LIVE_COLOR[1] = "#FF0000";
-    DEAD_COLOR[1] = "#ff7272";
-    LIVE_COLOR[2] = "#1c23ff";
-    DEAD_COLOR[2] = "#7277ff";
+    LIVE_COLOR[1] = "#bd1e24";  //option_4: cf0234 | option_3: bd1e24 | option_2: a02128 | option_1: a6001a | original: ff0000
+    DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
+    LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
+    DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
     GHOST_COLOR = "rgba(255,0,0,0.5)";
     BRIGHT_COLOR = "#66ffff";
-    VOID_COLOR = "#80bfff";
+    VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
 
     //COLORS FOR RENDERING
     GRID_LINES_COLOR = "#CCCCCC";
@@ -111,8 +111,8 @@ function initCanvas() {
     canvas = document.getElementById("editor_canvas");
     canvas2D = canvas.getContext("2d");
 
-    canvasWidth = canvas.width;
-    canvasHeight = canvas.height;
+    canvasWidth = canvas.width-1;
+    canvasHeight = canvas.height-1;
 }
 
 function initButton() {
@@ -135,7 +135,7 @@ function initEditorData() {
 
 function initGrid() {
     gridWidth = canvasWidth / cellLength;
-    gridHeight = canvasHeight / cellLength;
+    gridHeight = canvasHeight/ cellLength;
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
             setGridCell(renderGrid, i, j, EMPTY_CELL);
@@ -207,6 +207,7 @@ function respondToLoadMap() {
 
 function respondToResizeMap() {
     var customRow = parseInt($('#' + RESIZE_SELECTOR_ID).val());
+    console.log("customRow: " + customRow);
     canvasWidth = INIT_CANVAS_WIDTH; //INIT_CANVAS_WIDTH IS 512
 
     if ((customRow <= 16) && (customRow >= 8)) {
@@ -219,12 +220,11 @@ function respondToResizeMap() {
         window.alert("Please enter a number between 8 and 16 ");
         return false;
     }
-    canvasWidth += 1; //plus 1 to draw the right most and bottom line
-    //canvasHeight +=1;
-    canvas.width = canvasWidth;
-    canvas.height = canvasWidth;
+    canvas.width = canvasWidth + 1;
+    canvas.height = canvasWidth + 1;
+    canvasHeight = canvasWidth;
 
-    cellLength = (canvasWidth - 1) / customRow;
+    cellLength = canvasWidth / customRow;
     canvas2D.clearRect(0, 0, canvasWidth, canvasHeight);
     resetEditor();
 
@@ -331,8 +331,8 @@ function renderCells() {
 }
 
 function resetEditor() {
-    gridWidth = canvasWidth / cellLength; // width goes back to default
-    gridHeight = canvasHeight / cellLength; // height goes back to default
+    gridWidth = (canvasWidth) / cellLength; // width goes back to default
+    gridHeight = (canvasHeight) / cellLength; // height goes back to default
     mapNameInput.value = ''; // name field clear
     mapNameInput.disabled = false;
     mapLevelInput.value = ''; // level field clear
@@ -353,7 +353,7 @@ function renderGridLines() {
     canvas2D.strokeStyle = GRID_LINES_COLOR;
 
     // vertical lines
-    for (var i = 0; i < gridWidth; i++) {
+    for (var i = 0; i <= gridWidth; i++) {
         var x1 = i * cellLength;
         var y1 = 0;
         var x2 = x1;
@@ -365,7 +365,7 @@ function renderGridLines() {
     }
 
     // horizontal lines
-    for (var j = 0; j < gridHeight; j++) {
+    for (var j = 0; j <= gridHeight; j++) {
         var x_1 = 0;
         var y_1 = j * cellLength;
         var x_2 = canvasWidth;
