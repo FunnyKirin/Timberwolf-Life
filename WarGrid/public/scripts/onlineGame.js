@@ -266,7 +266,12 @@ function initEventHandlers() {
     });
     $("#inviteFriendButton").click(function() {
         var url = window.location.href;
-        url = url + "%202";
+        if (url.charAt(url.length-4) === "%"){
+            var url = url.substring(0,url.length-1) + "2";
+        }
+        else{
+            url = url + "%202";
+        }
         $("#invitedURL").val(url);
         var clipboard = new Clipboard("#copy-button");
     });

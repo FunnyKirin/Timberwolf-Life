@@ -51,10 +51,9 @@
     </script>
 
     <!-- The body has four sections. Left, middle, right and buttom. -->
-    <div id="gameDiv" class="w3-container w3-center w3-padding-64">
+    <div id="gameDiv" class="w3-container w3-center w3-padding-32">
         <div class="w3-container w3-card-24 w3-center w3-dark-grey w3-round-xlarge">
-            <!-- Left section-game info panel, panel is shown on large screen,
-            -->
+            <!-- Left section-game info panel, panel is shown on large screen -->
             <div class="w3-container w3-col w3-padding-16 m3 w3-left w3-hide-medium w3-hide-small">
                 <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
 
@@ -84,16 +83,13 @@
                 <p class="w3-container">
                     <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
                     <br>
-                    <label>
-                      Hotseat<input type="radio" name = "opponent-group" value="hotseat"/>
-                      <input type="radio" name="opponent-group" value="AI"/> Against AI
-                    </label>
                 </p>
             </div>
             <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
             <!--    1. this canvas is for large screen. -->
-            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center w3-border">
-                <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="512" height="512"> </canvas>
+            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center">
+                <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="513" height="513"> 
+                </canvas>
             </div>
             <!--    2. this canvas is for medium and small screen.
             <div class="w3-container w3-padding-16  w3-center w3-hide-large">
@@ -102,7 +98,6 @@
             -->
             <!-- Right section-char room is shown on large scrren. -->
             <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small ">
-
             </div>
 
 
@@ -113,11 +108,11 @@
                 <a class="w3-btn-floating" onclick="w3_local_right_open()"><i class="material-icons">chat</i></a>
         </div>
         <!-- span line to display the cell left number. -->
-        <div class="w3-container w3-row w3-center"> <span id="text">Cell left: 0</span> </div>
+        <div class="w3-container w3-row w3-center"> <span id="text" style="font-size: 40px">Cell left: 0</span> </div>
         <!-- button group includes 4 buttons to use. -->
         <div class="w3-container w3-row w3-center">
-            <button id="resetButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
             <button id="confirmButton" value="Confirm" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
+            <button id="resetButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
             <button id="ghostButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
             <button class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="localGame_open()">Exit</button>
         </div>

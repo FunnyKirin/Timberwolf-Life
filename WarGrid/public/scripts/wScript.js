@@ -247,12 +247,14 @@ function determineCanvasSize() {
     }
     else if(x <= 583)       // if browser window less than 583, meaning small screen, then -> set canvas to 256x256.
     {
-        $(".game_canvas_box").attr("width","256"); 
-        $(".game_canvas_box").attr("height","256"); 
+        $(".game_canvas_box").attr("width","230");      // for liyun's phone! 230 fits.
+        $(".game_canvas_box").attr("height","230"); 
         // Also change the class vars.
         $(".game_canvas_div").attr("class","w3-container w3-padding-16 w3-center");
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
+
+        $("#text").attr("style", "font-size: 20px")
 
         //console.log("canvas x: small");
     }
