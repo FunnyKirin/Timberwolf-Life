@@ -1,6 +1,5 @@
 //hotseat(1) or AI(2) 
-var gameMode=1;
-
+var gameMode = 2;
 var playerName;
 var loadMapName;
 //PlayerData
@@ -10,7 +9,8 @@ var numOfMove2;
 var currentPlayer = 2;
 var cellNumber = 0;
 var territory = 0;
-var ghostTrigger = 1;
+//Turn on(1)/off(2) ghost
+var ghostTrigger = 2;
 //Cell code
 var DEAD_CELL;
 var LIVE_CELL;
@@ -118,7 +118,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
+    GHOST_COLOR = "rgba(231, 237, 59, 1)";
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -252,7 +252,7 @@ function initUI() {
  * until the player click confirm.
  */
 function respondToMouseClick(event) {
-    if (currentPlayer == 1||gameMode==1) {
+    if (currentPlayer == 1 || gameMode == 1) {
         // CALCULATE THE ROW,COL OF THE CLICK
         var canvasCoords = getRelativeCoords(event);
         var clickCol = Math.floor(canvasCoords.x / cellLength);
@@ -393,8 +393,14 @@ function renderGhostCells() {
                 var _y = i * cellLength;
                 if (_leftNumber == currentPlayer) {
                     if (_rightNumber == 1) {
-                        canvas2D.fillStyle = GHOST_COLOR;
-                        canvas2D.fillRect(_x, _y, cellLength, cellLength);
+                        //canvas2D.fillStyle = GHOST_COLOR;
+                        //canvas2D.fillRect(_x, _y, cellLength, cellLength);
+                        
+                        canvas2D.beginPath();
+                        canvas2D.lineWidth="6"; //ghostWidth
+                        canvas2D.strokeStyle = GHOST_COLOR;
+                        canvas2D.rect(_x+2, _y+2, cellLength-4, cellLength-4);
+                        canvas2D.stroke();
                     }
                 }
             }
@@ -483,20 +489,19 @@ function nextTurn() {
     //amount of cell current player can place.
     cellNumber = getCellNumber(territory);
     initUI();
-    if (currentPlayer == 2&&gameMode==2) {
+    if (currentPlayer == 2 && gameMode == 2) {
         AI();
     }
 }
 
 function AI() {
-    var counter =0;
-    while(cellNumber>0&&counter<gridHeight*gridWidth*cellNumber){
-        clickCell(getRandomInt(0, gridHeight),getRandomInt(0, gridWidth));
+    var counter = 0;
+    while (cellNumber > 0 && counter < gridHeight * gridWidth * cellNumber) {
+        clickCell(getRandomInt(0, gridHeight), getRandomInt(0, gridWidth));
         counter++;
     }
     confirmMove();
 }
-
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
@@ -687,6 +692,7 @@ function renderCells() {
 }
 
 function renderGridLines() {
+    canvas2D.lineWidth="1";
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
     // VERTICAL LINES
