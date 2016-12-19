@@ -92,7 +92,7 @@
                 <canvas id="game_canvas" class="w3-sand w3-round-xlarge" width="512" height="512"> </canvas>
             </div>
             -->
-            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center w3-border">
+            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center">
                 <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="512" height="512"> </canvas>
             </div>
             <!--    2. this canvas is for medium and small screen. 
@@ -101,23 +101,30 @@
             </div>
             -->
             <!-- Right section-char room is shown on large scrren. -->
-            <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small">
-                <!-- WHERE MESSAGES DISPLAY, style is in style.css-->
-                <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round">
-                    <span id="message-filler">
-                    </span>
-                </div>
+            <div class="chatRoom_div_section">
 
-                <div id="chat">
-                    <form id="message-form" action="#" class="w3-container w3-margin-top">
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield-floating-label">
-                            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" placeholder="Message..." id="message">
-                        </div>
-                        <button id="submit" disabled type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
-                    </form>
+                <div class="w3-col w3-container w3-padding-16 m3 w3-right">
+                
+                <!-- <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top" id="online_right_side_chat_panel"> -->
+                    <!-- WHERE MESSAGES DISPLAY, style is in style.css-->
+                    <div id="messages" class="game_page_message_box w3-container w3-card-0 w3-sand w3-round">
+                        <span id="message-filler">
+                        </span>
+                    </div>
+
+                    <div id="chat">
+                        <form id="message-form" action="#" class="w3-container w3-margin-top">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield-floating-label">
+                                <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" placeholder="Message..." id="message">
+                            </div>
+                            <button id="submit" disabled type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand">Send</button>
+                        </form>
+                    </div>
+                
+                <!-- nav -->
                 </div>
+            
             </div>
-
         </div>
         <!-- Buttom part-->
         <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
@@ -146,6 +153,8 @@
     <script>
         // detect window's size.
         determineCanvasSize();
+        // change the chat room div to nav between large to small screen.
+        changeChatRoomDtoN();
         // set up the ad slides.
         pick_and_display_adPic(2);
 
@@ -179,7 +188,7 @@
 
 
 
-    <!-- Right side pop-up chat room. -->
+    <!-- Right side pop-up chat room. 
     <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top" id="online_right_side_chat_panel">
 
         <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section">
@@ -193,7 +202,7 @@
 
 
     </nav>
-
+    -->
     <!-- Overlay effect when opening right_side on small screens -->
     <div class="online_right_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_online_right_close()" title="close side menu" id="myOnlineRightlay"></div>
 

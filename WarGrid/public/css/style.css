@@ -161,11 +161,14 @@ input[type='range'] {
 	width:1%;
 }
 
+/*
 .game_page_message_box {
+	
 	height: 450px;
 	width: 300px;
+	
 }
-
+*/
 .game_page_small_message_box {
 	height: 350px;
 	width: 180px;

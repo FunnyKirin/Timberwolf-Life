@@ -214,13 +214,13 @@ function determineCanvasSize() {
     //console.log("x: ", x);
     //console.log("y: ", y);
 
-    console.log("x: ", x);
+    //console.log("x: ", x);
     //var left = (x - 512 - 100) / 2;
     //console.log("left: ", left);
     
 
-    console.log("canvas x: ", $(".game_canvas_box").attr("width"));
-    console.log("canvas y: ", $(".game_canvas_box").attr("height"));
+    //console.log("canvas x: ", $(".game_canvas_box").attr("width"));
+    //console.log("canvas y: ", $(".game_canvas_box").attr("height"));
     
     // Step 1: set the canvas size;
     if(x > 975)     // if browser window greater than 975, meaning larger screen, then -> set canvas to 512x512.
@@ -232,7 +232,7 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
-        console.log("canvas x: large");
+        //console.log("canvas x: large");
     }
     else if(x <= 975 && x > 583)     // if browser window between (583, 975] , meaning medium screen, then -> set canvas to 512x512.
     {
@@ -243,7 +243,7 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
-        console.log("canvas x: medium");
+        //console.log("canvas x: medium");
     }
     else if(x <= 583)       // if browser window less than 583, meaning small screen, then -> set canvas to 256x256.
     {
@@ -254,14 +254,88 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
-        console.log("canvas x: small");
+        //console.log("canvas x: small");
     }
     else
     {
         alert("Error: in  determineCanvasSize");
     }
 
-    console.log("canvas x: ", $(".game_canvas_box").attr("width"));
-    console.log("canvas y: ", $(".game_canvas_box").attr("height"));
+    //console.log("canvas x: ", $(".game_canvas_box").attr("width"));
+    //console.log("canvas y: ", $(".game_canvas_box").attr("height"));
    
+}
+
+
+
+
+function changeChatRoomDtoN()
+{
+    // Step 0: get the browser window size.
+    var x = $(window).width();
+    var y = $(window).height();
+
+    console.log("canvas x: ", x);
+    
+    var html_string =       "<span id='message-filler'>"
+                    +       "</span>"
+                    +   "</div>"
+                    +   "<div id='chat'>"
+                    +       "<form id='message-form' action='#'' class='w3-container w3-margin-top'>"
+                    +           "<div class='mdl-textfield mdl-js-textfield mdl-textfield-floating-label'>"
+                    +               "<input class='game_page_message_input w3-input w3-dark-grey w3-animate-input' type='text' placeholder='Message...' id='message'>"
+                    +           "</div>"
+                    +           "<button id='submit' disabled type='submit' class='w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand'>Send</button>"
+                    +       "</form>"
+                    +   "</div>"; 
+
+
+    if(x > 975)
+    {
+        //console.log("large screen.");
+
+        
+        
+
+        $(".chatRoom_div_section").html("<div class='w3-col w3-container w3-padding-16 m3 w3-right'>" 
+                                       +    "<div id='messages' class='game_page_message_box w3-container w3-card-0 w3-sand w3-round' style='height:450px; width:300px; margin-left:0px; margin-top:0px'>"
+                                       +        html_string
+                                       +"</div>");
+
+    
+        //console.log("style: " , $(".game_page_message_box").attr("style"));
+
+        
+        
+    }
+    else if(x <= 975 && x > 583)     // if browser window between (583, 975] , meaning medium screen, then -> set canvas to 512x512.
+    {
+        $(".chatRoom_div_section").hide();
+
+        //console.log("medium screen.");
+    }
+    else if(x <= 583)
+    {
+
+        
+
+
+        $(".chatRoom_div_section").html("<nav class='right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top' id='online_right_side_chat_panel'>" 
+                                       +    "<div id='messages' class='game_page_message_box w3-container w3-card-0 w3-sand w3-round' style='height:350px; width:180px; margin-left:10px; margin-top:10px'>"
+                                       +        html_string
+                                       +"</nav>");
+
+        
+
+        //console.log("style: " , $(".game_page_message_box").attr("style"));
+        //console.log("small screen.");
+    }
+    else
+    {
+        alert("Error: in  changeChatRoomDtoN");
+    }
+
+
+
+    console.log("canvas x: ", x);
 }
