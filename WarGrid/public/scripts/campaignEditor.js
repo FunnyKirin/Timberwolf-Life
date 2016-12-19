@@ -218,14 +218,14 @@ function respondToResizeMap() {
     // update the map size var.
     document.getElementById("cam_range").innerHTML = customRow;
 
-    if ((customRow <= 16) && (customRow >= 8)) {
+    if ((customRow <= 16) && (customRow >= 4)) {
         if ((canvasWidth % customRow) !== 0) {
             while ((canvasWidth % customRow) !== 0) {
                 canvasWidth += 1;
             }
         }
     } else {
-        window.alert("Please enter a number between 8 and 16 ");
+        window.alert("Please enter a number between 4 and 16 ");
         return false;
     }
     canvas.width = canvasWidth + 1;
@@ -450,7 +450,7 @@ function initSelectorContent() {
     });
 
     var optionHTML = '<option value="" disabled selected>Select Size</option>';
-    for (var i = 8; i <= 16; i++) {
+    for (var i = 4; i <= 16; i++) {
         optionHTML += '<option value="' + i + '">' + i + ' x ' + i + '</option>';
     }
     $("#" + RESIZE_SELECTOR_ID).html(optionHTML);
