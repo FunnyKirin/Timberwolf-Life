@@ -171,8 +171,11 @@ function initCanvas() {
  * they choose.
  */
 function initMap() {
-    loadMapName = window.location.search.substring(1);
+    var url = window.location.search;
+    gameMode = parseInt(url.slice(-1))+1;
+    loadMapName = url.slice(1,-1);
     loadMapName = loadMapName.replace("%20", " ");
+    
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
