@@ -83,6 +83,11 @@
                 -->
                 <p class="w3-container">
                     <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
+                    <br>
+                    <label>
+                      Hotseat<input type="radio" name = "opponent-group" value="hotseat"/>
+                      <input type="radio" name="opponent-group" value="AI"/> Against AI
+                    </label>
                 </p>
             </div>
             <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
@@ -90,16 +95,16 @@
             <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center w3-border">
                 <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="512" height="512"> </canvas>
             </div>
-            <!--    2. this canvas is for medium and small screen. 
+            <!--    2. this canvas is for medium and small screen.
             <div class="w3-container w3-padding-16  w3-center w3-hide-large">
                 <canvas id="game_small_canvas" class="w3-sand w3-round-xlarge w3-center" width="256" height="256"> </canvas>
             </div>
             -->
             <!-- Right section-char room is shown on large scrren. -->
             <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small ">
-                
+
             </div>
-            
+
 
         </div>
         <!-- Buttom part-->
@@ -163,7 +168,7 @@
 
         <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section" >
             <span id="message-filler">
-                
+
             </span>
         </div>
 

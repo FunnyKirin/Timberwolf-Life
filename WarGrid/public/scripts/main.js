@@ -218,6 +218,11 @@ function initGameOfLifeData() {
  */
 function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
+    //hotseat and against AI setting
+    $('input:radio[name="opponent-group"]').click(function(){
+        var opponent = $('input:radio[name="opponent-group"]:checked').val();
+        alert("you choose: " + opponent);
+    });
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
     $("#ghostButton").click(function() {
