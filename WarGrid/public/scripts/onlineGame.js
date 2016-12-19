@@ -264,6 +264,11 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
+    $("#inviteFriendButton").click(function() {
+        var url = window.location.href;
+        url = url + "%202";
+        $("#invitedURL span").text(url);
+    });
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1
     window.onbeforeunload = function () {

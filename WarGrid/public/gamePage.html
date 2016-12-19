@@ -95,7 +95,7 @@
             <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center w3-border">
                 <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="512" height="512"> </canvas>
             </div>
-            <!--    2. this canvas is for medium and small screen. 
+            <!--    2. this canvas is for medium and small screen.
             <div class="w3-container w3-padding-16  w3-center w3-hide-large">
                 <canvas id="game_small_canvas" class="w3-sand w3-round-xlarge w3-center" width="256" height="256"> </canvas>
             </div>
@@ -132,6 +132,7 @@
             <button id="confirmButton" value="Confirm" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
             <button id="ghostButton" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
             <button id="surrenderButton" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="document.getElementById('Surrender').style.display='block'">Surrender</button>
+            <button id="inviteFriendButton" onclick="document.getElementById('inviteFriendDialog').style.display='block'" class="online_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">invite a friend</button>
         </div>
     </div>
 
@@ -173,7 +174,7 @@
 
     </nav>
     -->
-    <!-- Overlay effect when opening left_side on small screens 
+    <!-- Overlay effect when opening left_side on small screens
     <div class="online_left_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_online_left_close()" title="close side menu" id="myOnlineLeftlay"></div>
     -->
 
@@ -218,6 +219,24 @@
                 <br/> Yellow blocks predict the positions of your living cells in the next turn. You can turn it on/off by pressing "Ghost On/Off"
                 <br/>
                 <br/> The "Reset" button cancels all placement of the current turn.
+                <br/>
+                <br/> </div>
+        </div>
+    </div>
+
+    <!-- The invite a friend dialog -->
+    <div id="inviteFriendDialog" class="w3-modal w3-animate-opacity">
+        <div class="w3-modal-content w3-card-8 w3-round">
+            <div class="w3-container w3-black"> <span onclick="document.getElementById('inviteFriendDialog').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
+                <h1>Instruction: </h1> </div>
+            <div class="w3-container w3-camo-forest">
+                <br/> To invite someone to play, give this URL:
+                <br/>
+                <div>
+                <span id="invitedURL"><span>
+              </div>
+                <br/>Ask your friend to come to this URL and your friend will play with you
+                <br/>
                 <br/>
                 <br/> </div>
         </div>
