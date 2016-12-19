@@ -232,6 +232,13 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
+        $("#text").attr("style", "font-size: 30px");
+        $("#turn_A_text").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
+        $("#turn_A_block").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
+        $("#turn_B_block").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
+
+        $(".turn_AB_sec").attr("style", "width: 400px; margin:auto;");
         //console.log("canvas x: large");
     }
     else if(x <= 975 && x > 583)     // if browser window between (583, 975] , meaning medium screen, then -> set canvas to 512x512.
@@ -243,6 +250,13 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
+        $("#text").attr("style", "font-size: 30px");
+        $("#turn_A_text").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
+        $("#turn_A_block").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
+        $("#turn_B_block").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
+
+        $(".turn_AB_sec").attr("style", "width: 400px; margin:auto;");
         //console.log("canvas x: medium");
     }
     else if(x <= 583)       // if browser window less than 583, meaning small screen, then -> set canvas to 256x256.
@@ -254,7 +268,14 @@ function determineCanvasSize() {
         //$(".game_canvas_box").attr("style","margin:auto");
         $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
 
-        $("#text").attr("style", "font-size: 20px")
+        $("#text").attr("style", "font-size: 15px");
+        $("#turn_A_text").attr("style","font-size: 15px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text").attr("style","font-size: 15px; margin-left:3px; color: #0067a7");
+        $("#turn_A_block").attr("style","width: 15px; height: 15px; background-color: #bd1e24; margin-top:3px");
+        $("#turn_B_block").attr("style","width: 15px; height: 15px; background-color: #0067a7; margin-top:3px");
+
+
+        $(".turn_AB_sec").attr("style", "width: 200px; margin:auto;");
 
         //console.log("canvas x: small");
     }
