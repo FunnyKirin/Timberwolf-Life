@@ -100,7 +100,9 @@ function initConstants() {
     GRID_LINE_LENGTH_RENDERING_THRESHOLD = 8;
 
     //canvas size
-    INIT_CANVAS_WIDTH = 512;
+    INIT_CANVAS_WIDTH = document.getElementById("editor_canvas").width;
+
+    //console.log("canvas width: ", INIT_CANVAS_WIDTH);
 }
 
 function initCanvas() {
@@ -129,7 +131,12 @@ function initButton() {
 }
 
 function initEditorData() {
-    cellLength = 64;
+    if(INIT_CANVAS_WIDTH === 513 || INIT_CANVAS_WIDTH === 512)      // should be 513 to show the right border.
+        cellLength = 64;
+    else if(INIT_CANVAS_WIDTH === 257 || INIT_CANVAS_WIDTH === 256)     // should be 257 to show the right border.
+        cellLength = 32;
+    else
+        alert("Error: Editor.js -> initEditorData. ");
 }
 
 function initGrid() {

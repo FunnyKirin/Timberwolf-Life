@@ -175,9 +175,11 @@ input[type='range'] {
 	margin-left: 10px;
 }
 
+/*
 .game_page_message_input {
-	width: 150px;
+	width: 280px;
 }
+*/
 
 .game_page_browse_img {
 	width: 100px;
