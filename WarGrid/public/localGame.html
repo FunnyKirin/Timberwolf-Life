@@ -28,9 +28,8 @@
     </style>
 </head>
 
-
-
-<body class="body-max-width w3-grey w3-content">
+<!-- add two function here to change the size while changing the browser size. it might affect other things. (don't know so far)-->
+<body class="body-max-width w3-grey w3-content" onresize="determineCanvasSize(); initGameOfLife();">
 
     <script>
       window.fbAsyncInit = function() {
@@ -53,7 +52,7 @@
 
     <!-- The body has four sections. Left, middle, right and buttom. -->
     <div id="gameDiv" class="w3-container w3-center w3-padding-64">
-        <div class="w3-container w3-card-24 w3-dark-grey w3-round-xlarge">
+        <div class="w3-container w3-card-24 w3-center w3-dark-grey w3-round-xlarge">
             <!-- Left section-game info panel, panel is shown on large screen,
             -->
             <div class="w3-container w3-col w3-padding-16 m3 w3-left w3-hide-medium w3-hide-small">
@@ -88,8 +87,8 @@
             </div>
             <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
             <!--    1. this canvas is for large screen. -->
-            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center">
-                <canvas id="game_canvas" class="w3-sand w3-round-xlarge"> </canvas>
+            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center w3-border">
+                <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="512" height="512"> </canvas>
             </div>
             <!--    2. this canvas is for medium and small screen. 
             <div class="w3-container w3-padding-16  w3-center w3-hide-large">
