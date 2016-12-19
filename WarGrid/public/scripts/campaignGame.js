@@ -441,7 +441,7 @@ function confirmMove() {
     renderGame();
     //check if current player win
     if (checkVictory()) {
-        alert("player " + currentPlayer + " win!");
+        swal("player " + currentPlayer + " win!");
     }
     nextTurn();
     renderGhostRenderCells();
