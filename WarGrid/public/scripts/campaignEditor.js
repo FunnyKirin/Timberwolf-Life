@@ -294,12 +294,13 @@ function respondToSaveMap() {
                 var storageRef = firebase.storage().ref();
                 mapImg = canvas.toDataURL("image/png");
                 storageRef.child('campaign/' + mapName).putString(mapImg, 'data_url');
+                swal("Save map successful")
             } else {
-                alert("The map name already exists");
+                swal("The map name already exists");
             }
         });
     } else {
-        alert('You must first log in to use this feature');
+        swal('You must first log in to use this feature');
     }
 }
 
