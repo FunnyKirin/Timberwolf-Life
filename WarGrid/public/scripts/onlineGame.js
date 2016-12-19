@@ -267,7 +267,11 @@ function initEventHandlers() {
     $("#inviteFriendButton").click(function() {
         var url = window.location.href;
         url = url + "%202";
-        $("#invitedURL span").text(url);
+        $("#invitedURL").val(url);
+        var clipboard = new Clipboard("#copy-button");
+    });
+    $("#copyurl").click(function(){
+        
     });
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1

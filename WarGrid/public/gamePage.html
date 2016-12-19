@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.16/clipboard.min.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/wScript.js"></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
@@ -242,8 +243,9 @@
                 <br/> To invite someone to play, give this URL:
                 <br/>
                 <div>
-                <span id="invitedURL"><span>
+                <input id="invitedURL" type="text" style="color:black;" size="75" value=""></input>
               </div>
+                <button id="copy-button" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand" data-clipboard-action="copy" data-clipboard-target="#invitedURL">copy</button>
                 <br/>Ask your friend to come to this URL and your friend will play with you
                 <br/>
                 <br/>
