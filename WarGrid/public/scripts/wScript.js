@@ -295,7 +295,7 @@ function changeChatRoomDtoN()
         //console.log("large screen.");
 
         $(".chatRoom_div_section").html("<div class='w3-col w3-container w3-padding-16 m3 w3-right'>" 
-                                       +    "<div id='messages' class='game_page_message_box w3-container w3-card-0 w3-sand w3-round' style='height:450px; width:300px; margin-left:0px; margin-top:0px'>"
+                                       +    "<div id='messages' class='game_page_message_box w3-container w3-card-0 w3-sand w3-round' style='height:450px; width:300px; margin-left:10px; margin-top:0px'>"
                                        +        html_string
                                        +"</div>");
 
