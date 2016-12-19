@@ -135,8 +135,6 @@ function initEditorData() {
         cellLength = 64;
     else if(INIT_CANVAS_WIDTH === 257 || INIT_CANVAS_WIDTH === 256)     // should be 257 to show the right border.
         cellLength = 32;
-    else
-        alert("Error: Editor.js -> initEditorData. ");
 }
 
 function initGrid() {
@@ -227,7 +225,7 @@ function respondToResizeMap() {
             }
         }
     } else {
-        window.alert("Please enter a number between 4 and 16 ");
+        swal("Please enter a number between 4 and 16 ");
         return false;
     }
     canvasWidth +=1;//plus 1 to draw the right most and bottom line
@@ -249,7 +247,7 @@ function respondToSaveMap() {
         mapname = mapname.replace(/^\s+/, '').replace(/\s+$/, '');
         if (mapname === '') {
             // text was all whitespace
-            alert("Please Fill Out the Map Name");
+            swal("Please Fill Out the Map Name");
             return false;
         } else {
             console.log("map name has real content");
@@ -283,15 +281,15 @@ function respondToSaveMap() {
                     mapImg = canvas.toDataURL("image/png");
                     storageRef.child('images/' + mapname).putString(mapImg, 'data_url');
                 } else {
-                    alert("The map name already exists");
+                    swal("The map name already exists");
                 }
             });
         }
 
         // inform user the map is uploaded sucessfully.
-        alert("Upload successfully!");
+        swal("Upload successfully!");
     } else {
-        alert('You must first log in to use this feature');
+        swal('You must first log in to use this feature');
     }
     initSelectorContent();
 }
@@ -463,10 +461,10 @@ function getRelativeCoords(event) {
 
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
-        window.alert('You have not configured and imported the Firebase SDK. ' +
+        swal('You have not configured and imported the Firebase SDK. ' +
             'Make sure you go through the codelab setup instructions.');
     } else if (config.storageBucket === '') {
-        window.alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
+        swal('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
             'actually a Firebase bug that occurs rarely. ' +
             'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' +
             'and make sure the storageBucket attribute is not empty. ' +
