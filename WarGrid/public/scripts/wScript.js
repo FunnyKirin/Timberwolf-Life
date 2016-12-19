@@ -211,33 +211,57 @@ function determineCanvasSize() {
     var x = $(window).width();
     var y = $(window).height();
 
-    console.log("x: ", x);
-    console.log("y: ", y);
+    //console.log("x: ", x);
+    //console.log("y: ", y);
 
-    //var canvas = document.getElementById('local_game_canvas')[0];
+    console.log("x: ", x);
+    //var left = (x - 512 - 100) / 2;
+    //console.log("left: ", left);
+    
+
+    console.log("canvas x: ", $(".game_canvas_box").attr("width"));
+    console.log("canvas y: ", $(".game_canvas_box").attr("height"));
+    
     // Step 1: set the canvas size;
-    if(x > 600)     // if browser window greater than 990, meaning larger screen, then -> set canvas to 512x512.
+    if(x > 975)     // if browser window greater than 975, meaning larger screen, then -> set canvas to 512x512.
     {
-        $("#game_canvas").attr("width","512"); 
-        $("#game_canvas").attr("height","512");
+        $(".game_canvas_box").attr("width","512"); 
+        $(".game_canvas_box").attr("height","512");
         // Also change the class vars.
-        $("#game_canvas_div").attr("class","w3-container w3-padding-16 w3-col m6 w3-center");
-        $("#game_canvas").attr("class","w3-sand w3-round-xlarge");
+        $(".game_canvas_div").attr("class","w3-container w3-padding-16 w3-col m6 w3-center");
+        //$(".game_canvas_box").attr("style","margin:auto");
+        $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
+
+        console.log("canvas x: large");
     }
-    else if(x <= 600)       // if browser window less than 990, meaning small screen, then -> set canvas to 256x256.
+    else if(x <= 975 && x > 583)     // if browser window between (583, 975] , meaning medium screen, then -> set canvas to 512x512.
     {
-        $("#game_canvas").attr("width","256"); 
-        $("#game_canvas").attr("height","256"); 
+        $(".game_canvas_box").attr("width","512"); 
+        $(".game_canvas_box").attr("height","512");
         // Also change the class vars.
-        $("#game_canvas_div").attr("class","w3-container w3-padding-16 w3-center w3-border");
-        $("#game_canvas").attr("class","w3-sand w3-round-xlarge w3-center w3-border");
+        $(".game_canvas_div").attr("class","w3-container w3-padding-16 w3-center");
+        //$(".game_canvas_box").attr("style","margin:auto");
+        $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
+
+        console.log("canvas x: medium");
+    }
+    else if(x <= 583)       // if browser window less than 583, meaning small screen, then -> set canvas to 256x256.
+    {
+        $(".game_canvas_box").attr("width","256"); 
+        $(".game_canvas_box").attr("height","256"); 
+        // Also change the class vars.
+        $(".game_canvas_div").attr("class","w3-container w3-padding-16 w3-center");
+        //$(".game_canvas_box").attr("style","margin:auto");
+        $(".game_canvas_box").attr("class","game_canvas_box w3-sand w3-round-xlarge");
+
+        console.log("canvas x: small");
     }
     else
     {
         alert("Error: in  determineCanvasSize");
     }
 
-    console.log("canvas x: ", $("#game_canvas").attr("width"));
-    console.log("canvas y: ", $("#game_canvas").attr("height"));
+    console.log("canvas x: ", $(".game_canvas_box").attr("width"));
+    console.log("canvas y: ", $(".game_canvas_box").attr("height"));
    
 }

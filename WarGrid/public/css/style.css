@@ -140,9 +140,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 
 input[type='range'] {
--webkit-appearance: none;
-padding-left:2px; padding-right:2px;
--webkit-border-radius: 5px;
+	-webkit-appearance: none;
+	padding-left:2px; 
+	padding-right:2px;
+	-webkit-border-radius: 5px;
 
 }
 
@@ -157,7 +158,7 @@ padding-left:2px; padding-right:2px;
 
 .game_page_message_box {
 	height: 450px;
-	width: 350px;
+	width: 300px;
 }
 
 .game_page_small_message_box {
@@ -188,6 +189,11 @@ padding-left:2px; padding-right:2px;
 .game_page_small_message_box {
 	text-align:left;
 	overflow-y: auto;
+}
+
+.game_canvas_box {
+	margin: auto;
+	
 }
 
 
