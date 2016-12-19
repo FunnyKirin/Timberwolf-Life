@@ -213,14 +213,14 @@ function respondToResizeMap() {
 
     canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
 
-    if ((customRow <= 16) && (customRow >= 8)) {
+    if ((customRow <= 16) && (customRow >= 4)) {
         if ((canvasWidth % customRow) !== 0) {
             while ((canvasWidth % customRow) !== 0) {
                 canvasWidth += 1;
             }
         }
     } else {
-        window.alert("Please enter a number between 8 and 16 ");
+        window.alert("Please enter a number between 4 and 16 ");
         return false;
     }
     canvasWidth +=1;//plus 1 to draw the right most and bottom line
