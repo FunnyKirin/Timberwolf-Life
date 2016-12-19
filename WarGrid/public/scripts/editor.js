@@ -135,8 +135,6 @@ function initEditorData() {
         cellLength = 64;
     else if(INIT_CANVAS_WIDTH === 257 || INIT_CANVAS_WIDTH === 256)     // should be 257 to show the right border.
         cellLength = 32;
-    else
-        swal("Error: Editor.js -> initEditorData. ");
 }
 
 function initGrid() {
