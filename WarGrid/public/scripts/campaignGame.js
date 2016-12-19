@@ -1,5 +1,5 @@
-//hotseat(1) or AI(2) 
-var gameMode = 1;
+//hotseat(1) or AI(2)
+var gameMode = 2;
 var playerName;
 var loadMapName;
 //PlayerData
@@ -175,7 +175,7 @@ function initMap() {
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
-    dbref.child(loadMapName).on("value", function (data) {
+    dbref.child(loadMapName).on("value", function(data) {
         //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
         key = data.key;
         renderGrid = data.val().data;
@@ -195,15 +195,7 @@ function initMap() {
         nextTurn();
         swapGrids();
     });
-    /*
-    $.getJSON("maps/test_map_2.json", function (json) {
-        renderGrid = json.data;
-        //updateGrid=json.data;
-        renderGame();
-        nextTurn();
-        swapGrids();
-    });
-    */
+
 }
 
 function initGameOfLifeData() {
@@ -222,7 +214,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function () {
+    $("#ghostButton").click(function() {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -230,7 +222,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function () {
+    $("#resetButton").click(function() {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -441,7 +433,7 @@ function confirmMove() {
     renderGame();
     //check if current player win
     if (checkVictory()) {
-        alert("player " + currentPlayer + " win!");
+        swal("player " + currentPlayer + " win!");
     }
     nextTurn();
     renderGhostRenderCells();
@@ -511,8 +503,7 @@ function getCellNumber(territory) {
         if (territory > 0) {
             number++;
             size += 2;
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -629,8 +620,7 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                }
-                else if (testCell == DEAD_CELL) {
+                } else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -670,8 +660,7 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                }
-                else {
+                } else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -822,14 +811,13 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX
-            , y: event.offsetY
+            x: event.offsetX,
+            y: event.offsetY
         };
-    }
-    else {
+    } else {
         return {
-            x: event.layerX
-            , y: event.layerY
+            x: event.layerX,
+            y: event.layerY
         };
     }
 }

@@ -84,20 +84,13 @@ function createRoom(map) {
                 // load map into grid
                 dbRef.child('campaign').child(map).once('value', function(snapshot) {
                     if (snapshot.val()) { // if the map exists of course
-                        grid = snapshot.val().data; // set the grid data
+                        var level = snapshot.val().level; // set the grid data
 
-                        // actual data
-                        var lobbyData = {
-                            map: map,
-                            challenger: '',
-                            owner: playerId,
-                            grid: grid,
-                            currentPlayer: 1
-                        };
-
-                        lobby['/lobby/' + newKey] = lobbyData; // directory
-                        dbRef.update(lobby); // updates the database, create the room
-                        game_open(newKey); // redirection
+                        if (player.campaign >= level) {
+                            enterLocalGame(map); // game!
+                        } else {
+                            alert('You are only at level: ' + player.campaign);
+                        }
                     }
                 });
 
@@ -106,4 +99,8 @@ function createRoom(map) {
     } else { // player is a guest
         alert('You need to login first');
     }
+}
+
+function enterLocalGame(map) {
+    window.open("campaignGame.html?" + map + 2, "_self");
 }

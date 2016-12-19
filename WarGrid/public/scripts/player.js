@@ -72,7 +72,7 @@ Player.prototype.playerHandler = function(player) {
                 rootRef.child('players').once('value', function(check) {
                     // regulation in database
                     while (check.hasChild(playerId)) {
-                        alert(playerId + ' exists');
+                        swal(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
 
