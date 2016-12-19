@@ -267,6 +267,39 @@ function determineCanvasSize() {
 }
 
 
+// determine the editor canvas size depending on large screen or small screen.
+function determineEditorCanvasSize() 
+{
+    // Step 0: get the browser window size.
+    var x = $(window).width();
+    var y = $(window).height();
+
+    //console.log("x: ", x);
+    // Step 1: set the canvas size;
+    if(x > 975)     // if browser window greater than 975, meaning larger screen, then -> set canvas to 512x512.
+    {
+        $("#editor_canvas").attr("width","513"); 
+        $("#editor_canvas").attr("height","513");
+        
+    }
+    else if(x <= 975 && x > 583)     // if browser window between (583, 975] , meaning medium screen, then -> set canvas to 512x512.
+    {
+        $("#editor_canvas").attr("width","513"); 
+        $("#editor_canvas").attr("height","513");
+
+    }
+    else if(x <= 583)       // if browser window less than 583, meaning small screen, then -> set canvas to 256x256.
+    {
+        $("#editor_canvas").attr("width","257"); 
+        $("#editor_canvas").attr("height","257");
+    }
+    else
+    {
+        alert("Error: in  determineCanvasSize");
+    }
+}
+
+
 // for larger screen, game_page_message_box needs to be div with some style;
 // for small screen, game_page_message_box needs to be nav (side nav) with some style;
 function changeChatRoomDtoN()
