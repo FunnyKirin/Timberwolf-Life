@@ -912,57 +912,33 @@ var gameOver = function(p1, p2) {
 var leaveRoom = function() {
     var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
     var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
+    var mapRef  firebase.database().ref('maps');
     var lobbyRef = firebase.database().ref('lobby'); // database root
     var roomRef = lobbyRef.child(room_key); // game session
+    var challenger = roomRef.child('challenger'); // the challenger
     var owner = roomRef.child('owner'); // the owner
 
-    roomRef.once('value', function(roomSnap) {
-        // we first need a new room (the so-called reset)
-        if (playerId) { // if the player signed in
-            // if the owner quits, the room disappears
-            owner.once('value', function(ownerSnap) {
-                if (ownerSnap.val() == playerId) {
-                    resetRoom(roomSnap.val().map);
-                }
-            });
-        } else { // guest player
-            // if it's the owner
-            if (raw_key.slice(-1) == '1') {
-                resetRoom(roomSnap.val().map);
+    if (playerId) { // if the player signed in
+        // if the owner quits, the room disappears
+        owner.once('value', function(ownerSnap) {
+            if (ownerSnap.val() == playerId) {
+                roomRef.remove();
             }
+        });
+    } else { // guest player
+        // if it's the owner
+        if (raw_key.slice(-1) == '1') {
+            roomRef.remove();
+        }
+    }
+
+    roomRef.once('value', function(roomSnap) {
+        if (roomSnap.val()) { // check if the room exists first
+            // the challenger is gone whatsoever
+            challenger.transaction(function(e) {
+                return '';
+            });
+
         }
     });
-
-    // the room will be gone whatsoever
-    roomRef.remove();
 };
-
-function resetRoom(map) {
-    // reference
-    var dbRef = firebase.database().ref();
-    var newKey = dbRef.child("lobby").push().key;
-    var lobby = {};
-    var grid = [];
-
-    //  load map into grid
-    dbRef.child('maps').child(map).once("value", function(snapshot) {
-        if (snapshot.val()) {
-            // add map info
-            grid = snapshot.val().data;
-
-            //create room
-            var lobbyData = {
-                map: map,
-                challenger: '',
-                owner: playerId,
-                grid: grid,
-                currentPlayer: 1
-            };
-            lobby['/lobby/' + newKey] = lobbyData;
-            dbRef.update(lobby);
-            game_open(newKey);
-        } else {
-            console.log('An unexpected error has occured. Do nothing');
-        }
-    });
-}
