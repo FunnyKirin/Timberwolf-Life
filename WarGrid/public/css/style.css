@@ -1,8 +1,10 @@
 *[hidden] { display: none; }
 
+/*
 #text{
     font-size: 40px;
 }
+*/
 
 .icon{
     width: 30%;
@@ -202,7 +204,7 @@ input[type='range'] {
 }
 
 .game_canvas_box {
-	margin: auto;
+	/*margin: auto;*/
 
 }
 
