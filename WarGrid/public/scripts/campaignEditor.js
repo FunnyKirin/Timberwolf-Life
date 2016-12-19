@@ -121,6 +121,9 @@ function initButton() {
 
     loadmapInput = document.getElementById("loadMapField");
 
+    rowInput = document.getElementById("cam_editor_size_bar");
+    console.log("rowInput: "+rowInput.value);
+
     columnInput = document.getElementById("resizeColumn");
 
     save = document.getElementById("save_button");
@@ -149,6 +152,7 @@ function initFirebase() {
 function initEventHandlers() {
     save.onclick = respondToSaveMap;
     canvas.onclick = respondToMouseClick;
+    rowInput.onchange = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
 
@@ -195,7 +199,8 @@ function respondToLoadMap() {
     var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
     var mapRef = firebase.database().ref().child('campaign');
     mapRef.child(mapName).on('value', function(snapshot) {
-        $('#' + RESIZE_SELECTOR_ID).val(snapshot.val().x);
+        //$('#' + RESIZE_SELECTOR_ID).val(snapshot.val().x);
+        rowInput.value = snapshot.val().x;
         respondToResizeMap();
         renderGrid = snapshot.val().data;
         renderCells();
@@ -203,9 +208,15 @@ function respondToLoadMap() {
 }
 
 function respondToResizeMap() {
+    var customRow = rowInput.value;
+    /*
     var customRow = parseInt($('#' + RESIZE_SELECTOR_ID).val());
     console.log("customRow: " + customRow);
     canvasWidth = INIT_CANVAS_WIDTH; //INIT_CANVAS_WIDTH IS 512
+    */
+
+    // update the map size var.
+    document.getElementById("cam_range").innerHTML = customRow;
 
     if ((customRow <= 16) && (customRow >= 8)) {
         if ((canvasWidth % customRow) !== 0) {
