@@ -293,6 +293,7 @@ function respondToSaveMap() {
     } else {
         alert('You must first log in to use this feature');
     }
+    initSelectorContent();
 }
 
 function respondToLoadAMap() {
@@ -323,6 +324,7 @@ function respondToDeleteAMap() {
         // Uh-oh, an error occurred!
     });
     resetEditor();
+    initSelectorContent();
 }
 
 function respondToResetEditor() {
@@ -484,3 +486,4 @@ function initSelectorContent() {
         $("#" + LOAD_MAP_SELECTOR_ID).change(respondToLoadMap);
     });
 }
+

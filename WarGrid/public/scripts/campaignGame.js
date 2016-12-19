@@ -1,6 +1,5 @@
 //hotseat(1) or AI(2) 
-var gameMode=1;
-
+var gameMode = 1;
 var playerName;
 var loadMapName;
 //PlayerData
@@ -252,7 +251,7 @@ function initUI() {
  * until the player click confirm.
  */
 function respondToMouseClick(event) {
-    if (currentPlayer == 1||gameMode==1) {
+    if (currentPlayer == 1 || gameMode == 1) {
         // CALCULATE THE ROW,COL OF THE CLICK
         var canvasCoords = getRelativeCoords(event);
         var clickCol = Math.floor(canvasCoords.x / cellLength);
@@ -483,20 +482,19 @@ function nextTurn() {
     //amount of cell current player can place.
     cellNumber = getCellNumber(territory);
     initUI();
-    if (currentPlayer == 2&&gameMode==2) {
+    if (currentPlayer == 2 && gameMode == 2) {
         AI();
     }
 }
 
 function AI() {
-    var counter =0;
-    while(cellNumber>0&&counter<gridHeight*gridWidth*cellNumber){
-        clickCell(getRandomInt(0, gridHeight),getRandomInt(0, gridWidth));
+    var counter = 0;
+    while (cellNumber > 0 && counter < gridHeight * gridWidth * cellNumber) {
+        clickCell(getRandomInt(0, gridHeight), getRandomInt(0, gridWidth));
         counter++;
     }
     confirmMove();
 }
-
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
