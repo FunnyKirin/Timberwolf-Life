@@ -400,7 +400,7 @@ function renderGhostCells() {
                         //canvas2D.fillRect(_x, _y, cellLength, cellLength);
                         
                         canvas2D.beginPath();
-                        canvas2D.lineWidth="6"; //ghostWidth
+                        canvas2D.lineWidth="2"; //ghostWidth
                         canvas2D.strokeStyle = GHOST_COLOR;
                         canvas2D.rect(_x+2, _y+2, cellLength-4, cellLength-4);
                         canvas2D.stroke();
