@@ -173,7 +173,7 @@ function initMap() {
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
-    dbref.child(loadMapName).on("value", function(data) {
+    dbref.child(loadMapName).on("value", function (data) {
         //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
         key = data.key;
         renderGrid = data.val().data;
@@ -220,7 +220,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -228,7 +228,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -249,10 +249,16 @@ function initUI() {
  * until the player click confirm.
  */
 function respondToMouseClick(event) {
-    // CALCULATE THE ROW,COL OF THE CLICK
-    var canvasCoords = getRelativeCoords(event);
-    var clickCol = Math.floor(canvasCoords.x / cellLength);
-    var clickRow = Math.floor(canvasCoords.y / cellLength);
+    if (currentPlayer == 1) {
+        // CALCULATE THE ROW,COL OF THE CLICK
+        var canvasCoords = getRelativeCoords(event);
+        var clickCol = Math.floor(canvasCoords.x / cellLength);
+        var clickRow = Math.floor(canvasCoords.y / cellLength);
+        clickCell(clickCol, clickRow);
+    }
+}
+
+function clickCell(clickCol, clickRow) {
     //get cells from update grid and ghost cell
     var cell = getGridCell(updateGrid, clickRow, clickCol);
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
@@ -321,7 +327,6 @@ function respondToMouseClick(event) {
         initUI();
     }
 }
-
 //Check if a live cell in ghost grid have a path to territory.
 //para: Cell
 //return: boolean
@@ -475,6 +480,26 @@ function nextTurn() {
     //amount of cell current player can place.
     cellNumber = getCellNumber(territory);
     initUI();
+    if (currentPlayer == 2) {
+        AI();
+    }
+}
+
+function AI() {
+    var counter =0;
+    while(cellNumber>0&&counter<gridHeight*gridWidth*cellNumber){
+        clickCell(getRandomInt(0, gridHeight),getRandomInt(0, gridWidth));
+        counter++;
+    }
+    confirmMove();
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ */
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function getCellNumber(territory) {
@@ -603,7 +628,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -643,7 +669,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -794,13 +821,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
