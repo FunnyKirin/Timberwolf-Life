@@ -4,7 +4,7 @@ var Campaign = function() {
     console.log("[INFO] Loading Campaign Module...");
     firebase.auth().onAuthStateChanged(this.loadCampaign.bind(this));
 };
-
+//
 // for now, campaign is only made for players who logged in
 // firebase ref('campaign')
 // the maps cannot be directly edited?
