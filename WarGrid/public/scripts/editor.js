@@ -49,7 +49,7 @@ var resizeButton;
 var imageElement;
 var mapImg;
 var key;
-var deleteButton;
+//var deleteButton;
 
 // RENDERING VARIABLES
 var cellLength;
@@ -125,7 +125,7 @@ function initButton() {
     resizeButton = document.getElementById("resizeButton");
 
     save = document.getElementById("save_button");
-    deleteButton = document.getElementById("delete_button");
+    //deleteButton = document.getElementById("delete_button");
 
     resetButton = document.getElementById("reset_button");
 }
@@ -158,7 +158,7 @@ function initFirebase() {
 function initEventHandlers() {
     save.onclick = respondToSaveMap;
     canvas.onclick = respondToMouseClick;
-    deleteButton.onclick = respondToDeleteMap;
+    //deleteButton.onclick = respondToDeleteMap;
     rowInput.onchange = respondToResizeMap;
     resetButton.onclick = respondToResetEditor;
 }
