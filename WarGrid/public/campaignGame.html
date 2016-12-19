@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Campaign</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-highway.css">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-food.css">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-camo.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-camo.css">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-signal.css">
+
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src = "scripts/wScript.js" ></script>
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/map.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+    <style>
+        .local_adSlides {display:none;}
+    </style>
+</head>
+
+<!-- add two function here to change the size while changing the browser size. it might affect other things. (don't know so far)-->
+<body class="body-max-width w3-grey w3-content" >
+
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1239589969432849',
+          xfbml      : true,
+          version    : 'v2.6'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+    <!-- The body has four sections. Left, middle, right and buttom. -->
+    <div id="gameDiv" class="w3-container w3-center w3-padding-32">
+        <div class="w3-container w3-card-24 w3-center w3-dark-grey w3-round-xlarge">
+            <!-- Left section-game info panel, panel is shown on large screen -->
+            <div class="w3-container w3-col w3-padding-16 m3 w3-left w3-hide-medium w3-hide-small">
+                <h1 class="w3-text-sand w3-padding-24">Timberwolf Life</h1>
+
+                <div class="adSlides-local-section w3-container w3-content w3-center">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png"     onclick="openAd(1)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png"      onclick="openAd(2)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/fireBrick_ad.png"   onclick="openAd(3)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png"         onclick="openAd(4)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png"         onclick="openAd(5)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png"      onclick="openAd(6)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png"      onclick="openAd(7)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/scarlet_ad.png"     onclick="openAd(8)">
+                    <img class="local_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png"    onclick="openAd(9)">
+                </div>
+                <!--
+                <div class="w3-container w3-padding-16">
+                    <p class="w3-text-red w3-xlarge"><i class="glyphicon glyphicon-tower w3-xxlarge"></i> Player Name </p>
+                    <p>Occupied cell: xx</p>
+                    <p>Left cell to win: xx</p>
+                </div>
+                <div class="w3-container w3-padding-16">
+                    <p class="w3-text-blue w3-xlarge"><i class="glyphicon glyphicon-tower w3-xxlarge"></i> Player Name </p>
+                    <p>Occupied cell: xx</p>
+                    <p>Left cell to win: xx</p>
+                </div>
+                -->
+                <p class="w3-container">
+                    <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
+                    <br>
+                </p>
+            </div>
+            <!-- Middle section-game canvas, there are two canvas, one for larger screen, another one for medium and small screen.  -->
+            <!--    1. this canvas is for large screen. -->
+            <div class="game_canvas_div w3-col w3-container w3-padding-16 m6 w3-center">
+                <canvas class="game_canvas_box w3-sand w3-round-xlarge w3-border" id="game_canvas" width="513" height="513">
+                </canvas>
+            </div>
+            <!--    2. this canvas is for medium and small screen.
+            <div class="w3-container w3-padding-16  w3-center w3-hide-large">
+                <canvas id="game_small_canvas" class="w3-sand w3-round-xlarge w3-center" width="256" height="256"> </canvas>
+            </div>
+            -->
+            <!-- Right section-char room is shown on large scrren. -->
+            <div class="w3-col w3-container w3-padding-16 m3 w3-right w3-hide-medium w3-hide-small ">
+            </div>
+
+
+        </div>
+        <!-- Buttom part-->
+        <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large">
+                <a class="w3-btn-floating" onclick="document.getElementById('Instruction').style.display='block'"><i class="material-icons">announcement</i></a>
+                <a class="w3-btn-floating" onclick="w3_local_right_open()"><i class="material-icons">chat</i></a>
+        </div>
+        <!-- span line to display the cell left number. -->
+        <div class="w3-container w3-row w3-center"> <span id="text" style="font-size: 40px">Cell left: 0</span> </div>
+        <!-- button group includes 4 buttons to use. -->
+        <div class="w3-container w3-row w3-center">
+            <button id="confirmButton" value="Confirm" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>
+            <button id="resetButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Reset</button>
+            <button id="ghostButton" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Ghost On/Off </button>
+            <button class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom" onclick="localGame_open()">Exit</button>
+        </div>
+    </div>
+    <!-- set up the game. -->
+    <script>
+        // detect window's size.
+        determineCanvasSize();
+        // set up the ad slides.
+        pick_and_display_adPic(1);
+
+        initGameOfLife();
+    </script>
+
+    <!-- Left side pop-up info panel. -->
+    <!--
+    <nav class="left_side_info_panel-style w3-sidenav w3-animate-left w3-dark-grey w3-center w3-text-grey  w3-top"  id="local_left_side_info_panel">
+
+        <h1 class="w3-text-sand w3-padding-24">TL</h1>
+        <div class="w3-container w3-padding-16">
+            <p class="w3-text-red w3-xlarge"><i class="glyphicon glyphicon-tower w3-large"></i> Player Name </p>
+            <p class="w3-text-light-grey">Occupied cell: xx</p>
+            <p class="w3-text-light-grey">Left cell to win: xx</p>
+        </div>
+        <div class="w3-container w3-padding-16">
+            <p class="w3-text-blue w3-xlarge"><i class="glyphicon glyphicon-tower w3-large"></i> Player Name </p>
+            <p class="w3-text-light-grey">Occupied cell: xx</p>
+            <p class="w3-text-light-grey">Left cell to win: xx</p>
+        </div>
+        <p>
+            <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
+        </p>
+
+    </nav>
+    -->
+    <!-- Overlay effect when opening left_side on small screens -->
+    <!--
+    <div class="local_left_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_local_left_close()" title="close side menu" id="myLocalLeftlay"></div>
+    -->
+
+
+
+    <!-- Right side pop-up chat room. -->
+    <nav class="right_side_chat_room-style w3-sidenav w3-animate-right w3-dark-grey w3-center w3-text-grey w3-top"  id="local_right_side_chat_panel">
+
+        <div id="messages" class="game_page_small_message_box w3-container w3-card-0 w3-sand w3-round w3-section" >
+            <span id="message-filler">
+
+            </span>
+        </div>
+
+        <div id="message-form" action="#" class="w3-container w3-margin-top">
+            <input class="game_page_message_input w3-input w3-dark-grey w3-animate-input" type="text" id="message" placeholder="Message..." >
+            <button id="submit" type="submit" class="w3-btn w3-teal w3-round-large w3-margin-top w3-center w3-animate-zoom w3-hover-sand">Send</button>
+        </div>
+
+
+    </nav>
+
+    <!-- Overlay effect when opening right_side on small screens -->
+    <div class="local_right_side-overlay w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_local_right_close()" title="close side menu" id="myLocalRightlay"></div>
+
+
+
+
+
+    <!-- The how to play info -->
+    <div id="Instruction" class="w3-modal w3-animate-opacity">
+        <div class="w3-modal-content w3-card-8 w3-round">
+            <div class="w3-container w3-black"> <span onclick="document.getElementById('Instruction').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
+                <h1>Instruction: </h1> </div>
+            <div class="w3-container w3-camo-forest">
+                <br/> This game is a turn based strategy game that requires two players play against each other. Both player need to play on one machine for now.
+                <br/>
+                <br/> Players' goal is to occupy the entire map with their live cells or dead cells, once a cell is occupied by a player's live cell, it become part of the player's terrtory until it get occupied by another player.
+                <br/>
+                <br/> Player can place certain amount of living cells each turn, after pressing "confirm", all live cells of current player will render 1 frame base on game of life algorithm, then it is the other player's turn.
+                <br/>
+                <br/> The amount of Live cells players can place is depend on the size of their terrtory; and players can only place cells in or next to their terrtory.
+                <br/>
+                <br/> Yellow cells will indicate position of your live cells in the next turn based on your current placement, you can turn it on/off by pressing "Ghost on/off button
+                <br/>
+                <br/> "Reset" button will cancel all placement of the current turn.
+                <br/>
+                <br/> </div>
+        </div>
+    </div>
+
+    <!-- The pop-up surrender info block. -->
+    <div id="Surrender" class="w3-modal w3-animate-opacity">
+        <div class="w3-modal-content w3-card-8 w3-round">
+            <div class="w3-container w3-section w3-black">
+                <h1 class="w3-xxlarge w3-center w3-margin-top">Loser!!!</h1>
+                <p class="w3-jumbo w3-margin-top w3-center"><i class="fa fa-thumbs-down"></i></p>
+                <div class="w3-container w3-margin-top w3-center">
+                    <button class="w3-btn w3-border w3-margin w3-w3-round-xlarge w3-large w3-round-large" onclick="index_open()">Click</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+</html>
