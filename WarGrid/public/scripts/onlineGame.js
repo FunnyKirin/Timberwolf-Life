@@ -884,6 +884,22 @@ function checkSetup() {
         alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
+
+// p1, p2 are strings
+// p1 wins, p2 loses
+var gameOver = function(p1, p2) {
+    // reference
+    var playerRef = firebase.database().ref('players');
+    // p1 wins
+    playerRef.child(p1).child('totalWins').transaction(function (wins) {
+        return wins + 1;
+    });
+    // p2 wins
+    playerRef.child(p2).child('totalLosses').transaction(function (losses) {
+        return losses + 1;
+    });
+};
+
 // handles the operation of leaving a game room
 // this is called when a user closes a tab
 var leaveRoom = function () {
@@ -893,18 +909,12 @@ var leaveRoom = function () {
     var roomRef = lobbyRef.child(room_key); // game session
     var challenger = roomRef.child('challenger'); // the challenger
     var owner = roomRef.child('owner'); // the owner
-    roomRef.once('value', function (roomSnap) {
-        if (roomSnap.val()) { // check if the room exists first
-            // the challenger is gone whatsoever
-            challenger.transaction(function (e) {
-                return '';
-            });
-        }
-    });
+
     if (playerId) { // if the player signed in
         // if the owner quits, the room disappears
         owner.once('value', function (ownerSnap) {
             if (ownerSnap.val() == playerId) {
+
                 roomRef.remove();
             }
         });
@@ -915,4 +925,13 @@ var leaveRoom = function () {
             roomRef.remove();
         }
     }
+
+    roomRef.once('value', function (roomSnap) {
+        if (roomSnap.val()) { // check if the room exists first
+            // the challenger is gone whatsoever
+            challenger.transaction(function (e) {
+                return '';
+            });
+        }
+    });
 };
