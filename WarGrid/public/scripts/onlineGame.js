@@ -934,15 +934,21 @@ var leaveRoom = function() {
 
     roomRef.once('value', function(roomSnap) {
         if (roomSnap.val()) { // check if the room exists first
-            // the challenger is gone whatsoever
-            challenger.transaction(function(e) {
-                return '';
-            });
+            challenger.once('value', function(challengerSnap) {
+                // if an observer leaves nothing happens
 
-            mapRef.child(roomSnap.val().map).once('value', function(mapSnap) {
-                roomSnap.child('grid').transaction(function(grid) {
-                    return mapSnap.val().data;
-                });
+                if (challengerSnap.val() == playerId) {
+                    // the challenger is gone whatsoever
+                    challenger.transaction(function(e) {
+                        return '';
+                    });
+
+                    mapRef.child(roomSnap.val().map).once('value', function(mapSnap) {
+                        roomSnap.child('grid').transaction(function(grid) {
+                            return mapSnap.val().data;
+                        });
+                    });
+                }
             });
         }
     });
