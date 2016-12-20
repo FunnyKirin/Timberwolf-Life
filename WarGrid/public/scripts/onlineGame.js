@@ -292,9 +292,11 @@ function initEventHandlers() {
     $("#copyurl").click(function() {});
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1
+    /*
     window.onbeforeunload = function() {
         return 'If you leave, you lose';
     };
+    */
     // remove game room properly
     window.onunload = leaveRoom.bind(this);
 }
@@ -548,9 +550,9 @@ function confirmMove() {
                         });
                     }
                     // then challenger
-                    challengerRef.once('value', function(challenger) {
+                    challengerRef.once('value', function(challengerSnap) {
                         if (challengerSnap.val()) {
-                            lossRef = playerRef.child(challenger.val()).child('totalLosses');
+                            lossRef = playerRef.child(challengerSnap.val()).child('totalLosses');
                             lossRef.transaction(function(loss) {
                                 return loss + 1;
                             });
