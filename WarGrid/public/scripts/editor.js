@@ -56,6 +56,7 @@ var cellLength;
 
 var LOAD_MAP_SELECTOR_ID = 'load-map-options';
 
+//initialize the map editor
 function initEditor() {
     checkSetup();
     initFirebase();
@@ -68,7 +69,7 @@ function initEditor() {
     initGrid();
     initSelectorContent();
 }
-
+// initialize the variable
 function initConstants() {
     //THESE REPRESENT THE POSSIBLE STATS FOR EACH CELL
     EMPTY_CELL = 0;
@@ -102,7 +103,6 @@ function initConstants() {
     //canvas size
     INIT_CANVAS_WIDTH = document.getElementById("editor_canvas").width;
 
-    //console.log("canvas width: ", INIT_CANVAS_WIDTH);
 }
 
 function initCanvas() {
@@ -120,7 +120,6 @@ function initButton() {
     loadmapInput = document.getElementById("loadMapField");
 
     rowInput = document.getElementById("editor_size_bar");
-    console.log("rowInput: "+rowInput.value);
     columnInput = document.getElementById("resizeColumn");
     resizeButton = document.getElementById("resizeButton");
 
@@ -195,6 +194,7 @@ function respondToMouseClick(event) {
     renderCells();
 }
 
+//load the map from the firebase database
 function respondToLoadMap() {
     var mapName = $('#' + LOAD_MAP_SELECTOR_ID).val();
     var mapRef = firebase.database().ref().child('maps');
@@ -210,6 +210,7 @@ function respondToDeleteMap() {
     respondToDeleteAMap();
 }
 
+//reisize the map base on the map size that the user require it
 function respondToResizeMap() {
     var customRow = rowInput.value;
 
@@ -218,6 +219,7 @@ function respondToResizeMap() {
 
     canvasWidth = INIT_CANVAS_WIDTH;//INIT_CANVAS_WIDTH IS 512
 
+    //the maximun map size is 16 and th minumun map size is 4
     if ((customRow <= 16) && (customRow >= 4)) {
         if ((canvasWidth % customRow) !== 0) {
             while ((canvasWidth % customRow) !== 0) {
@@ -239,6 +241,8 @@ function respondToResizeMap() {
 
 }
 
+//save the map to firebase database
+//also save a map image to firebase storeage
 function respondToSaveMap() {
 
     if (playerId) {
