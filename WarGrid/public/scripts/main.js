@@ -433,10 +433,9 @@ function renderGhostRenderCells() {
  Send socket to server
  */
 function confirmMove() {
-    // 
+    // show and hide one player's turn info. 
     if(currentPlayer ===1 )
     {
-        
         $("#turn_A_block_div").attr("style", "display:none");
         $("#turn_B_block_div").attr("style", "display:block");
     }
