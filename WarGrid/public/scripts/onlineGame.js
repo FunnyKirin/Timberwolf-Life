@@ -198,6 +198,7 @@ function initFirebase() {
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
     room.on('value', function(snapshot) {
+        
         //swal(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -211,6 +212,21 @@ function initFirebase() {
                 renderGhost();
             }
         }
+        
+    $(".cube").hide();
+    if(playerIndex==1){
+        if(currentPlayer==playerIndex){
+            $("#turn_A_block_div1").show();
+        }else{
+            $("#turn_B_block_div4").show();
+        }
+    }else{
+        if(currentPlayer==playerIndex){
+            $("#turn_B_block_div3").show();
+        }else{
+            $("#turn_A_block_div2").show();
+        }
+    }
     });
 }
 

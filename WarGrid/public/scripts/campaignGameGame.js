@@ -174,7 +174,7 @@ function initMap() {
     this.db = firebase.database();
     dbref = this.db.ref().child('campaign');
     //  this.dbref = this.db.ref('map');
-    dbref.child(loadMapName).on("value", function(data) {
+    dbref.child(loadMapName).on("value", function (data) {
         key = data.key;
         renderGrid = data.val().data;
         var x = data.val().x;
@@ -193,7 +193,6 @@ function initMap() {
         nextTurn();
         swapGrids();
     });
-
 }
 
 function initGameOfLifeData() {
@@ -212,7 +211,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -220,7 +219,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -256,7 +255,7 @@ function clickCell(clickCol, clickRow) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (cell != LIVE_CELL + currentPlayer * 10 && cell != LIVE_CELL + (3 - currentPlayer) * 10) {
+    if (cell != LIVE_CELL + currentPlayer * 10) {
         if (ghostCell != LIVE_CELL + currentPlayer * 10) {
             //check if the player can place a cell at that position.
             if (cellNumber > 0 && cell != VOID_CELL) {
@@ -284,8 +283,16 @@ function clickCell(clickCol, clickRow) {
                 }
                 //it is!
                 if (boolean == 1) {
-                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-                    cellNumber--;
+                    if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                        if (cellNumber >= 2) {
+                            setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                            cellNumber -= 2;
+                        }
+                    }
+                    else {
+                        setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                        cellNumber--;
+                    }
                 }
             }
         }
@@ -293,6 +300,9 @@ function clickCell(clickCol, clickRow) {
         else {
             setGridCell(ghostGrid, clickRow, clickCol, 0);
             cellNumber++;
+            if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                cellNumber++;
+            }
             //if boolean2 ==1, we cant withdraw that placement.
             var boolean2 = 0;
             for (var i = 0; i <= gridHeight; i++) {
@@ -309,6 +319,9 @@ function clickCell(clickCol, clickRow) {
             if (boolean2 == 1) {
                 setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
                 cellNumber--;
+                if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                    cellNumber--;
+                }
             }
         }
         //reset game UI
@@ -382,8 +395,11 @@ function renderGhostCells() {
                 var _y = i * cellLength;
                 if (_leftNumber == currentPlayer) {
                     if (_rightNumber == 1) {
-                        canvas2D.fillStyle = GHOST_COLOR;
-                        canvas2D.fillRect(_x, _y, cellLength, cellLength);
+                        canvas2D.beginPath();
+                        canvas2D.lineWidth = "4"; //ghostWidth
+                        canvas2D.strokeStyle = GHOST_COLOR;
+                        canvas2D.rect(_x + 2, _y + 2, cellLength - 4, cellLength - 4);
+                        canvas2D.stroke();
                     }
                 }
             }
@@ -414,20 +430,14 @@ function renderGhostRenderCells() {
  */
 function confirmMove() {
     // show and hide one player's turn info.
-    if(currentPlayer ===1 )
-    {
+    if (currentPlayer === 1) {
         $("#turn_A_block_div").attr("style", "display:none");
         $("#turn_B_block_div").attr("style", "display:block");
     }
-    else if(currentPlayer ===2 )
-    {
+    else if (currentPlayer === 2) {
         $("#turn_A_block_div").attr("style", "display:block");
         $("#turn_B_block_div").attr("style", "display:none");
     }
-
-
-
-
     //place cells from ghost grid to update grid and render grid
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
@@ -444,31 +454,26 @@ function confirmMove() {
     ghostGrid = [];
     updateGame(updateGrid, renderGrid);
     renderGame();
-
     //check if current player win
     if (checkVictory()) {
         var dbRef = firebase.database().ref();
         var campaignRef = dbRef.child('campaign').child(window.location.search.substring(1).replace('%20', ' '));
         var playerRef = dbRef.child('players').child(playerId);
-
         // update player campaign stat
-        campaignRef.once('value', function(campaignSnap) {
+        campaignRef.once('value', function (campaignSnap) {
             if (campaignSnap.val()) {
-                playerRef.child('campaign').once('value', function(levelSnap) {
+                playerRef.child('campaign').once('value', function (levelSnap) {
                     if (levelSnap.val() == campaignSnap.val().level) {
-                        playerRef.child('campaign').transaction(function(e) {
+                        playerRef.child('campaign').transaction(function (e) {
                             return e + 1;
                         });
                     }
-
                     alert("You win!");
                     campaign_open(); // quit
                 });
             }
         });
-
     }
-
     nextTurn();
     renderGhostRenderCells();
     renderGhost();
@@ -537,7 +542,8 @@ function getCellNumber(territory) {
         if (territory > 0) {
             number++;
             size += 2;
-        } else {
+        }
+        else {
             break;
         }
     }
@@ -654,7 +660,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * currentPlayer;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -694,7 +701,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -708,6 +716,7 @@ function renderCells() {
 }
 
 function renderGridLines() {
+    canvas2D.lineWidth = "1";
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
     // VERTICAL LINES
@@ -845,13 +854,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
