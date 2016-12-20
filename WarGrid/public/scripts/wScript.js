@@ -235,8 +235,12 @@ function determineCanvasSize() {
         $("#text").attr("style", "font-size: 30px");
         $("#turn_A_text").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
         $("#turn_B_text").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
+        $("#turn_A_text_wait").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text_wait").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
         $("#turn_A_block").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
         $("#turn_B_block").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
+        $("#turn_A_block_wait").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
+        $("#turn_B_block_wait").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
 
         $(".turn_AB_sec").attr("style", "width: 400px; margin:auto;");
         //console.log("canvas x: large");
@@ -253,8 +257,12 @@ function determineCanvasSize() {
         $("#text").attr("style", "font-size: 30px");
         $("#turn_A_text").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
         $("#turn_B_text").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
+        $("#turn_A_text_wait").attr("style","font-size: 30px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text_wait").attr("style","font-size: 30px; margin-left:3px; color: #0067a7");
         $("#turn_A_block").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
         $("#turn_B_block").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
+        $("#turn_A_block_wait").attr("style","width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px");
+        $("#turn_B_block_wait").attr("style","width: 30px; height: 30px; background-color: #0067a7; margin-top:7px");
 
         $(".turn_AB_sec").attr("style", "width: 400px; margin:auto;");
         //console.log("canvas x: medium");
@@ -271,8 +279,12 @@ function determineCanvasSize() {
         $("#text").attr("style", "font-size: 15px");
         $("#turn_A_text").attr("style","font-size: 15px; margin-left:3px; color: #bd1e24");
         $("#turn_B_text").attr("style","font-size: 15px; margin-left:3px; color: #0067a7");
+        $("#turn_A_text_wait").attr("style","font-size: 15px; margin-left:3px; color: #bd1e24");
+        $("#turn_B_text_wait").attr("style","font-size: 15px; margin-left:3px; color: #0067a7");
         $("#turn_A_block").attr("style","width: 15px; height: 15px; background-color: #bd1e24; margin-top:3px");
         $("#turn_B_block").attr("style","width: 15px; height: 15px; background-color: #0067a7; margin-top:3px");
+        $("#turn_A_block_wait").attr("style","width: 15px; height: 15px; background-color: #bd1e24; margin-top:3px");
+        $("#turn_B_block_wait").attr("style","width: 15px; height: 15px; background-color: #0067a7; margin-top:3px");
 
 
         $(".turn_AB_sec").attr("style", "width: 200px; margin:auto;");

@@ -13,6 +13,7 @@ var PLAYER_PROFILE_ID_2 = "player-profile-mobile";
 var CLASS_PLAYER_ID = 'pid';
 var CLASS_PLAYER_WINS = 'win';
 var CLASS_PLAYER_LOSSES = 'loss';
+var CLASS_PLAYER_LEVELS = 'campaign';
 var CLASS_PLAYER_GAME = 'in-room';
 
 
@@ -50,6 +51,7 @@ Player.prototype.playerHandler = function(player) {
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
+                    $("." + CLASS_PLAYER_LEVELS).text('Campaign Progress: ' + Math.round((obj.val().campaign + 1 / 9) * 100) + "%");
                     //$("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
                 });
 
@@ -96,6 +98,7 @@ Player.prototype.playerHandler = function(player) {
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
+                    $("." + CLASS_PLAYER_LEVELS).text('Campaign Progress: 0%');
                     //$("." + CLASS_PLAYER_GAME).html('In Game: No');
 
                     // 'initialize' global variables
