@@ -437,12 +437,12 @@ function confirmMove() {
         alert("You win!");
 
         // update player campaign stat
-        dbRef.child('campaign').child(window.location.search.substring(1)).once('value', function(snapshot) {
-            if (snapshot.val()) {
+        dbRef.child('campaign').child(window.location.search.substring(1)).once('value', function(campaignSnap) {
+            if (campaignSnap.val()) {
                 dbRef.child('players').child(playerId).child('campaign').once('value', function(levelSnap) {
-                    if (levelSnap.val() <= snapshot.val().level) {
+                    if (levelSnap.val() <= campaignSnap.val().level) {
                         dbRef.child('players').child(playerId).child('campaign').transaction(function(e) {
-                            return e + 1;
+                            return campaignSnap.val().level + 1;
                         });
                     }
                 });
