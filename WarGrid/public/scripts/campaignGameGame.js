@@ -440,6 +440,7 @@ function confirmMove() {
         dbRef.child('campaign').child(window.location.search.substring(1)).once('value', function(campaignSnap) {
             if (campaignSnap.val()) {
                 dbRef.child('players').child(playerId).child('campaign').once('value', function(levelSnap) {
+                    alert('player level vs campaign level: ' + levelSnap.val() + ' vs ' + campaignSnap.val().level);
                     if (levelSnap.val() <= campaignSnap.val().level) {
                         dbRef.child('players').child(playerId).child('campaign').transaction(function(e) {
                             return campaignSnap.val().level + 1;
