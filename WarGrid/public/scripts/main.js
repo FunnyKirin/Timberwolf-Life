@@ -118,7 +118,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "#fafe4b";  // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
+    GHOST_COLOR = "#fafe4b"; // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -172,10 +172,9 @@ function initCanvas() {
  */
 function initMap() {
     var url = window.location.search;
-    gameMode = parseInt(url.slice(-1))+1;
-    loadMapName = url.slice(1,-1);
+    gameMode = parseInt(url.slice(-1)) + 1;
+    loadMapName = url.slice(1, -1);
     loadMapName = loadMapName.replace("%20", " ");
-    
     this.db = firebase.database();
     dbref = this.db.ref().child('maps');
     //  this.dbref = this.db.ref('map');
@@ -270,7 +269,7 @@ function clickCell(clickCol, clickRow) {
     var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
     //check if there is already a cell in ghost grid,
     // if not:
-    if (cell != LIVE_CELL + currentPlayer * 10 && cell != LIVE_CELL + (3 - currentPlayer) * 10) {
+    if (cell != LIVE_CELL + currentPlayer * 10) {
         if (ghostCell != LIVE_CELL + currentPlayer * 10) {
             //check if the player can place a cell at that position.
             if (cellNumber > 0 && cell != VOID_CELL) {
@@ -298,8 +297,16 @@ function clickCell(clickCol, clickRow) {
                 }
                 //it is!
                 if (boolean == 1) {
-                    setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
-                    cellNumber--;
+                    if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                        if (cellNumber >= 2) {
+                            setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                            cellNumber -= 2;
+                        }
+                    }
+                    else {
+                        setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
+                        cellNumber--;
+                    }
                 }
             }
         }
@@ -307,6 +314,9 @@ function clickCell(clickCol, clickRow) {
         else {
             setGridCell(ghostGrid, clickRow, clickCol, 0);
             cellNumber++;
+            if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                cellNumber++;
+            }
             //if boolean2 ==1, we cant withdraw that placement.
             var boolean2 = 0;
             for (var i = 0; i <= gridHeight; i++) {
@@ -323,6 +333,9 @@ function clickCell(clickCol, clickRow) {
             if (boolean2 == 1) {
                 setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
                 cellNumber--;
+                if (cell == LIVE_CELL + (3 - currentPlayer) * 10) {
+                    cellNumber--;
+                }
             }
         }
         //reset game UI
@@ -398,11 +411,10 @@ function renderGhostCells() {
                     if (_rightNumber == 1) {
                         //canvas2D.fillStyle = GHOST_COLOR;
                         //canvas2D.fillRect(_x, _y, cellLength, cellLength);
-                        
                         canvas2D.beginPath();
-                        canvas2D.lineWidth="4"; //ghostWidth
+                        canvas2D.lineWidth = "4"; //ghostWidth
                         canvas2D.strokeStyle = GHOST_COLOR;
-                        canvas2D.rect(_x+2, _y+2, cellLength-4, cellLength-4);
+                        canvas2D.rect(_x + 2, _y + 2, cellLength - 4, cellLength - 4);
                         canvas2D.stroke();
                     }
                 }
@@ -707,7 +719,7 @@ function renderCells() {
 }
 
 function renderGridLines() {
-    canvas2D.lineWidth="1";
+    canvas2D.lineWidth = "1";
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
     // VERTICAL LINES
