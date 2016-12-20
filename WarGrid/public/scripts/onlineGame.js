@@ -198,7 +198,7 @@ function initFirebase() {
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
     room.on('value', function(snapshot) {
-        
+
         //swal(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -212,7 +212,7 @@ function initFirebase() {
                 renderGhost();
             }
         }
-        
+
     $(".cube").hide();
     if(playerIndex==1){
         if(currentPlayer==playerIndex){
@@ -532,6 +532,7 @@ function confirmMove() {
             var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
             var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
             var playerRef = firebase.database().ref('players');
+            var lobbyRef = firebase.database().ref('lobby');
             var roomRef = lobbyRef.child(room_key); // game session
             var challengerRef = roomRef.child('challenger'); // the challenger
             var ownerRef = roomRef.child('owner'); // the owner
