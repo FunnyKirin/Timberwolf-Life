@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-colors-signal.css">
 
     <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
-    <script src = "scripts/wScript.js" ></script>
+    <script src="scripts/wScript.js" ></script>
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/map.js"></script>
@@ -109,7 +109,20 @@
                 <a class="w3-btn-floating" onclick="w3_local_right_open()"><i class="material-icons">chat</i></a>
         </div>
         <!-- span line to display the cell left number. -->
-        <div class="w3-container w3-row w3-center"> <span id="text" style="font-size: 40px">Cell left: 0</span> </div>
+        <div class="turn_AB_sec w3-container w3-row w3-center" style="width: 400px; margin:auto;">
+
+            <div id="turn_A_block_div" class="w3-left" style="display:block">
+                <div id="turn_A_block" class="w3-left w3-round" style="width: 30px; height: 30px; background-color: #bd1e24; margin-top:7px"></div>
+                <span id="turn_A_text" style="font-size: 30px; margin-left:3px; color: #bd1e24">Your turn</span>
+            </div>
+
+            <div id="turn_B_block_div" class="w3-left" style="display:none">
+                <div id="turn_B_block" class="w3-left w3-round" style="width: 30px; height: 30px; background-color: #0067a7; margin-top:7px"> </div>
+                <span id="turn_B_text" style="font-size: 30px; margin-left:3px; color: #0067a7">Your turn</span>
+            </div>
+
+            <span id="text"  class="w3-right" style="font-size: 30px">Cell left: 0</span>
+        </div>
         <!-- button group includes 4 buttons to use. -->
         <div class="w3-container w3-row w3-center">
             <button id="confirmButton" value="Confirm" class="local_game_bottom_buttons w3-container w3-btn w3-dark-grey w3-large w3-round-large w3-animate-zoom">Confirm</button>

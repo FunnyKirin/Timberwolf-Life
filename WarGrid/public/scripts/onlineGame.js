@@ -273,9 +273,7 @@ function initEventHandlers() {
         $("#invitedURL").val(url);
         var clipboard = new Clipboard("#copy-button");
     });
-    $("#copyurl").click(function() {
-
-    });
+    $("#copyurl").click(function() {});
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1
     window.onbeforeunload = function() {
@@ -305,7 +303,7 @@ function respondToMouseClick(event) {
         var ghostCell = getGridCell(ghostGrid, clickRow, clickCol);
         //check if there is already a cell in ghost grid,
         // if not:
-        if (cell != LIVE_CELL + playerIndex * 10 && cell != LIVE_CELL + (3 - playerIndex) * 10) {
+        if (cell != LIVE_CELL + playerIndex * 10) {
             if (ghostCell != LIVE_CELL + playerIndex * 10) {
                 //check if the player can place a cell at that position.
                 if (cellNumber > 0 && cell != VOID_CELL) {
@@ -333,8 +331,15 @@ function respondToMouseClick(event) {
                     }
                     //it is!
                     if (boolean == 1) {
-                        setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
-                        cellNumber--;
+                        if (cell == LIVE_CELL + (3 - playerIndex) * 10) {
+                            if (cellNumber >= 2) {
+                                setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
+                                cellNumber -= 2;
+                            }
+                        } else {
+                            setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
+                            cellNumber--;
+                        }
                     }
                 }
             }
@@ -342,6 +347,9 @@ function respondToMouseClick(event) {
             else {
                 setGridCell(ghostGrid, clickRow, clickCol, 0);
                 cellNumber++;
+                if (cell == LIVE_CELL + (3 - playerIndex) * 10) {
+                    cellNumber++;
+                }
                 //if boolean2 ==1, we cant withdraw that placement.
                 var boolean2 = 0;
                 for (var i = 0; i <= gridHeight; i++) {
@@ -358,6 +366,9 @@ function respondToMouseClick(event) {
                 if (boolean2 == 1) {
                     setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + currentPlayer * 10);
                     cellNumber--;
+                    if (cell == LIVE_CELL + (3 - playerIndex) * 10) {
+                        cellNumber--;
+                    }
                 }
             }
             //reset game UI
@@ -432,32 +443,15 @@ function renderGhostCells() {
                 var _y = i * cellLength;
                 if (_leftNumber == playerIndex) {
                     if (_rightNumber == 1) {
-                        canvas2D.fillStyle = GHOST_COLOR;
-                        canvas2D.fillRect(_x, _y, cellLength, cellLength);
+                        canvas2D.beginPath();
+                        canvas2D.lineWidth = "4"; //ghostWidth
+                        canvas2D.strokeStyle = GHOST_COLOR;
+                        canvas2D.rect(_x + 2, _y + 2, cellLength - 4, cellLength - 4);
+                        canvas2D.stroke();
                     }
                 }
             }
-            /*
-             //if the cell is a player's living/ dead cell
-             if (leftNumber > 0) {
-             //it is a deadcell
-             if (rightNumber === 0) {
-             canvas2D.fillStyle = DEAD_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             //it is a living cell
-             else {
-             canvas2D.fillStyle = LIVE_COLOR[leftNumber];
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             }
-             //it is a void cell
 
-             if (rightNumber == 3) {
-             canvas2D.fillStyle = VOID_COLOR;
-             canvas2D.fillRect(x, y, cellLength, cellLength);
-             }
-             */
         }
     }
 }
@@ -484,6 +478,19 @@ function renderGhostRenderCells() {
  Send socket to server
  */
 function confirmMove() {
+    // show and hide one player's turn info.
+    /*
+    if(currentData === 1 )
+    {
+        $("#turn_A_block_div").attr("style", "display:none");
+        $("#turn_B_block_div").attr("style", "display:block");
+    }
+    else if(currentData ===2 )
+    {
+        $("#turn_A_block_div").attr("style", "display:block");
+        $("#turn_B_block_div").attr("style", "display:none");
+    }
+    */
     if (currentPlayer == playerIndex) {
         //place cells from ghost grid to update grid and render grid
         for (var i = 0; i <= gridHeight; i++) {
@@ -504,7 +511,60 @@ function confirmMove() {
         writeMap(updateGrid);
         //check if current player win
         if (checkVictory()) {
-            swal("player " + playerIndex + " win!");
+            swal("player " + playerIndex + " win!"); // sweet alert?
+
+            var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
+            var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
+            var playerRef = firebase.database().ref('players');
+            var roomRef = lobbyRef.child(room_key); // game session
+            var challengerRef = roomRef.child('challenger'); // the challenger
+            var ownerRef = roomRef.child('owner'); // the owner
+
+            var winRef, lossRef;
+
+            if (playerIndex == 1) { // the owner wins
+                ownerRef.once('value', function(ownerSnap) {
+                    if (ownerSnap.val()) { // always validate
+                        winRef = playerRef.child(ownerSnap.val()).child('totalWins');
+                        winRef.transaction(function(win) {
+                            return win + 1;
+                        });
+                    }
+                    // then challenger
+                    challengerRef.once('value', function(challenger) {
+                        if (challengerSnap.val()) {
+                            lossRef = playerRef.child(challenger.val()).child('totalLosses');
+                            lossRef.transaction(function(loss) {
+                                return loss + 1;
+                            });
+                        }
+                        // remove the room at last
+                        roomRef.remove();
+                        index_open(); // at last jump to index
+                    });
+                });
+            } else { // the challenger wins
+                ownerRef.once('value', function(ownerSnap) {
+                    if (ownerSnap.val()) { // always validate
+                        winRef = playerRef.child(ownerSnap.val()).child('totalLosses');
+                        winRef.transaction(function(loss) {
+                            return loss + 1;
+                        });
+                    }
+                    // then challenger
+                    challengerRef.once('value', function(challengerSnap) {
+                        if (challengerSnap.val()) {
+                            lossRef = playerRef.child(challengerSnap.val()).child('totalWins');
+                            lossRef.transaction(function(win) {
+                                return win + 1;
+                            });
+                        }
+                        // remove the room at last
+                        roomRef.remove();
+                        index_open(); // at last jump to index
+                    });
+                });
+            }
         }
         //nextTurn();
         //go to next turn
@@ -736,6 +796,8 @@ function renderCells() {
 }
 
 function renderGridLines() {
+
+    canvas2D.lineWidth = "1";
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
     // VERTICAL LINES
@@ -891,7 +953,6 @@ function checkSetup() {
         swal('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
-
 // p1, p2 are strings
 // p1 wins, p2 loses
 var gameOver = function(p1, p2) {
@@ -906,7 +967,6 @@ var gameOver = function(p1, p2) {
         return losses + 1;
     });
 };
-
 // handles the operation of leaving a game room
 // this is called when a user closes a tab
 var leaveRoom = function() {
@@ -917,7 +977,6 @@ var leaveRoom = function() {
     var roomRef = lobbyRef.child(room_key); // game session
     var challenger = roomRef.child('challenger'); // the challenger
     var owner = roomRef.child('owner'); // the owner
-
     if (playerId) { // if the player signed in
         // if the owner quits, the room disappears
         owner.once('value', function(ownerSnap) {
@@ -931,18 +990,15 @@ var leaveRoom = function() {
             roomRef.remove();
         }
     }
-
     roomRef.once('value', function(roomSnap) {
         if (roomSnap.val()) { // check if the room exists first
             challenger.once('value', function(challengerSnap) {
                 // if an observer leaves nothing happens
-
                 if (challengerSnap.val() == playerId) {
                     // the challenger is gone whatsoever
                     challenger.transaction(function(e) {
                         return '';
                     });
-
                     mapRef.child(roomSnap.val().map).once('value', function(mapSnap) {
                         roomSnap.child('grid').transaction(function(grid) {
                             return mapSnap.val().data;

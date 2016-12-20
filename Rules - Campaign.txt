@@ -1,0 +1,18 @@
+Basics:
+
+<Red> your active cell - It affects the number of active cells you can place on the board, as well as the status the their neighbors (including diagonal ones)
+
+<Light Red> Your territory - It only affects the number of active cells you can place on the board
+
+<Blue> Your enemy's active cell
+
+<Light Blue> Your enemy's territory
+
+<Yellow Empty Square> Ghost - Cells with yellow borders are your active cells in the next turn
+
+Goal: Eliminate blue
+
+Rules:
+You can only place a cell on or near any of your territory and your active cells
+
+Unlike blue territory which you can directly occupy, you needs two active cells to convert a blue active cell directly. Better yet, try to surround a blue active cell with three of your active cells
