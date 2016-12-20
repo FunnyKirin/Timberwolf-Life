@@ -912,7 +912,7 @@ var gameOver = function(p1, p2) {
 var leaveRoom = function() {
     var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
     var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
-    var mapRef  firebase.database().ref('maps');
+    var mapRef = firebase.database().ref('maps');
     var lobbyRef = firebase.database().ref('lobby'); // database root
     var roomRef = lobbyRef.child(room_key); // game session
     var challenger = roomRef.child('challenger'); // the challenger
