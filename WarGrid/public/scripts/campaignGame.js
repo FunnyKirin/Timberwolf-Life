@@ -117,7 +117,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
+    GHOST_COLOR = "#fafe4b";  // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -433,7 +433,7 @@ function confirmMove() {
     renderGame();
     //check if current player win
     if (checkVictory()) {
-        alert("player " + currentPlayer + " win!");
+        swal("player " + currentPlayer + " win!");
     }
     nextTurn();
     renderGhostRenderCells();
