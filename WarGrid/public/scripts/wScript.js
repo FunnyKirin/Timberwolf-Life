@@ -359,7 +359,7 @@ function changeChatRoomDtoN()
                                         +   "<div id='chat'>"
                                         +       "<form id='message-form' action='#'' class='w3-container w3-margin-top'>"
                                         +           "<div class='mdl-textfield mdl-js-textfield mdl-textfield-floating-label'>"
-                                        +               "<input class='game_page_message_input w3-input w3-dark-grey w3-animate-input' style='width: 285px' type='text' placeholder='Message...' id='message'>"
+                                        +               "<input class='game_page_message_input w3-input w3-dark-grey' style='width: 280px' type='text' placeholder='Message...' id='message'>"
                                         +           "</div>"
                                         +           "<button id='submit' disabled type='submit' class='w3-btn w3-teal w3-round-large w3-margin-top w3-left w3-animate-zoom w3-hover-sand'>Send</button>"
                                         +       "</form>"

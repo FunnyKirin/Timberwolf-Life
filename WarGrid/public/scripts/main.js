@@ -445,6 +445,19 @@ function renderGhostRenderCells() {
  Send socket to server
  */
 function confirmMove() {
+    // 
+    if(currentPlayer ===1 )
+    {
+        
+        $("#turn_A_block_div").attr("style", "display:none");
+        $("#turn_B_block_div").attr("style", "display:block");
+    }
+    else if(currentPlayer ===2 )
+    {
+        $("#turn_A_block_div").attr("style", "display:block");
+        $("#turn_B_block_div").attr("style", "display:none");
+    }
+    
     //place cells from ghost grid to update grid and render grid
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
