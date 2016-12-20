@@ -33,14 +33,14 @@
 
 <body class="body-max-width w3-grey w3-content">
     <script>
-        window.fbAsyncInit = function () {
+        window.fbAsyncInit = function() {
             FB.init({
-                appId: '1239589969432849'
-                , xfbml: true
-                , version: 'v2.6'
+                appId: '1239589969432849',
+                xfbml: true,
+                version: 'v2.6'
             });
         };
-        (function (d, s, id) {
+        (function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {
                 return;
@@ -69,7 +69,9 @@
                     <p>Left cell to win: xx</p>
                 </div>
                 -->
-                <div class="adSlides-game-section w3-container w3-center w3-content"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png" onclick="openAd(1)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png" onclick="openAd(2)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/fireBrick_ad.png" onclick="openAd(3)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png" onclick="openAd(4)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png" onclick="openAd(5)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png" onclick="openAd(6)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png" onclick="openAd(7)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/scarlet_ad.png" onclick="openAd(8)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png" onclick="openAd(9)"> </div>
+                <div class="adSlides-game-section w3-container w3-center w3-content"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/awesome_ad.png" onclick="openAd(1)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/canary_ad.png" onclick="openAd(2)"> <img class="game_adSlides w3-card-4 w3-round-large"
+                        src="images/fireBrick_ad.png" onclick="openAd(3)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/ikb_ad.png" onclick="openAd(4)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/jet_ad.png" onclick="openAd(5)">                    <img class="game_adSlides w3-card-4 w3-round-large" src="images/purple_ad.png" onclick="openAd(6)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/salmon_ad.png" onclick="openAd(7)"> <img class="game_adSlides w3-card-4 w3-round-large"
+                        src="images/scarlet_ad.png" onclick="openAd(8)"> <img class="game_adSlides w3-card-4 w3-round-large" src="images/wisteria_ad.png" onclick="openAd(9)"> </div>
                 <p class="w3-container">
                     <button onclick="document.getElementById('Instruction').style.display='block'" class="w3-btn w3-teal w3-padding w3-large w3-round-xlarge w3-margin-top w3-animate-zoom w3-hover-sand">How to play</button>
                 </p>
@@ -108,7 +110,7 @@
             </div>
         </div>
         <!-- Buttom part-->
-        <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large"> <a class="w3-btn-floating" onclick="document.getElementById('Instruction').style.display='block'"><i class="material-icons">announcement</i></a> <a class="w3-btn-floating" onclick="w3_online_right_open()"><i class="material-icons">chat</i></a> </div>
+        <div class="w3-container w3-row w3-padding-8 w3-center w3-hide-large"> <a class="w3-btn-floating" onclick="document.getElementById('Instruction').style.display='block'"><i class="material-icons">announcement</i></a> <a class="w3-btn-floating" onclick="w3_online_right_open()"><i class="material-icons">chat</i></a>            </div>
         <!-- span line to display the cell left number. -->
         <div class="game_cell_left_var w3-container w3-row w3-center">
             <div class="turn_AB_sec w3-container w3-row w3-center" style="width: 400px; margin:auto;">
@@ -186,19 +188,24 @@
             <div class="w3-container w3-black"> <span onclick="document.getElementById('Instruction').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
                 <h1>Instruction: </h1> </div>
             <div class="w3-container w3-camo-forest">
-                <br/> This is a turn based strategy game where two players play against each other.
+                <br/> This is a turn based strategy game where two players play against each other
                 <br/>
-                <br/> Your goal is to occupy the entire map with your living cell and terrtory. Once a cell is occupied by a player's live cell, it becomes part of the player's terrtory.
+                <br/> Colors:
+                <br/> Red - your active cell - It affects the number of active cells you can place on the board, as well as the status the their neighbors (including diagonal ones)
+                <br/> Light Red - Your territory - It only affects the number of active cells you can place on the board
+                <br/> Blue - Your enemy's active cell
+                <br/> Light Blue - Your enemy's territory
+                <br/> Yellow Empty Square - Ghost - Cells with yellow borders are your active cells in the next turn
                 <br/>
-                <br/> You can place certain amount of living cells each turn. By pressing Confirm, the game renders once based on our Game of Life algorithm.
+                <br/> Rules:
+                <br/> You can only place a cell on or near any of your territory and your active cells
+                <br/> Unlike blue territory which you can directly occupy, you needs two active cells to convert a blue active cell directly. Better yet, try to surround a blue active cell with three of your active cells
                 <br/>
-                <br/> The number of living cells you can place depends on your terrtory. You may only place cells in or near your territory and your living cells.
-                <br/>
-                <br/> Yellow blocks predict the positions of your living cells in the next turn. You can turn it on/off by pressing "Ghost On/Off"
-                <br/>
-                <br/> The "Reset" button cancels all placement of the current turn.
-                <br/>
-                <br/> </div>
+                <br/> Game of Life algorithm
+                <br/> a. Active Cells with two or three active neighbors get to live on
+                <br/> b. Active Cells with only one active neighbor die and turn into territory cells (underpopulation)
+                <br/> c. Active Cells with four or more active neighbors die and turn into territory cells (overpopulation)
+            </div>
         </div>
     </div>
     <!-- The invite a friend dialog -->
@@ -232,7 +239,7 @@
         </div>
     </div>
     <script>
-        window.onload = function () {
+        window.onload = function() {
             window.chat = new Chat();
             window.player = new Player();
         }
