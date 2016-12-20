@@ -433,7 +433,7 @@ function confirmMove() {
     //check if current player win
     if (checkVictory()) {
         var dbRef = firebase.database().ref();
-        var campaignRef = dbRef.child('campaign').child(window.location.search.substring(1));
+        var campaignRef = dbRef.child('campaign').child(window.location.search.substring(1).replace('%20', ' '));
         var playerRef = dbRef.child('players').child(playerId);
 
         // update player campaign stat
