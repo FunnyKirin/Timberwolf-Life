@@ -448,11 +448,12 @@ function confirmMove() {
     if (currentPlayer === 1) {
         $("#turn_A_block_div").attr("style", "display:none");
         $("#turn_B_block_div").attr("style", "display:block");
-    } else if (currentPlayer === 2) {
+
+    }
+    else if (currentPlayer === 2) {
         $("#turn_A_block_div").attr("style", "display:block");
         $("#turn_B_block_div").attr("style", "display:none");
     }
-
     //place cells from ghost grid to update grid and render grid
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
@@ -471,9 +472,17 @@ function confirmMove() {
     renderGame();
     //check if current player win
     if (checkVictory()) {
-        alert("player " + currentPlayer + " win!");
-
-        localGame_open();
+        swal({
+            title: "Game Over"
+            , text: "player " + currentPlayer + " win!"
+            , type: ""
+            , showCancelButton: false
+            , confirmButtonColor: "#DD6B55"
+            , confirmButtonText: "Close"
+            , closeOnConfirm: false
+        }, function () {
+            localGame_open();
+        });
     }
     nextTurn();
     renderGhostRenderCells();
