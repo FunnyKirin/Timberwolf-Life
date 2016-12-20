@@ -154,16 +154,17 @@ function initFirebase() {
         anonymous = 1;
     }
     room = database.ref().child("lobby").child(url);
-    room.once('value', function(snapshot) {
+    room.once('value', function (snapshot) {
         currentPlayer = snapshot.val().currentPlayer;
         renderGrid = snapshot.val().grid;
         loadMapName = snapshot.val().map;
         //get player Index
         if (anonymous === 0) {
-            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function(abc) {
+            database.ref().child("playerUID").child(auth.currentUser.uid).once("value", function (abc) {
                 if (abc.val() == snapshot.val().owner) {
                     playerIndex = 1;
-                } else if (abc.val() == snapshot.val().challenger) {
+                }
+                else if (abc.val() == snapshot.val().challenger) {
                     playerIndex = 2;
                 }
                 if (snapshot.val().currentPlayer == playerIndex) {
@@ -174,8 +175,8 @@ function initFirebase() {
         //swal("you are player " + playerIndex);
     });
     var map = database.ref().child("maps");
-    map.once("value").then(function(snapshot) {
-        snapshot.forEach(function(data) {
+    map.once("value").then(function (snapshot) {
+        snapshot.forEach(function (data) {
             if (data.val().map == loadMapName) {
                 var x = data.val().x;
                 if (canvasWidth % x !== 0) {
@@ -197,8 +198,7 @@ function initFirebase() {
     });
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-    room.on('value', function(snapshot) {
-        
+    room.on('value', function (snapshot) {
         //swal(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
@@ -212,21 +212,23 @@ function initFirebase() {
                 renderGhost();
             }
         }
-        
-    $(".cube").hide();
-    if(playerIndex==1){
-        if(currentPlayer==playerIndex){
-            $("#turn_A_block_div1").show();
-        }else{
-            $("#turn_B_block_div4").show();
+        $(".cube").hide();
+        if (playerIndex == 1) {
+            if (currentPlayer == playerIndex) {
+                $("#turn_A_block_div1").show();
+            }
+            else {
+                $("#turn_B_block_div4").show();
+            }
         }
-    }else{
-        if(currentPlayer==playerIndex){
-            $("#turn_B_block_div3").show();
-        }else{
-            $("#turn_A_block_div2").show();
+        else {
+            if (currentPlayer == playerIndex) {
+                $("#turn_B_block_div3").show();
+            }
+            else {
+                $("#turn_A_block_div2").show();
+            }
         }
-    }
     });
 }
 
@@ -262,7 +264,7 @@ function initEventHandlers() {
     canvas.onclick = respondToMouseClick;
     $("#confirmButton").click(confirmMove);
     //click ghostButton will enable/disable ghostcells
-    $("#ghostButton").click(function() {
+    $("#ghostButton").click(function () {
         ghostTrigger = ghostTrigger === 1 ? 2 : 1;
         //re-render game after clicking.
         renderGame();
@@ -270,7 +272,7 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#resetButton").click(function() {
+    $("#resetButton").click(function () {
         cellNumber = getCellNumber(territory);
         ghostGrid = [];
         //re-render game after clicking.
@@ -279,20 +281,21 @@ function initEventHandlers() {
         renderGhost();
         renderGridLines();
     });
-    $("#inviteFriendButton").click(function() {
+    $("#inviteFriendButton").click(function () {
         var url = window.location.href;
         if (url.charAt(url.length - 4) === "%") {
             var url = url.substring(0, url.length - 1) + "2";
-        } else {
+        }
+        else {
             url = url + "%202";
         }
         $("#invitedURL").val(url);
         var clipboard = new Clipboard("#copy-button");
     });
-    $("#copyurl").click(function() {});
+    $("#copyurl").click(function () {});
     // confirms leaving before actually leaving otherwise users may leave without actually want to leave
     // tongue twister level 1
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
         return 'If you leave, you lose';
     };
     // remove game room properly
@@ -352,7 +355,8 @@ function respondToMouseClick(event) {
                                 setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
                                 cellNumber -= 2;
                             }
-                        } else {
+                        }
+                        else {
                             setGridCell(ghostGrid, clickRow, clickCol, LIVE_CELL + playerIndex * 10);
                             cellNumber--;
                         }
@@ -467,7 +471,6 @@ function renderGhostCells() {
                     }
                 }
             }
-
         }
     }
 }
@@ -527,60 +530,67 @@ function confirmMove() {
         writeMap(updateGrid);
         //check if current player win
         if (checkVictory()) {
-            swal("player " + playerIndex + " win!"); // sweet alert?
-
-            var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
-            var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
-            var playerRef = firebase.database().ref('players');
-            var roomRef = lobbyRef.child(room_key); // game session
-            var challengerRef = roomRef.child('challenger'); // the challenger
-            var ownerRef = roomRef.child('owner'); // the owner
-
-            var winRef, lossRef;
-
-            if (playerIndex == 1) { // the owner wins
-                ownerRef.once('value', function(ownerSnap) {
-                    if (ownerSnap.val()) { // always validate
-                        winRef = playerRef.child(ownerSnap.val()).child('totalWins');
-                        winRef.transaction(function(win) {
-                            return win + 1;
-                        });
-                    }
-                    // then challenger
-                    challengerRef.once('value', function(challenger) {
-                        if (challengerSnap.val()) {
-                            lossRef = playerRef.child(challenger.val()).child('totalLosses');
-                            lossRef.transaction(function(loss) {
-                                return loss + 1;
-                            });
-                        }
-                        // remove the room at last
-                        roomRef.remove();
-                        index_open(); // at last jump to index
-                    });
-                });
-            } else { // the challenger wins
-                ownerRef.once('value', function(ownerSnap) {
-                    if (ownerSnap.val()) { // always validate
-                        winRef = playerRef.child(ownerSnap.val()).child('totalLosses');
-                        winRef.transaction(function(loss) {
-                            return loss + 1;
-                        });
-                    }
-                    // then challenger
-                    challengerRef.once('value', function(challengerSnap) {
-                        if (challengerSnap.val()) {
-                            lossRef = playerRef.child(challengerSnap.val()).child('totalWins');
-                            lossRef.transaction(function(win) {
+            swal({
+                title: "Game Over"
+                , text: "You" + " win!"
+                , type: ""
+                , showCancelButton: false
+                , confirmButtonColor: "#DD6B55"
+                , confirmButtonText: "Close"
+                , closeOnConfirm: false
+            }, function () {
+                var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
+                var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
+                var playerRef = firebase.database().ref('players');
+                var roomRef = lobbyRef.child(room_key); // game session
+                var challengerRef = roomRef.child('challenger'); // the challenger
+                var ownerRef = roomRef.child('owner'); // the owner
+                var winRef, lossRef;
+                if (playerIndex == 1) { // the owner wins
+                    ownerRef.once('value', function (ownerSnap) {
+                        if (ownerSnap.val()) { // always validate
+                            winRef = playerRef.child(ownerSnap.val()).child('totalWins');
+                            winRef.transaction(function (win) {
                                 return win + 1;
                             });
                         }
-                        // remove the room at last
-                        roomRef.remove();
-                        index_open(); // at last jump to index
+                        // then challenger
+                        challengerRef.once('value', function (challenger) {
+                            if (challengerSnap.val()) {
+                                lossRef = playerRef.child(challenger.val()).child('totalLosses');
+                                lossRef.transaction(function (loss) {
+                                    return loss + 1;
+                                });
+                            }
+                            // remove the room at last
+                            roomRef.remove();
+                            index_open(); // at last jump to index
+                        });
                     });
-                });
-            }
+                }
+                else { // the challenger wins
+                    ownerRef.once('value', function (ownerSnap) {
+                        if (ownerSnap.val()) { // always validate
+                            winRef = playerRef.child(ownerSnap.val()).child('totalLosses');
+                            winRef.transaction(function (loss) {
+                                return loss + 1;
+                            });
+                        }
+                        // then challenger
+                        challengerRef.once('value', function (challengerSnap) {
+                            if (challengerSnap.val()) {
+                                lossRef = playerRef.child(challengerSnap.val()).child('totalWins');
+                                lossRef.transaction(function (win) {
+                                    return win + 1;
+                                });
+                            }
+                            // remove the room at last
+                            roomRef.remove();
+                            index_open(); // at last jump to index
+                        });
+                    });
+                }
+            });
         }
         //nextTurn();
         //go to next turn
@@ -590,10 +600,10 @@ function confirmMove() {
 }
 //send map info to database after pressing confirm
 function writeMap(grid) {
-    room.child("grid").transaction(function(currentData) {
+    room.child("grid").transaction(function (currentData) {
         return grid;
     });
-    room.child("currentPlayer").transaction(function(currentData) {
+    room.child("currentPlayer").transaction(function (currentData) {
         currentData = currentData === 1 ? 2 : 1;
         return currentData;
     });
@@ -605,7 +615,7 @@ function checkVictory() {
             var cell = getGridCell(updateGrid, i, j);
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber != -1) {
-                if (cell != VOID_CELL && leftNumber == (3 - currentPlayer)) {
+                if (cell != VOID_CELL && leftNumber == (3 - playerIndex)) {
                     return 0;
                 }
             }
@@ -641,7 +651,8 @@ function getCellNumber(territory) {
         if (territory > 0) {
             number++;
             size += 2;
-        } else {
+        }
+        else {
             break;
         }
     }
@@ -758,7 +769,8 @@ function updateGame(updateGrid, renderGrid) {
                 if (numLivingNeighbors === 3) {
                     //become a live cell
                     renderGrid[index] = LIVE_CELL + 10 * playerIndex;
-                } else if (testCell == DEAD_CELL) {
+                }
+                else if (testCell == DEAD_CELL) {
                     {
                         //still a dead cell
                         renderGrid[index] = DEAD_CELL;
@@ -798,7 +810,8 @@ function renderCells() {
                 if (rightNumber === 0) {
                     canvas2D.fillStyle = DEAD_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
-                } else {
+                }
+                else {
                     canvas2D.fillStyle = LIVE_COLOR[leftNumber];
                     canvas2D.fillRect(x, y, cellLength, cellLength);
                 }
@@ -812,7 +825,6 @@ function renderCells() {
 }
 
 function renderGridLines() {
-
     canvas2D.lineWidth = "1";
     // SET THE PROPER COLOR
     canvas2D.strokeStyle = GRID_LINES_COLOR;
@@ -951,13 +963,14 @@ function isValidCell(row, col) {
 function getRelativeCoords(event) {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
         return {
-            x: event.offsetX,
-            y: event.offsetY
+            x: event.offsetX
+            , y: event.offsetY
         };
-    } else {
+    }
+    else {
         return {
-            x: event.layerX,
-            y: event.layerY
+            x: event.layerX
+            , y: event.layerY
         };
     }
 }
@@ -965,27 +978,28 @@ function getRelativeCoords(event) {
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
         swal('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
-    } else if (config.storageBucket === '') {
+    }
+    else if (config.storageBucket === '') {
         swal('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
 // p1, p2 are strings
 // p1 wins, p2 loses
-var gameOver = function(p1, p2) {
+var gameOver = function (p1, p2) {
     // reference
     var playerRef = firebase.database().ref('players');
     // p1 wins
-    playerRef.child(p1).child('totalWins').transaction(function(wins) {
+    playerRef.child(p1).child('totalWins').transaction(function (wins) {
         return wins + 1;
     });
     // p2 wins
-    playerRef.child(p2).child('totalLosses').transaction(function(losses) {
+    playerRef.child(p2).child('totalLosses').transaction(function (losses) {
         return losses + 1;
     });
 };
 // handles the operation of leaving a game room
 // this is called when a user closes a tab
-var leaveRoom = function() {
+var leaveRoom = function () {
     var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
     var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
     var mapRef = firebase.database().ref('maps');
@@ -995,28 +1009,29 @@ var leaveRoom = function() {
     var owner = roomRef.child('owner'); // the owner
     if (playerId) { // if the player signed in
         // if the owner quits, the room disappears
-        owner.once('value', function(ownerSnap) {
+        owner.once('value', function (ownerSnap) {
             if (ownerSnap.val() == playerId) {
                 roomRef.remove();
             }
         });
-    } else { // guest player
+    }
+    else { // guest player
         // if it's the owner
         if (raw_key.slice(-1) == '1') {
             roomRef.remove();
         }
     }
-    roomRef.once('value', function(roomSnap) {
+    roomRef.once('value', function (roomSnap) {
         if (roomSnap.val()) { // check if the room exists first
-            challenger.once('value', function(challengerSnap) {
+            challenger.once('value', function (challengerSnap) {
                 // if an observer leaves nothing happens
                 if (challengerSnap.val() == playerId) {
                     // the challenger is gone whatsoever
-                    challenger.transaction(function(e) {
+                    challenger.transaction(function (e) {
                         return '';
                     });
-                    mapRef.child(roomSnap.val().map).once('value', function(mapSnap) {
-                        roomSnap.child('grid').transaction(function(grid) {
+                    mapRef.child(roomSnap.val().map).once('value', function (mapSnap) {
+                        roomSnap.child('grid').transaction(function (grid) {
                             return mapSnap.val().data;
                         });
                     });
