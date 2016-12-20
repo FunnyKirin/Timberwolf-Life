@@ -1,4 +1,3 @@
-//hotseat(1) or AI(2)
 var gameMode = 2;
 var playerName;
 var loadMapName;
@@ -117,7 +116,7 @@ function initConstants() {
     DEAD_COLOR[2] = "#a9aac6"; //option_1: a9aac6 | original: 7277ff
     GRID_LINES_COLOR = "#CCCCCC";
     TEXT_COLOR = "#7777CC";
-    GHOST_COLOR = "#fafe4b";  // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
+    GHOST_COLOR = "rgba(231, 237, 59, 0.6)";
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b"; //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
     // THESE REPRESENT THE DIFFERENT TYPES OF CELL LOCATIONS IN THE GRID
@@ -173,10 +172,9 @@ function initMap() {
     loadMapName = window.location.search.substring(1);
     loadMapName = loadMapName.replace("%20", " ");
     this.db = firebase.database();
-    dbref = this.db.ref().child('maps');
+    dbref = this.db.ref().child('campaign');
     //  this.dbref = this.db.ref('map');
     dbref.child(loadMapName).on("value", function(data) {
-        //console.log("The key:   " + data.key + " map is:  " + data.val().map + "data: " + data.val().data);
         key = data.key;
         renderGrid = data.val().data;
         var x = data.val().x;
@@ -431,10 +429,29 @@ function confirmMove() {
     ghostGrid = [];
     updateGame(updateGrid, renderGrid);
     renderGame();
+
     //check if current player win
     if (checkVictory()) {
-        swal("player " + currentPlayer + " win!");
+        var dbRef = firebase.database().ref();
+
+        alert("You win!");
+
+        // update player campaign stat
+        dbRef.child('campaign').child(window.location.search.substring(1)).once('value', function(snapshot) {
+            if (snapshot.val()) {
+                dbRef.child('players').child(playerId).child('campaign').once('value', function(levelSnap) {
+                    if (levelSnap.val() <= snapshot.val().level) {
+                        dbRef.child('players').child(playerId).child('campaign').transaction(function(e) {
+                            return e + 1;
+                        });
+                    }
+                });
+            }
+        });
+
+        campaign_open(); // quit
     }
+
     nextTurn();
     renderGhostRenderCells();
     renderGhost();
@@ -449,7 +466,7 @@ function checkVictory() {
             var leftNumber = Math.floor(cell / 10);
             if (leftNumber != -1) {
                 if (cell != VOID_CELL && leftNumber == (3 - currentPlayer)) {
-                    return 0;
+                    return 0; //
                 }
             }
         }

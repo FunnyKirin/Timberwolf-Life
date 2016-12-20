@@ -89,7 +89,7 @@ function initConstants() {
     DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
     LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
     DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
-    GHOST_COLOR = "rgba(255,0,0,0.5)";
+    GHOST_COLOR = "#fafe4b";  // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
 

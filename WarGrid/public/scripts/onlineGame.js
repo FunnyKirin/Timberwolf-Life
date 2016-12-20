@@ -171,7 +171,7 @@ function initFirebase() {
                 }
             });
         }
-        //alert("you are player " + playerIndex);
+        //swal("you are player " + playerIndex);
     });
     var map = database.ref().child("maps");
     map.once("value").then(function(snapshot) {
@@ -198,7 +198,7 @@ function initFirebase() {
     // Initiates Firebase auth and listen to auth state changes.
     //this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
     room.on('value', function(snapshot) {
-        //alert(snapshot.val().currentPlayer + " + " + currentPlayer);
+        //swal(snapshot.val().currentPlayer + " + " + currentPlayer);
         //switch player
         if (snapshot.val().currentPlayer != currentPlayer) {
             currentPlayer = snapshot.val().currentPlayer;
@@ -504,7 +504,7 @@ function confirmMove() {
         writeMap(updateGrid);
         //check if current player win
         if (checkVictory()) {
-            alert("player " + playerIndex + " win!");
+            swal("player " + playerIndex + " win!");
         }
         //nextTurn();
         //go to next turn
@@ -886,9 +886,9 @@ function getRelativeCoords(event) {
 // Checks that the Firebase SDK has been correctly setup and configured.
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
-        alert('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
+        swal('You have not configured and imported the Firebase SDK. ' + 'Make sure you go through the codelab setup instructions.');
     } else if (config.storageBucket === '') {
-        alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
+        swal('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' + 'actually a Firebase bug that occurs rarely. ' + 'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' + 'and make sure the storageBucket attribute is not empty. ' + 'You may also need to visit the Storage tab and paste the name of your bucket which is ' + 'displayed there.');
     }
 }
 
@@ -934,11 +934,22 @@ var leaveRoom = function() {
 
     roomRef.once('value', function(roomSnap) {
         if (roomSnap.val()) { // check if the room exists first
-            // the challenger is gone whatsoever
-            challenger.transaction(function(e) {
-                return '';
-            });
+            challenger.once('value', function(challengerSnap) {
+                // if an observer leaves nothing happens
 
+                if (challengerSnap.val() == playerId) {
+                    // the challenger is gone whatsoever
+                    challenger.transaction(function(e) {
+                        return '';
+                    });
+
+                    mapRef.child(roomSnap.val().map).once('value', function(mapSnap) {
+                        roomSnap.child('grid').transaction(function(grid) {
+                            return mapSnap.val().data;
+                        });
+                    });
+                }
+            });
         }
     });
 };

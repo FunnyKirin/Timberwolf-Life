@@ -72,7 +72,7 @@ Player.prototype.playerHandler = function(player) {
                 rootRef.child('players').once('value', function(check) {
                     // regulation in database
                     while (check.hasChild(playerId)) {
-                        alert(playerId + ' exists');
+                        swal(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
                     }
 
@@ -88,14 +88,15 @@ Player.prototype.playerHandler = function(player) {
                         totalWins: 0,
                         totalLosses: 0,
                         online: true,
-                        game_room: ''
+                        game_room: '',
+                        campaign: 1
                     });
 
                     // for profile page
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
                     $("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
                     $("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
-                    $("." + CLASS_PLAYER_GAME).html('In Game: No');
+                    //$("." + CLASS_PLAYER_GAME).html('In Game: No');
 
                     // 'initialize' global variables
                     totalWins = 0;
@@ -147,7 +148,7 @@ Player.prototype.init = function() {
     // Shortcuts to Firebase SDK features.
     this.ref = firebase.database().ref();
     this.auth = firebase.auth();
-    
+
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.playerHandler.bind(this));
 };

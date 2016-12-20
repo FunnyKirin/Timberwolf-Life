@@ -90,7 +90,7 @@ function initConstants() {
     DEAD_COLOR[1] = "#e68989";  //option_1: e68989 | original: ff7272
     LIVE_COLOR[2] = "#0067a7";  //option_4: 464196 | option_3: 0067a7 | option_2: 154889 | option_1: 00477e | original: 1c23ff
     DEAD_COLOR[2] = "#a9aac6";  //option_1: a9aac6 | original: 7277ff
-    GHOST_COLOR = "rgba(255,0,0,0.5)";
+    GHOST_COLOR = "#fafe4b";  // option: #ffff81 | option_1: #fafe4b | original: rgba(231, 237, 59, 1)
     BRIGHT_COLOR = "#66ffff";
     VOID_COLOR = "#a9947b";     //option_4: a9947b | option_3:b49d80 | option_2: bcab90 | option_1: 745d46 | original: 9B7653
 
@@ -137,7 +137,7 @@ function initEditorData() {
     else if(INIT_CANVAS_WIDTH === 257 || INIT_CANVAS_WIDTH === 256)     // should be 257 to show the right border.
         cellLength = 32;
     else
-        alert("Error: Editor.js -> initEditorData. ");
+        swal("Error: Editor.js -> initEditorData. ");
 }
 
 function initGrid() {
@@ -230,7 +230,7 @@ function respondToResizeMap() {
             }
         }
     } else {
-        window.alert("Please enter a number between 4 and 16 ");
+        swal("Please enter a number between 4 and 16 ");
         return false;
     }
     canvas.width = canvasWidth + 1;
@@ -432,10 +432,10 @@ function getRelativeCoords(event) {
 
 function checkSetup() {
     if (!window.firebase || !(firebase.app instanceof Function) || !window.config) {
-        window.alert('You have not configured and imported the Firebase SDK. ' +
+        swal('You have not configured and imported the Firebase SDK. ' +
             'Make sure you go through the codelab setup instructions.');
     } else if (config.storageBucket === '') {
-        window.alert('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
+        swal('Your Firebase Storage bucket has not been enabled. Sorry about that. This is ' +
             'actually a Firebase bug that occurs rarely. ' +
             'Please go and re-generate the Firebase initialisation snippet (step 4 of the codelab) ' +
             'and make sure the storageBucket attribute is not empty. ' +
