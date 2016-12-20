@@ -70,7 +70,7 @@ function createRoom(map) {
         var playerRef = firebase.database().ref('players');
         var playerUidRef = firebase.database().ref('playerUID');
 
-        playerUidRef.child(player.uid).once('value', function(uidSnap) {
+        playerUidRef.child(firebase.auth().currentUser.uid).once('value', function(uidSnap) {
             var playerId = uidSnap.val();
             playerRef.child(playerId).once('value', function(snapshot) {
                 var player = snapshot.val();
@@ -102,5 +102,5 @@ function createRoom(map) {
 }
 
 function enterLocalGame(map) {
-    window.open("campaignGame.html?" + map + 2, "_self");
+    window.open("campaignGame.html?" + map, "_self");
 }

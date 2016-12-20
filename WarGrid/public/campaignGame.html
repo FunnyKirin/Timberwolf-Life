@@ -21,7 +21,8 @@
     <script src="scripts/jquery-1.12.4.min.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/map.js"></script>
-    <script src="scripts/main.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/campaignGameGame.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
     <style>
         .local_adSlides {display:none;}
@@ -125,6 +126,10 @@
         pick_and_display_adPic(1);
 
         initGameOfLife();
+
+        window.onload = function() {
+            window.player = new Player();
+        }
     </script>
 
     <!-- Left side pop-up info panel. -->
@@ -214,7 +219,6 @@
         </div>
     </div>
 </body>
-
 
 
 
