@@ -482,16 +482,19 @@ function renderGhostRenderCells() {
  */
 function confirmMove() {
     // show and hide one player's turn info. 
-    if(currentPlayer ===1 )
+    /*
+    if(currentData === 1 )
     {
         $("#turn_A_block_div").attr("style", "display:none");
         $("#turn_B_block_div").attr("style", "display:block");
     }
-    else if(currentPlayer ===2 )
+    else if(currentData ===2 )
     {
         $("#turn_A_block_div").attr("style", "display:block");
         $("#turn_B_block_div").attr("style", "display:none");
     }
+    */
+    
 
 
 
