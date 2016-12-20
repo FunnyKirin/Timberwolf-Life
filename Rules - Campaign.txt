@@ -15,4 +15,4 @@ Goal: Eliminate blue
 Rules:
 You can only place a cell on or near any of your territory and your active cells
 
-Unlike blue territory, you cannot kill any blue active cell by directly placing one of your cells on top. Instead, you need three of your active cells around (including diagonal ones)
+Unlike blue territory which you can directly occupy, you needs two active cells to convert a blue active cell directly. Better yet, try to surround a blue active cell with three of your active cells

@@ -1,4 +1,4 @@
-//hotseat(1) or AI(2) 
+//hotseat(1) or AI(2)
 var gameMode = 2;
 var playerName;
 var loadMapName;
@@ -445,7 +445,7 @@ function renderGhostRenderCells() {
  Send socket to server
  */
 function confirmMove() {
-    // show and hide one player's turn info. 
+    // show and hide one player's turn info.
     if(currentPlayer ===1 )
     {
         $("#turn_A_block_div").attr("style", "display:none");
@@ -456,7 +456,7 @@ function confirmMove() {
         $("#turn_A_block_div").attr("style", "display:block");
         $("#turn_B_block_div").attr("style", "display:none");
     }
-    
+
     //place cells from ghost grid to update grid and render grid
     for (var i = 0; i <= gridHeight; i++) {
         for (var j = 0; j < gridWidth; j++) {
@@ -476,6 +476,8 @@ function confirmMove() {
     //check if current player win
     if (checkVictory()) {
         alert("player " + currentPlayer + " win!");
+
+        localGame_open();
     }
     nextTurn();
     renderGhostRenderCells();
