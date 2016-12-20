@@ -201,19 +201,24 @@
             <div class="w3-container w3-black"> <span onclick="document.getElementById('Instruction').style.display='none'" class="w3-closebtn w3-xxlarge w3-hover-text-grey">&times;</span>
                 <h1>Instruction: </h1> </div>
             <div class="w3-container w3-camo-forest">
-                <br/> This game is a turn based strategy game that requires two players play against each other. Both player need to play on one machine for now.
+                <br/> This is a turn based strategy game where two players play against each other
                 <br/>
-                <br/> Players' goal is to occupy the entire map with their live cells or dead cells, once a cell is occupied by a player's live cell, it become part of the player's terrtory until it get occupied by another player.
+                <br/> Colors:
+                <br/> Red - your active cell - It affects the number of active cells you can place on the board, as well as the status the their neighbors (including diagonal ones)
+                <br/> Light Red - Your territory - It only affects the number of active cells you can place on the board
+                <br/> Blue - Your enemy's active cell
+                <br/> Light Blue - Your enemy's territory
+                <br/> Yellow Empty Square - Ghost - Cells with yellow borders are your active cells in the next turn
                 <br/>
-                <br/> Player can place certain amount of living cells each turn, after pressing "confirm", all live cells of current player will render 1 frame base on game of life algorithm, then it is the other player's turn.
+                <br/> Rules:
+                <br/> You can only place a cell on or near any of your territory and your active cells
+                <br/> Unlike blue territory which you can directly occupy, you needs two active cells to convert a blue active cell directly. Better yet, try to surround a blue active cell with three of your active cells
                 <br/>
-                <br/> The amount of Live cells players can place is depend on the size of their terrtory; and players can only place cells in or next to their terrtory.
-                <br/>
-                <br/> Yellow cells will indicate position of your live cells in the next turn based on your current placement, you can turn it on/off by pressing "Ghost on/off button
-                <br/>
-                <br/> "Reset" button will cancel all placement of the current turn.
-                <br/>
-                <br/> </div>
+                <br/> Game of Life algorithm
+                <br/> a. Active Cells with two or three active neighbors get to live on
+                <br/> b. Active Cells with only one active neighbor die and turn into territory cells (underpopulation)
+                <br/> c. Active Cells with four or more active neighbors die and turn into territory cells (overpopulation)
+            </div>
         </div>
     </div>
 
