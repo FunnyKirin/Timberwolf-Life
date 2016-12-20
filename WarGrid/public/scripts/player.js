@@ -49,8 +49,8 @@ Player.prototype.playerHandler = function(player) {
                 // get player data for display
                 firebase.database().ref('players/' + playerId).once('value', function(obj) {
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
-                    $("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
-                    $("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
+                    //$("." + CLASS_PLAYER_WINS).text('Total Wins: ' + obj.val().totalWins);
+                    //$("." + CLASS_PLAYER_LOSSES).text('Total Losses: ' + obj.val().totalLosses);
                     $("." + CLASS_PLAYER_LEVELS).text('Campaign Progress: ' + Math.round((obj.val().campaign + 1 / 9) * 100) + "%");
                     //$("." + CLASS_PLAYER_GAME).html('In Game: ' + gameRoom);
                 });
@@ -76,6 +76,9 @@ Player.prototype.playerHandler = function(player) {
                     while (check.hasChild(playerId)) {
                         swal(playerId + ' exists');
                         playerId = validateInput(prompt('Taken. Try again'));
+                        if (playerId == 'Anonymous') {
+                            playerId = validateInput(prompt('Taken. Try again'));
+                        }
                     }
 
                     // html element display
@@ -96,8 +99,8 @@ Player.prototype.playerHandler = function(player) {
 
                     // for profile page
                     $("." + CLASS_PLAYER_ID).text('Player ID: ' + playerId);
-                    $("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
-                    $("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
+                    //$("." + CLASS_PLAYER_WINS).text('Total Wins: 0');
+                    //$("." + CLASS_PLAYER_LOSSES).text('Total Losses: 0');
                     $("." + CLASS_PLAYER_LEVELS).text('Campaign Progress: 0%');
                     //$("." + CLASS_PLAYER_GAME).html('In Game: No');
 

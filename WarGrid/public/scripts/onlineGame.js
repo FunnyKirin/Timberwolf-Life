@@ -529,61 +529,9 @@ function confirmMove() {
         writeMap(updateGrid);
         //check if current player win
         if (checkVictory()) {
-            swal("player " + playerIndex + " win!"); // sweet alert?
-
-            var raw_key = window.location.search.substring(1); // the raw room key, we need to mod it
-            var room_key = playerId ? raw_key : raw_key.slice(0, -4); // anonymous links are different!
-            var playerRef = firebase.database().ref('players');
-            var lobbyRef = firebase.database().ref('lobby');
-            var roomRef = lobbyRef.child(room_key); // game session
-            var challengerRef = roomRef.child('challenger'); // the challenger
-            var ownerRef = roomRef.child('owner'); // the owner
-
-            var winRef, lossRef;
-
-            if (playerIndex == 1) { // the owner wins
-                ownerRef.once('value', function(ownerSnap) {
-                    if (ownerSnap.val()) { // always validate
-                        winRef = playerRef.child(ownerSnap.val()).child('totalWins');
-                        winRef.transaction(function(win) {
-                            return win + 1;
-                        });
-                    }
-                    // then challenger
-                    challengerRef.once('value', function(challengerSnap) {
-                        if (challengerSnap.val()) {
-                            lossRef = playerRef.child(challengerSnap.val()).child('totalLosses');
-                            lossRef.transaction(function(loss) {
-                                return loss + 1;
-                            });
-                        }
-                        // remove the room at last
-                        roomRef.remove();
-                        index_open(); // at last jump to index
-                    });
-                });
-            } else { // the challenger wins
-                ownerRef.once('value', function(ownerSnap) {
-                    if (ownerSnap.val()) { // always validate
-                        winRef = playerRef.child(ownerSnap.val()).child('totalLosses');
-                        winRef.transaction(function(loss) {
-                            return loss + 1;
-                        });
-                    }
-                    // then challenger
-                    challengerRef.once('value', function(challengerSnap) {
-                        if (challengerSnap.val()) {
-                            lossRef = playerRef.child(challengerSnap.val()).child('totalWins');
-                            lossRef.transaction(function(win) {
-                                return win + 1;
-                            });
-                        }
-                        // remove the room at last
-                        roomRef.remove();
-                        index_open(); // at last jump to index
-                    });
-                });
-            }
+            swal("Player " + playerIndex + " win!"); // sweet alert?
+            alert('Leaving game room...');
+            index_open();
         }
         //nextTurn();
         //go to next turn
@@ -986,6 +934,7 @@ var gameOver = function(p1, p2) {
         return losses + 1;
     });
 };
+
 // handles the operation of leaving a game room
 // this is called when a user closes a tab
 var leaveRoom = function() {
