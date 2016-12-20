@@ -433,24 +433,26 @@ function confirmMove() {
     //check if current player win
     if (checkVictory()) {
         var dbRef = firebase.database().ref();
-
-        alert("You win!");
+        var campaignRef = dbRef.child('campaign').child(window.location.search.substring(1));
+        var playerRef = dbRef.child('players').child(playerId);
 
         // update player campaign stat
-        dbRef.child('campaign').child(window.location.search.substring(1)).once('value', function(campaignSnap) {
+        campaignRef.once('value', function(campaignSnap) {
             if (campaignSnap.val()) {
-                dbRef.child('players').child(playerId).child('campaign').once('value', function(levelSnap) {
-                    alert('player level vs campaign level: ' + levelSnap.val() + ' vs ' + campaignSnap.val().level);
-                    if (levelSnap.val() <= campaignSnap.val().level) {
-                        dbRef.child('players').child(playerId).child('campaign').transaction(function(e) {
-                            return campaignSnap.val().level + 1;
+                playerRef.child('campaign').once('value', function(levelSnap) {
+                    if (levelSnap.val() == campaignSnap.val().level) {
+                        playerRef.child('campaign').transaction(function(e) {
+                            return e + 1;
                         });
                     }
+
+                    alert("You win!");
+                    campaign_open(); // quit
                 });
             }
         });
 
-        campaign_open(); // quit
+
     }
 
     nextTurn();
